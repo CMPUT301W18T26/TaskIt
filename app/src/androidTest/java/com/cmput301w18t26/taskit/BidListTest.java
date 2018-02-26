@@ -11,8 +11,36 @@ public class BidListTest extends ActivityInstrumentationTestCase2 {
         super(BidActivity.class);
     }
 
-    public void testAdd() {}
-    public void testHas() {}
-    public void testGet() {}
-    public void testDelete() {}
+    public void testAddBid() {
+        BidList bids = new BidList();
+        Bid bid = new Bid();
+        bids.add(bid);
+
+        assertTrue(bids.hasBid(bid));
+    }
+
+    public void testHasBid() {
+        BidList bids = new BidList();
+        Bid bid = new Bid();
+        assertFalse(bids.hasBid(bid));
+        bids.add(bid);
+        assertTrue(bids.hasBid(bid));
+    }
+
+    public void testGetBid() {
+        BidList bids = new BidList();
+        Bid bid = new Bid();
+        bids.add(bid);
+        Bid returnedBid = bids.getBid(0);
+        assertEquals(bid.getID(), returnedBid.getID());
+    }
+
+
+    public void testDeleteBid() {
+        BidList bids = new BidList();
+        Bid bid = new Bid();
+        bids.add(bid);
+        bids.deleteBid(bid);
+        assertFalse(bids.hasBid(bid));
+    }
 }

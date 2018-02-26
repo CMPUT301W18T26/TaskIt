@@ -5,4 +5,8 @@ package com.cmput301w18t26.taskit;
  */
 
 public class Bid {
+    private int ID;
+    public long getID() {
+        return ID;
+    }
 }

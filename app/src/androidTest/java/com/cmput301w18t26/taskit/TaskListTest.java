@@ -11,8 +11,36 @@ public class TaskListTest extends ActivityInstrumentationTestCase2 {
         super(ListActivity.class);
     }
 
-    public void testAdd() {}
-    public void testHas() {}
-    public void testGet() {}
-    public void testDelete() {}
+    public void testAddTask() {
+        TaskList tasks = new TaskList();
+        Task task = new Task();
+        tasks.add(task);
+
+        assertTrue(tasks.hasTask(task));
+    }
+
+    public void testHasTask() {
+        TaskList tasks = new TaskList();
+        Task task = new Task();
+        assertFalse(tasks.hasTask(task));
+        tasks.add(task);
+        assertTrue(tasks.hasTask(task));
+    }
+
+    public void testGetTask() {
+        TaskList tasks = new TaskList();
+        Task task = new Task();
+        tasks.add(task);
+        Task returnedTask = tasks.getTask(0);
+        assertEquals(task.getID(), returnedTask.getID());
+    }
+
+
+    public void testDelete() {
+        TaskList tasks = new TaskList();
+        Task task = new Task();
+        tasks.add(task);
+        tasks.delete(task);
+        assertFalse(tasks.hasTask(task));
+    }
 }
