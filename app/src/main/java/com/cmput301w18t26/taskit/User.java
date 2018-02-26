@@ -68,4 +68,9 @@ public class User {
     public BidList getBids() {
         return bids;
     }
+
+    public int getRank() {
+        // Return -1 if no ranks
+        return 0;
+    }
 }

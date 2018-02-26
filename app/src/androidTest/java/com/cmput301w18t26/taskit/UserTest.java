@@ -60,4 +60,19 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         assertEquals(bids, user.getBids());
     }
 
+    public void testGetRank() {
+        User user = new User();
+        int[] ranks1 = {1,2,3,4,5};
+        user.setRanks(ranks1);
+        assertEquals(3, user.getRank());
+        int[] ranks2 = {1};
+        user.setRanks(ranks2);
+        assertEquals(1, user.getRank());
+        int[] ranks3 = {1,2};
+        user.setRanks(ranks3);
+        assertEquals(1.5, user.getRank());
+        int[] ranks4 = {};
+        user.setRanks(ranks4);
+        assertEquals(-1, user.getRank());
+    }
 }
