@@ -34,9 +34,10 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
     public void testGetUser() {
         UserList users = new UserList();
         User user = new User();
+        user.setUsername("AliceBob");
         users.addUser(user);
         User returnedUser = users.getUser(0);
-        assertEquals(user.getID(), returnedUser.getID());
+        assertEquals(user.getUsername(), returnedUser.getUsername());
     }
 
 
