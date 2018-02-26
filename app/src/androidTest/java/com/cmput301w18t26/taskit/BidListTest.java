@@ -11,10 +11,14 @@ public class BidListTest extends ActivityInstrumentationTestCase2 {
         super(BidActivity.class);
     }
 
+    public void testTest() {
+        assertTrue(true);
+    }
+
     public void testAddBid() {
         BidList bids = new BidList();
         Bid bid = new Bid();
-        bids.add(bid);
+        bids.addBid(bid);
 
         assertTrue(bids.hasBid(bid));
     }
@@ -23,14 +27,14 @@ public class BidListTest extends ActivityInstrumentationTestCase2 {
         BidList bids = new BidList();
         Bid bid = new Bid();
         assertFalse(bids.hasBid(bid));
-        bids.add(bid);
+        bids.addBid(bid);
         assertTrue(bids.hasBid(bid));
     }
 
     public void testGetBid() {
         BidList bids = new BidList();
         Bid bid = new Bid();
-        bids.add(bid);
+        bids.addBid(bid);
         Bid returnedBid = bids.getBid(0);
         assertEquals(bid.getID(), returnedBid.getID());
     }
@@ -39,8 +43,28 @@ public class BidListTest extends ActivityInstrumentationTestCase2 {
     public void testDeleteBid() {
         BidList bids = new BidList();
         Bid bid = new Bid();
-        bids.add(bid);
+        bids.addBid(bid);
         bids.deleteBid(bid);
         assertFalse(bids.hasBid(bid));
+    }
+
+    public void testGetBidCount() {
+        BidList bids = new BidList();
+        assertEquals(0, bids.getBidCount());
+        Bid bid1 = new Bid();
+        bids.addBid(bid1);
+        assertEquals(1, bids.getBidCount());
+        Bid bid2 = new Bid();
+        bids.addBid(bid2);
+        assertEquals(2, bids.getBidCount());
+        Bid bid3 = new Bid();
+        bids.addBid(bid3);
+        assertEquals(3, bids.getBidCount());
+        bids.deleteBid(bid3);
+        assertEquals(2, bids.getBidCount());
+        bids.deleteBid(bid2);
+        assertEquals(1, bids.getBidCount());
+        bids.deleteBid(bid1);
+        assertEquals(0, bids.getBidCount());
     }
 }

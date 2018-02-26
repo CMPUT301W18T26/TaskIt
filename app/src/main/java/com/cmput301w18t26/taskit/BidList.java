@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class BidList {
     private ArrayList<Bid> bids = new ArrayList<Bid>();
-    public void add(Bid bid) {
+    public void addBid(Bid bid) {
     }
 
     public boolean hasBid(Bid bid) {
@@ -21,5 +21,9 @@ public class BidList {
 
     public void deleteBid(Bid bid) {
         bids.remove(bid);
+    }
+
+    public int getBidCount() {
+        return 0;
     }
 }

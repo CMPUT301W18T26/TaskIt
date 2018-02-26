@@ -8,7 +8,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 public class BidTest extends ActivityInstrumentationTestCase2 {
     public BidTest() {
-        super(UserActivity.class);
+        super(BidActivity.class);
     }
 
     public void testAdd() {}

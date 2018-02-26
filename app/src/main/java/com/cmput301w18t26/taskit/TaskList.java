@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class TaskList {
     private ArrayList<Task> tasks = new ArrayList<Task>();
-    public void add(Task task) {
+    public void addTask(Task task) {
     }
 
     public boolean hasTask(Task task) {
@@ -21,5 +21,9 @@ public class TaskList {
 
     public void deleteTask(Task task) {
         tasks.remove(task);
+    }
+
+    public int getTaskCount() {
+        return 0;
     }
 }
