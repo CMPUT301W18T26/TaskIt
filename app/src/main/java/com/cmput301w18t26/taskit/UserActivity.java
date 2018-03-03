@@ -12,6 +12,6 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.userinfo);
+        setContentView(R.layout.viewuser);
     }
 }

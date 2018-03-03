@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
  * Created by kevingordon on 2018-02-26.
  */
 
-public class Home extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
