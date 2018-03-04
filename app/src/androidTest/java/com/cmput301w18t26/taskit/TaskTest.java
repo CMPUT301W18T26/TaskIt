@@ -35,7 +35,7 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
 
     public void testSetGetDescription() {
         Task task = new Task();
-        String desc = "A very lovely task...";
+        String desc = "A very lovely viewtask...";
         task.setDescription(desc);
         assertEquals(desc, task.getDescription());
     }
@@ -63,7 +63,7 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
 
     public void testSetGetTitle() {
         Task task = new Task();
-        String title = "Super great task right here!";
+        String title = "Super great viewtask right here!";
         task.setTitle(title);
         assertEquals(title, task.getTitle());
     }
