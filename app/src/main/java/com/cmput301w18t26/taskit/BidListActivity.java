@@ -4,14 +4,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- * Created by kevingordon on 2018-02-26.
+ * Created by hains on 3/3/18.
  */
 
-public class UserActivity extends AppCompatActivity {
+public class BidListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.viewuser);
+        setContentView(R.layout.bidlist);
     }
 }
