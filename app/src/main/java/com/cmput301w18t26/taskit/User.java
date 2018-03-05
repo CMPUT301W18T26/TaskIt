@@ -72,9 +72,16 @@ public class User {
         return bids;
     }
 
-    public int getRank() {
+    public double getRank() {
         // Return -1 if no ranks
-        return 0;
+        double sum = 0;
+        if(ranks.length>0) {
+            for (int i=0; i<ranks.length; i++) {
+                sum += ranks[i];
+            }
+            return sum / ranks.length;
+        }
+        return -1;
     }
 
     public void setDate(Date date) {

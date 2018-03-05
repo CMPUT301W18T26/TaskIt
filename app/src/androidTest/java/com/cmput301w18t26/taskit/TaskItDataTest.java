@@ -1,16 +1,9 @@
 package com.cmput301w18t26.taskit;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.ServiceTestCase;
-import android.util.Log;
-
-import org.junit.Before;
-
 import java.io.File;
-import java.lang.reflect.Method;
+
 
 /**
  * Created by kevingordon on 2018-03-04.
@@ -103,7 +96,6 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         assertFalse(users.hasUser(user));
         assertFalse(tasks.hasTask(task));
         assertFalse(bids.hasBid(bid));
-
 
         db.addUser(user);
         db.addTask(task);

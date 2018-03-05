@@ -17,7 +17,7 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
 
     public void testAddUser() {
         UserList users = new UserList();
-        User user = new User();
+        User user = new MockUser("AliceBob");
         users.addUser(user);
 
         assertTrue(users.hasUser(user));
@@ -25,7 +25,7 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
 
     public void testHasUser() {
         UserList users = new UserList();
-        User user = new User();
+        User user = new MockUser("AliceBob");
         assertFalse(users.hasUser(user));
         users.addUser(user);
         assertTrue(users.hasUser(user));
@@ -33,8 +33,7 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
 
     public void testGetUser() {
         UserList users = new UserList();
-        User user = new User();
-        user.setUsername("AliceBob");
+        User user = new MockUser("AliceBob");
         users.addUser(user);
         User returnedUser = users.getUser(0);
         assertEquals(user.getUsername(), returnedUser.getUsername());
