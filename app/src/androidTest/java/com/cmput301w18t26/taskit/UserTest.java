@@ -2,6 +2,8 @@ package com.cmput301w18t26.taskit;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import java.util.Date;
+
 /**
  * Created by kevingordon on 2018-02-26.
  */
@@ -74,5 +76,12 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         int[] ranks4 = {};
         user.setRanks(ranks4);
         assertEquals(-1, user.getRank());
+    }
+
+    public void testSetGetDate() {
+        User user = new User();
+        Date date = new Date();
+        user.setDate(date);
+        assertEquals(date, user.getDate());
     }
 }

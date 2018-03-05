@@ -1,5 +1,7 @@
 package com.cmput301w18t26.taskit;
 
+import java.util.Date;
+
 /**
  * Created by kevingordon on 2018-02-26.
  */
@@ -12,6 +14,7 @@ public class User {
     private int[] ranks;
     private TaskList tasks;
     private BidList bids;
+    private Date date;
 
     public void setName(String name) {
         this.name = name;
@@ -72,5 +75,13 @@ public class User {
     public int getRank() {
         // Return -1 if no ranks
         return 0;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Date getDate() {
+        return date;
     }
 }
