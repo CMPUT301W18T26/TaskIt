@@ -28,7 +28,7 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         //   TaskItData db = TaskItData.getInstance(this);
         TaskItData db = TaskItData.getInstance(c);
 
-        User user = new MockUser();
+        User user = new MockUser("AliceBob");
 
         String filename = db.getUserFilename(user, false);
         File file = new File(filename);
@@ -90,5 +90,33 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         assertFalse(file.exists());
 
     }
+
+    public void testLoadAllFromFile() {
+        Context c = getInstrumentation().getTargetContext().getApplicationContext();
+        // Typically from an activity a call would be more like:
+        //   TaskItData db = TaskItData.getInstance(this);
+        TaskItData db = TaskItData.getInstance(c);
+        String username = "LoadMe";
+        User user = new MockUser(username);
+        String filename = db.getUserFilename(user, false);
+
+        File file = new File(filename);
+
+        UserList users = db.getUsers();
+
+        assertFalse(users.hasUser(user));
+
+        db.addUser(user);
+        assertTrue(users.hasUser(user));
+        assertTrue(file.exists());
+
+        users.deleteUser(user);
+        assertFalse(users.hasUser(user));
+        assertTrue(file.exists());
+
+        db.loadAllFromFile();
+        assertTrue(users.hasUser(user));
+    }
+
 
 }

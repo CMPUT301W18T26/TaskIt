@@ -5,11 +5,11 @@ package com.cmput301w18t26.taskit;
  */
 
 public class MockUser extends User {
-    public MockUser() {
+    public MockUser(String username) {
         setName("Alice Bob");
         setEmail("AliceBob@charlie.com");
         setPhone(1234567890);
-        setUsername("AliceBob");
+        setUsername(username);
         int[] ranks = {1, 2, 3, 4, 5};
         setRanks(ranks);
     }
