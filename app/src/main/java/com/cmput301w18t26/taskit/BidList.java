@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 
 public class BidList {
+
     private ArrayList<Bid> bids = new ArrayList<Bid>();
     public void addBid(Bid bid) {
         bids.add(bid);

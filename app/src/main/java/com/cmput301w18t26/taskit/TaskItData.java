@@ -28,6 +28,7 @@ import java.lang.reflect.Type;
  * It will push/pull from the filesystem
  *
  */
+
 // Todo: cite https://www.geeksforgeeks.org/singleton-class-java/ in wiki
 public class TaskItData {
     private final String userDirName = "user";
@@ -200,11 +201,10 @@ public class TaskItData {
      * @param task
      * @return
      */
+
     public BidList taskBids(Task task){
         return new BidList();
-    };
-
-
+    }
 
     // get the string of the directory belonging to a model collection
     // create the directory if needed
@@ -326,7 +326,5 @@ public class TaskItData {
         File trashFile = new File(trashFilename);
         file.renameTo(trashFile);
     }
-
-
 
 }
