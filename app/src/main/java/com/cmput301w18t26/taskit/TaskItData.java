@@ -89,18 +89,44 @@ public class TaskItData {
     }
 
     public void loadAllFromFile() {
-        // get user directory
-        String userDirName = getDirname(USER);
-        File userDir = new File(userDirName);
-        String[] userFilenames = userDir.list();
-        File[] userFiles = userDir.listFiles();
+        String dirName;
+        File dir;
+        String[] filenames;
+        String filename;
+
+        // user handling
+        dirName = getDirname(USER);
+        dir = new File(dirName);
+        filenames = dir.list();
 
         Type userType = new TypeToken<User>(){}.getType();
-        for (int i=0; i<userFilenames.length; i++) {
-            String filename = userDirName+"/"+userFilenames[i];
+        for (int i=0; i<filenames.length; i++) {
+            filename = dirName+"/"+filenames[i];
             users.addUser((User) loadFromFile(filename, userType));
         }
+        // task handling
+        dirName = getDirname(TASK);
+        dir = new File(dirName);
+        filenames = dir.list();
+
+        Type taskType = new TypeToken<Task>(){}.getType();
+        for (int i=0; i<filenames.length; i++) {
+            filename = dirName+"/"+filenames[i];
+            tasks.addTask((Task) loadFromFile(filename, taskType));
+        }
+        // bid handling
+        dirName = getDirname(BID);
+        dir = new File(dirName);
+        filenames = dir.list();
+
+        Type bidType = new TypeToken<Bid>(){}.getType();
+        for (int i=0; i<filenames.length; i++) {
+            filename = dirName+"/"+filenames[i];
+            bids.addBid((Bid) loadFromFile(filename, bidType));
+        }
+
     }
+
     /**
      * USER METHODS
      */
@@ -118,6 +144,9 @@ public class TaskItData {
         // Request sync?
     }
 
+    public UserList getUsers() {
+        return users;
+    }
 
     /**
      * TASK METHODS
@@ -136,6 +165,9 @@ public class TaskItData {
         // Request sync?
     }
 
+    public TaskList getTasks() {
+        return tasks;
+    }
 
     /**
      * BID METHODS
@@ -153,10 +185,10 @@ public class TaskItData {
         deleteBidFile(bid);
         // Request sync?
     }
-
-    public UserList getUsers() {
-        return users;
+    public BidList getBids() {
+        return bids;
     }
+
     /**
      * Get a list of tasks for a specific user.
      *

@@ -33,8 +33,6 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         String filename = db.getUserFilename(user, false);
         File file = new File(filename);
 
-        assertFalse(file.exists());
-
         db.addUser(user);
 
         assertTrue(file.exists());
@@ -55,8 +53,6 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
 
         String filename = db.getTaskFilename(task, false);
         File file = new File(filename);
-
-        assertFalse(file.exists());
 
         db.addTask(task);
 
@@ -79,8 +75,6 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         String filename = db.getBidFilename(bid, false);
         File file = new File(filename);
 
-        assertFalse(file.exists());
-
         db.addBid(bid);
 
         assertTrue(file.exists());
@@ -97,25 +91,41 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         //   TaskItData db = TaskItData.getInstance(this);
         TaskItData db = TaskItData.getInstance(c);
         String username = "LoadMe";
-        User user = new MockUser(username);
-        String filename = db.getUserFilename(user, false);
 
-        File file = new File(filename);
+        User user = new MockUser(username);
+        Task task = new MockTask();
+        Bid bid = new MockBid();
 
         UserList users = db.getUsers();
+        TaskList tasks = db.getTasks();
+        BidList bids = db.getBids();
 
         assertFalse(users.hasUser(user));
+        assertFalse(tasks.hasTask(task));
+        assertFalse(bids.hasBid(bid));
+
 
         db.addUser(user);
+        db.addTask(task);
+        db.addBid(bid);
+
         assertTrue(users.hasUser(user));
-        assertTrue(file.exists());
+        assertTrue(tasks.hasTask(task));
+        assertTrue(bids.hasBid(bid));
 
         users.deleteUser(user);
+        tasks.deleteTask(task);
+        bids.deleteBid(bid);
+
         assertFalse(users.hasUser(user));
-        assertTrue(file.exists());
+        assertFalse(tasks.hasTask(task));
+        assertFalse(bids.hasBid(bid));
 
         db.loadAllFromFile();
+
         assertTrue(users.hasUser(user));
+        assertTrue(tasks.hasTask(task));
+        assertTrue(bids.hasBid(bid));
     }
 
 

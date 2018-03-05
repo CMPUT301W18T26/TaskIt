@@ -9,10 +9,16 @@ import java.util.ArrayList;
 public class BidList {
     private ArrayList<Bid> bids = new ArrayList<Bid>();
     public void addBid(Bid bid) {
+        bids.add(bid);
     }
 
     public boolean hasBid(Bid bid) {
-        return true;
+        for (int i=0; i<bids.size(); i++) {
+            if (getBid(i).getID()==(bid.getID())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Bid getBid(int index) {
@@ -24,6 +30,6 @@ public class BidList {
     }
 
     public int getBidCount() {
-        return 0;
+        return bids.size();
     }
 }

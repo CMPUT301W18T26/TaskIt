@@ -35,7 +35,4 @@ public class UserList {
         return users.size();
     }
 
-    public int size() {
-        return users.size();
-    }
 }
