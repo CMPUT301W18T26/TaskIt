@@ -12,6 +12,8 @@ public class Bid {
     private String user;
     private double amount;
     private String status;
+    private String owner;
+    private String UUID;
 
     public long getID() {
         return ID;
@@ -51,5 +53,19 @@ public class Bid {
 
     public String getStatus() {
         return status;
+    }
+
+    public void setOwner(String o) {
+        owner = o;
+    }
+    public String getOwner() {
+        return owner;
+    }
+    public boolean isOwner(String s) {
+        return owner.equals(s);
+    }
+
+    public String getUUID() {
+        return UUID;
     }
 }

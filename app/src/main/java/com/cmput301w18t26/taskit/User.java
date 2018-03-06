@@ -15,6 +15,8 @@ public class User {
     private TaskList tasks;
     private BidList bids;
     private Date date;
+    private String owner;
+    private String UUID;
 
     public void setName(String name) {
         this.name = name;
@@ -42,6 +44,7 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+        this.owner = username;
     }
 
     public String getUsername() {
@@ -90,5 +93,17 @@ public class User {
 
     public Date getDate() {
         return date;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public boolean isOwner(String s) {
+        return owner.equals(s);
+    }
+
+    public String getUUID() {
+        return UUID;
     }
 }

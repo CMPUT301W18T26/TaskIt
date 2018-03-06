@@ -17,6 +17,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import io.searchbox.client.JestResult;
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 
 import io.searchbox.core.Index;
@@ -172,8 +173,6 @@ public class TaskItServer {
         }
     }
 
-
-    // TODO we need a function which gets tweets from elastic search
     public static class getUserJob extends AsyncTask<String, Void, UserList> {
         @Override
         protected UserList doInBackground(String... search_parameters) {
@@ -258,6 +257,122 @@ public class TaskItServer {
         }
     }
 
+    public static class deleteUserJob extends AsyncTask<User, Void, Void> {
+
+        @Override
+        protected Void doInBackground(User... users) {
+            verifySettings();
+
+            for (User user : users) {
+                Delete index = new Delete.Builder(user.getUUID())
+                                    .index(INDEX_TaskItMain)
+                                    .type(TYPE_USER)
+                                    .build();
+                try {
+                    // where is the client?
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()) {
+                        Log.d("TaskItServer", String.valueOf(result.getId())+result.getJsonString());
+//                        tweet.setId(result.getId());
+                    } else {
+                        Log.d("TaskItServer", "delete user not succeed "+result.getErrorMessage());
+                    }
+
+                }
+                catch (Exception e) {
+                    Log.d("TaskItServer", "Exception during delete user");
+                    e.printStackTrace();
+                }
+
+            }
+            return null;
+        }
+    }
+
+    public static class deleteTaskJob extends AsyncTask<Task, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Task... tasks) {
+            verifySettings();
+
+            for (Task task : tasks) {
+                Delete index = new Delete.Builder(task.getUUID())
+                        .index(INDEX_TaskItMain)
+                        .type(TYPE_TASK)
+                        .build();
+                try {
+                    // where is the client?
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()) {
+                        Log.d("TaskItServer", String.valueOf(result.getId())+result.getJsonString());
+//                        tweet.setId(result.getId());
+                    } else {
+                        Log.d("TaskItServer", "delete task not succeed "+result.getErrorMessage());
+                    }
+
+                }
+                catch (Exception e) {
+                    Log.d("TaskItServer", "Exception during delete task");
+                    e.printStackTrace();
+                }
+
+            }
+            return null;
+        }
+    }
+
+    public static class deleteBidJob extends AsyncTask<Bid, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Bid... bids) {
+            verifySettings();
+
+            for (Bid bid : bids) {
+                Delete index = new Delete.Builder(bid.getUUID())
+                        .index(INDEX_TaskItMain)
+                        .type(TYPE_BID)
+                        .build();
+                try {
+                    // where is the client?
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()) {
+                        Log.d("TaskItServer", String.valueOf(result.getId())+result.getJsonString());
+//                        tweet.setId(result.getId());
+                    } else {
+                        Log.d("TaskItServer", "delete bid not succeed "+result.getErrorMessage());
+                    }
+
+                }
+                catch (Exception e) {
+                    Log.d("TaskItServer", "Exception during delete bid");
+                    e.printStackTrace();
+                }
+
+            }
+            return null;
+        }
+    }
+
+    // TODO implement delete jobs + methods
+
+    public void loadAllFromServer(UserList u, TaskList t, BidList b) {
+        TaskItServer.getUserJob getUser = new TaskItServer.getUserJob();
+        TaskItServer.getTaskJob getTask = new TaskItServer.getTaskJob();
+        TaskItServer.getBidJob getBid = new TaskItServer.getBidJob();
+
+        getUser.execute("");
+        getTask.execute("");
+        getBid.execute("");
+
+        try {
+            u = getUser.get();
+            t = getTask.get();
+            b = getBid.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public static void verifySettings() {
         if (client == null) {
@@ -269,5 +384,75 @@ public class TaskItServer {
             client = (JestDroidClient) factory.getObject();
         }
     }
+
+
+
+    public void addUser(User user) {
+        TaskItServer.addUserJob addUser = new TaskItServer.addUserJob();
+        addUser.execute(user);
+    }
+
+    public void addTask(Task task) {
+        TaskItServer.addTaskJob addTask = new TaskItServer.addTaskJob();
+        addTask.execute(task);
+    }
+
+    public void addBid(Bid bid) {
+        TaskItServer.addBidJob addBid = new TaskItServer.addBidJob();
+        addBid.execute(bid);
+    }
+
+
+    public void delUser(User user) {
+        TaskItServer.deleteUserJob delUser = new TaskItServer.deleteUserJob();
+        delUser.execute(user);
+    }
+
+    public void delTask(Task task) {
+        TaskItServer.deleteTaskJob delTask = new TaskItServer.deleteTaskJob();
+        delTask.execute(task);
+    }
+
+    public void delBid(Bid bid) {
+        TaskItServer.deleteBidJob delBid = new TaskItServer.deleteBidJob();
+        delBid.execute(bid);
+    }
+
+    public UserList getUsers() {
+        UserList l = new UserList();
+        TaskItServer.getUserJob getUser = new TaskItServer.getUserJob();
+        getUser.execute("");
+        try {
+            l = getUser.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return l;
+    }
+
+    public TaskList getTasks() {
+        TaskList l = new TaskList();
+        TaskItServer.getTaskJob getTask = new TaskItServer.getTaskJob();
+        getTask.execute("");
+        try {
+            l = getTask.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return l;
+    }
+
+    public BidList getBids() {
+        BidList l = new BidList();
+        TaskItServer.getBidJob getBid = new TaskItServer.getBidJob();
+        getBid.execute("");
+        try {
+            l = getBid.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return l;
+    }
+
 
 }

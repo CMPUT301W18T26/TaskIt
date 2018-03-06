@@ -16,7 +16,8 @@ public class Task {
     private BidList bids;
     private String status;
     private String title;
-
+    private String owner;
+    private String UUID;
 
     public long getID() {return ID;}
 
@@ -78,5 +79,19 @@ public class Task {
 
     public String getTitle() {
         return title;
+    }
+
+    public void setOwner(String o) {
+        owner = o;
+    }
+    public String getOwner() {
+        return owner;
+    }
+    public boolean isOwner(String s) {
+        return owner.equals(s);
+    }
+
+    public String getUUID() {
+        return UUID;
     }
 }

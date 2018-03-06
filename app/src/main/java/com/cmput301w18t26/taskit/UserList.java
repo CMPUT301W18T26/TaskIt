@@ -17,20 +17,36 @@ public class UserList {
     }
 
     public boolean hasUser(User user) {
+        if (getIndex(user) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int getIndex(User user) {
         for (int i=0; i<users.size(); i++) {
             if (getUser(i).getUsername().equals(user.getUsername())) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     public User getUser(int index) {
         return users.get(index);
     }
 
+    public User getUser(User user) {
+        return users.get(getIndex(user));
+    }
+
     public void deleteUser(User user) {
-        users.remove(user);
+        int index = getIndex(user);
+
+        if (index > -1) {
+            users.remove(index);
+        }
     }
 
     public int getUserCount() {
