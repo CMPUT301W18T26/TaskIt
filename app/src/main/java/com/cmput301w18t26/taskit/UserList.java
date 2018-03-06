@@ -3,6 +3,8 @@ package com.cmput301w18t26.taskit;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -35,4 +37,7 @@ public class UserList {
         return users.size();
     }
 
+    public void addAll(Collection<User> l) {
+        users.addAll(l);
+    }
 }

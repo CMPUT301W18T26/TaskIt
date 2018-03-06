@@ -3,6 +3,7 @@ package com.cmput301w18t26.taskit;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -36,5 +37,9 @@ public class TaskList {
 
     public int getTaskCount() {
         return tasks.size();
+    }
+
+    public void addAll(Collection<Task> l) {
+        tasks.addAll(l);
     }
 }

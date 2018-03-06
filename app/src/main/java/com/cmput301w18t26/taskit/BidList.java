@@ -1,6 +1,7 @@
 package com.cmput301w18t26.taskit;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -32,5 +33,9 @@ public class BidList {
 
     public int getBidCount() {
         return bids.size();
+    }
+
+    public void addAll(Collection<Bid> l) {
+        bids.addAll(l);
     }
 }
