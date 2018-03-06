@@ -19,11 +19,12 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         Context c = getInstrumentation().getTargetContext().getApplicationContext();
         // Typically from an activity a call would be more like:
         //   TaskItData db = TaskItData.getInstance(this);
-        TaskItData db = TaskItData.getInstance(c);
+        TaskItFile.setContext(c);
+        TaskItData db = TaskItData.getInstance();
 
         User user = new MockUser("AliceBob");
 
-        String filename = db.getUserFilename(user, false);
+        String filename = TaskItFile.getUserFilename(user, false);
         File file = new File(filename);
 
         db.addUser(user);
@@ -40,11 +41,12 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         Context c = getInstrumentation().getTargetContext().getApplicationContext();
         // Typically from an activity a call would be more like:
         //   TaskItData db = TaskItData.getInstance(this);
-        TaskItData db = TaskItData.getInstance(c);
+        TaskItFile.setContext(c);
+        TaskItData db = TaskItData.getInstance();
 
         Task task = new MockTask();
 
-        String filename = db.getTaskFilename(task, false);
+        String filename = TaskItFile.getTaskFilename(task, false);
         File file = new File(filename);
 
         db.addTask(task);
@@ -61,11 +63,12 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         Context c = getInstrumentation().getTargetContext().getApplicationContext();
         // Typically from an activity a call would be more like:
         //   TaskItData db = TaskItData.getInstance(this);
-        TaskItData db = TaskItData.getInstance(c);
+        TaskItFile.setContext(c);
+        TaskItData db = TaskItData.getInstance();
 
         Bid bid = new MockBid();
 
-        String filename = db.getBidFilename(bid, false);
+        String filename = TaskItFile.getBidFilename(bid, false);
         File file = new File(filename);
 
         db.addBid(bid);
@@ -82,7 +85,9 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         Context c = getInstrumentation().getTargetContext().getApplicationContext();
         // Typically from an activity a call would be more like:
         //   TaskItData db = TaskItData.getInstance(this);
-        TaskItData db = TaskItData.getInstance(c);
+        TaskItFile.setContext(c);
+        TaskItData db = TaskItData.getInstance();
+
         String username = "LoadMe";
 
         User user = new MockUser(username);
@@ -113,7 +118,7 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         assertFalse(tasks.hasTask(task));
         assertFalse(bids.hasBid(bid));
 
-        db.loadAllFromFile();
+        db.refresh();
 
         assertTrue(users.hasUser(user));
         assertTrue(tasks.hasTask(task));
