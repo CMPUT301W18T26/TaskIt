@@ -19,6 +19,8 @@
         </activity>
         <activity android:name=".HomeActivity">
         </activity>
+        <activity android:name=".UserActivity">
+        </activity>
         <activity android:name=".ListActivity">
         </activity>
     </application>
