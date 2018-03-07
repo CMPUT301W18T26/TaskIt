@@ -25,6 +25,7 @@ public class HomeActivity extends AppCompatActivity {
         Button biddedTasksButton = (Button) findViewById(R.id.biddedtasks);
         Button requestedBidsButton = (Button) findViewById(R.id.requestedbidstasks);
         Button allRequestedButton = (Button) findViewById(R.id.allrequestedtasks);
+        Button searchTasksButton = (Button) findViewById(R.id.searchtasks);
         Button profileButton = (Button) findViewById(R.id.profile);
         final Intent taskList = new Intent(getApplicationContext(),ListActivity.class);
 
@@ -32,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
         inProgressButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                taskList.putExtra(TYPE, "inProgress");
+                taskList.putExtra(TYPE, "My Tasks");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -41,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         assignedTasksButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                taskList.putExtra(TYPE, "assignedTask");
+                taskList.putExtra(TYPE, "My Tasks");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -50,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
         biddedTasksButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                taskList.putExtra(TYPE, "biddedTasks");
+                taskList.putExtra(TYPE, "My Tasks");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -59,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
         requestedBidsButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                taskList.putExtra(TYPE, "requestedBids");
+                taskList.putExtra(TYPE, "Requested Tasks");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -68,7 +69,16 @@ public class HomeActivity extends AppCompatActivity {
         allRequestedButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                taskList.putExtra(TYPE, "allRequest");
+                taskList.putExtra(TYPE, "Requested Tasks");
+                startActivity(taskList);
+                setResult(RESULT_OK);
+            }
+        });
+
+        searchTasksButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                taskList.putExtra(TYPE, "Search Tasks");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -78,7 +88,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 Intent registerIntent = new Intent(getApplicationContext(),UserActivity.class);
-                registerIntent.putExtra(TYPE, "view_self");
+                registerIntent.putExtra(TYPE, "My Profile");
                 startActivity(registerIntent);
                 setResult(RESULT_OK);
             }

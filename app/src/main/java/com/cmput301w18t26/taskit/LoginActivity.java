@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 Intent registerIntent = new Intent(getApplicationContext(),UserActivity.class);
-                registerIntent.putExtra(TYPE, "register");
+                registerIntent.putExtra(TYPE, "Register");
                 startActivity(registerIntent);
                 setResult(RESULT_OK);
             }

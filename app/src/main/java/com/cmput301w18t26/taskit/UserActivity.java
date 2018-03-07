@@ -19,7 +19,8 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
-        if (type.equals("register") || type.equals("update")) {
+        setTitle(type);
+        if (type.equals("Register") || type.equals("Update")) {
             setContentView(R.layout.edituser);
             Button actionButton = (Button) findViewById(R.id.register);
             actionButton.setText(type);
@@ -34,7 +35,7 @@ public class UserActivity extends AppCompatActivity {
         } else {
             setContentView(R.layout.viewuser);
             Button editButton = (Button) findViewById(R.id.edit);
-            if (type.equals("view_other")) {
+            if (!type.equals("My Profile")) {
                 editButton.setVisibility(View.GONE);
             }
 
@@ -42,7 +43,7 @@ public class UserActivity extends AppCompatActivity {
 
                 public void onClick(View v) {
                     Intent updateIntent = new Intent(getApplicationContext(),UserActivity.class);
-                    updateIntent.putExtra(TYPE, "update");
+                    updateIntent.putExtra(TYPE, "Update");
                     startActivity(updateIntent);
                     setResult(RESULT_OK);
                 }
