@@ -15,16 +15,28 @@ public class BidList {
     }
 
     public boolean hasBid(Bid bid) {
+        if (getIndex(bid) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int getIndex(Bid bid) {
         for (int i=0; i<bids.size(); i++) {
             if (getBid(i).getUUID().equals(bid.getUUID())) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     public Bid getBid(int index) {
         return bids.get(index);
+    }
+
+    public Bid getBid(Bid bid) {
+        return bids.get(getIndex(bid));
     }
 
     public void deleteBid(Bid bid) {

@@ -56,7 +56,15 @@ public class TaskItSync {
                 if (!remoteUsers.hasUser(currUser)) { // Local, not remote
                     server.addUser(currUser);
                 } else { // In both
-                    // Todo: Choose newest, update accordingly
+                    User rUser = remoteUsers.getUser(currUser);
+                    User lUser = localUsers.getUser(currUser);
+                    if (rUser.getTimestamp().after(lUser.getTimestamp())) { // remote is current
+                        fs.deleteUserFile(lUser);
+                        fs.addUserFile(rUser);
+                    } else { // local is current
+                        server.delUser(rUser);
+                        server.addUser(lUser);
+                    }
                     // remove from remote list (so as not to duplicate work)
                     remoteUsers.deleteUser(currUser);
                 }
@@ -64,7 +72,15 @@ public class TaskItSync {
                 if (!remoteUsers.hasUser(currUser)) { // Local, not remote
                     fs.deleteUserFile(currUser);
                 } else { // In both
-                    // Todo: Choose newest, update accordingly
+                    User rUser = remoteUsers.getUser(currUser);
+                    User lUser = localUsers.getUser(currUser);
+                    if (rUser.getTimestamp().after(lUser.getTimestamp())) { // remote is current
+                        fs.deleteUserFile(lUser);
+                        fs.addUserFile(rUser);
+                    } else { // local is current
+                        server.delUser(rUser);
+                        server.addUser(lUser);
+                    }
                     // remove from remote list (so as not to duplicate work)
                     remoteUsers.deleteUser(currUser);
                 }
@@ -72,21 +88,16 @@ public class TaskItSync {
 
         }
 
+        // Anything in both will have been processed by the above
         for (int i=0;i<remoteUsers.getUserCount(); i++) {
             currUser = remoteUsers.getUser(i);
             if (currUser.isOwner(appUser)) { // Owner's file
                 if (!localUsers.hasUser(currUser)) { // Remote, not local
                     server.delUser(currUser);
-                } else { // In both
-                    // Todo: Choose newest, update accordingly
                 }
             } else { // Others file
                 if (!localUsers.hasUser(currUser)) { // Remote, not local
                     fs.addUserFile(currUser);
-                } else { // In both
-                    // Todo: Choose newest, update accordingly
-                    // remove from remote list (so as not to duplicate work)
-                    remoteUsers.deleteUser(currUser);
                 }
             }
         }
@@ -100,7 +111,15 @@ public class TaskItSync {
                 if (!remoteTasks.hasTask(currTask)) { // Local, not remote
                     server.addTask(currTask);
                 } else { // In both
-                    // Todo: Choose newest, update accordingly
+                    Task rTask = remoteTasks.getTask(currTask);
+                    Task lTask = localTasks.getTask(currTask);
+                    if (rTask.getTimestamp().after(lTask.getTimestamp())) { // remote is current
+                        fs.deleteTaskFile(lTask);
+                        fs.addTaskFile(rTask);
+                    } else { // local is current
+                        server.delTask(rTask);
+                        server.addTask(lTask);
+                    }
                     // remove from remote list (so as not to duplicate work)
                     remoteTasks.deleteTask(currTask);
                 }
@@ -108,7 +127,15 @@ public class TaskItSync {
                 if (!remoteTasks.hasTask(currTask)) { // Local, not remote
                     fs.deleteTaskFile(currTask);
                 } else { // In both
-                    // Todo: Choose newest, update accordingly
+                    Task rTask = remoteTasks.getTask(currTask);
+                    Task lTask = localTasks.getTask(currTask);
+                    if (rTask.getTimestamp().after(lTask.getTimestamp())) { // remote is current
+                        fs.deleteTaskFile(lTask);
+                        fs.addTaskFile(rTask);
+                    } else { // local is current
+                        server.delTask(rTask);
+                        server.addTask(lTask);
+                    }
                     // remove from remote list (so as not to duplicate work)
                     remoteTasks.deleteTask(currTask);
                 }
@@ -121,16 +148,10 @@ public class TaskItSync {
             if (currTask.isOwner(appUser)) { // Owner's file
                 if (!localTasks.hasTask(currTask)) { // Remote, not local
                     server.delTask(currTask);
-                } else { // In both
-                    // Todo: Choose newest, update accordingly
                 }
             } else { // Others file
                 if (!localTasks.hasTask(currTask)) { // Remote, not local
                     fs.addTaskFile(currTask);
-                } else { // In both
-                    // Todo: Choose newest, update accordingly
-                    // remove from remote list (so as not to duplicate work)
-                    remoteTasks.deleteTask(currTask);
                 }
             }
         }
@@ -144,7 +165,15 @@ public class TaskItSync {
                 if (!remoteBids.hasBid(currBid)) { // Local, not remote
                     server.addBid(currBid);
                 } else { // In both
-                    // Todo: Choose newest, update accordingly
+                    Bid rBid = remoteBids.getBid(currBid);
+                    Bid lBid = localBids.getBid(currBid);
+                    if (rBid.getTimestamp().after(lBid.getTimestamp())) { // remote is current
+                        fs.deleteBidFile(lBid);
+                        fs.addBidFile(rBid);
+                    } else { // local is current
+                        server.delBid(rBid);
+                        server.addBid(lBid);
+                    }
                     // remove from remote list (so as not to duplicate work)
                     remoteBids.deleteBid(currBid);
                 }
@@ -152,7 +181,15 @@ public class TaskItSync {
                 if (!remoteBids.hasBid(currBid)) { // Local, not remote
                     fs.deleteBidFile(currBid);
                 } else { // In both
-                    // Todo: Choose newest, update accordingly
+                    Bid rBid = remoteBids.getBid(currBid);
+                    Bid lBid = localBids.getBid(currBid);
+                    if (rBid.getTimestamp().after(lBid.getTimestamp())) { // remote is current
+                        fs.deleteBidFile(lBid);
+                        fs.addBidFile(rBid);
+                    } else { // local is current
+                        server.delBid(rBid);
+                        server.addBid(lBid);
+                    }
                     // remove from remote list (so as not to duplicate work)
                     remoteBids.deleteBid(currBid);
                 }
@@ -165,16 +202,10 @@ public class TaskItSync {
             if (currBid.isOwner(appUser)) { // Owner's file
                 if (!localBids.hasBid(currBid)) { // Remote, not local
                     server.delBid(currBid);
-                } else { // In both
-                    // Todo: Choose newest, update accordingly
                 }
             } else { // Others file
                 if (!localBids.hasBid(currBid)) { // Remote, not local
                     fs.addBidFile(currBid);
-                } else { // In both
-                    // Todo: Choose newest, update accordingly
-                    // remove from remote list (so as not to duplicate work)
-                    remoteBids.deleteBid(currBid);
                 }
             }
         }

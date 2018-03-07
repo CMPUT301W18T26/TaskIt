@@ -16,16 +16,28 @@ public class TaskList {
     }
 
     public boolean hasTask(Task task) {
+        if (getIndex(task) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int getIndex(Task task) {
         for (int i=0; i<tasks.size(); i++) {
             if (getTask(i).getUUID().equals(task.getUUID())) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     public Task getTask(int index) {
         return tasks.get(index);
+    }
+
+    public Task getTask(Task task) {
+        return tasks.get(getIndex(task));
     }
 
     public void deleteTask(Task task) {
