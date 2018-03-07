@@ -7,17 +7,14 @@ import java.util.Date;
  */
 
 public class Bid {
-    private int ID;
     private Date date;
     private String user;
     private double amount;
     private String status;
     private String owner;
+    // metadata for server/sync
     private String UUID;
-
-    public long getID() {
-        return ID;
-    }
+    private Date timestamp;
 
     public void setDate(Date date) {
         this.date = date;
@@ -25,10 +22,6 @@ public class Bid {
 
     public Date getDate() {
         return date;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
     }
 
     public void setUser(String user) {
@@ -65,7 +58,19 @@ public class Bid {
         return owner.equals(s);
     }
 
+
     public String getUUID() {
         return UUID;
+    }
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 }

@@ -17,7 +17,7 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
 
     public void testAddUser() {
         UserList users = new UserList();
-        User user = new MockUser("AliceBob");
+        User user = new MockUser();
         users.addUser(user);
 
         assertTrue(users.hasUser(user));
@@ -25,7 +25,7 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
 
     public void testHasUser() {
         UserList users = new UserList();
-        User user = new MockUser("AliceBob");
+        User user = new MockUser();
         assertFalse(users.hasUser(user));
         users.addUser(user);
         assertTrue(users.hasUser(user));
@@ -33,7 +33,7 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
 
     public void testGetUser() {
         UserList users = new UserList();
-        User user = new MockUser("AliceBob");
+        User user = new MockUser();
         users.addUser(user);
         User returnedUser = users.getUser(0);
         assertEquals(user.getUsername(), returnedUser.getUsername());
@@ -42,7 +42,7 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
 
     public void testDelete() {
         UserList users = new UserList();
-        User user = new User();
+        User user = new MockUser();
         users.addUser(user);
         users.deleteUser(user);
         assertFalse(users.hasUser(user));
@@ -51,13 +51,13 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
     public void testGetUserCount() {
         UserList users = new UserList();
         assertEquals(0, users.getUserCount());
-        User user1 = new User();
+        User user1 = new MockUser();
         users.addUser(user1);
         assertEquals(1, users.getUserCount());
-        User user2 = new User();
+        User user2 = new MockUser();
         users.addUser(user2);
         assertEquals(2, users.getUserCount());
-        User user3 = new User();
+        User user3 = new MockUser();
         users.addUser(user3);
         assertEquals(3, users.getUserCount());
         users.deleteUser(user3);

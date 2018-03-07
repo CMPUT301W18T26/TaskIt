@@ -16,7 +16,7 @@ public class BidList {
 
     public boolean hasBid(Bid bid) {
         for (int i=0; i<bids.size(); i++) {
-            if (getBid(i).getID()==(bid.getID())) {
+            if (getBid(i).getUUID().equals(bid.getUUID())) {
                 return true;
             }
         }

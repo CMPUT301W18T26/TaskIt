@@ -132,38 +132,26 @@ public class TaskItFile {
         return dirPath;
     }
 
-    public static String getUserFilename(User user, boolean trash) {
+    public static String getUserFilename(User user) {
         String userFile;
-        if (trash) {
-            userFile = getDirname(TRASH) + "/" + user.getUsername();
-        } else {
-            userFile = getDirname(USER) + "/" + user.getUsername();
-        }
+        userFile = getDirname(USER) + "/" + user.getUUID();
         return userFile;
     }
-    public static String getTaskFilename(Task task, boolean trash) {
+    public static String getTaskFilename(Task task) {
         String taskFile;
-        if (trash) {
-            taskFile = getDirname(TRASH) + "/" + String.valueOf(task.getID());
-        } else {
-            taskFile = getDirname(TASK) + "/" + String.valueOf(task.getID());
-        }
+        taskFile = getDirname(TASK) + "/" + task.getUUID();
         return taskFile;
     }
-    public static String getBidFilename(Bid bid, boolean trash) {
+    public static String getBidFilename(Bid bid) {
         String bidFile;
-        if (trash) {
-            bidFile = getDirname(TRASH) + "/" + String.valueOf(bid.getID());
-        } else {
-            bidFile = getDirname(BID) + "/" + String.valueOf(bid.getID());
-        }
+        bidFile = getDirname(BID) + "/" + bid.getUUID();
         return bidFile;
     }
 
     // TODO: cite the following in wiki
     // https://stackoverflow.com/questions/1889188/how-to-create-files-hierarchy-in-androids-data-data-pkg-files-directory
     public void addUserFile(User user) {
-        String userFile = getUserFilename(user, false);
+        String userFile = getUserFilename(user);
 
         try {
             OutputStream fos = new FileOutputStream(userFile, false);
@@ -180,16 +168,14 @@ public class TaskItFile {
     }
 
     public void deleteUserFile(User user) {
-        String filename = getUserFilename(user, false);
-        String trashFilename = getUserFilename(user, true);
+        String filename = getUserFilename(user);
         File file = new File(filename);
-        File trashFile = new File(trashFilename);
-        file.renameTo(trashFile);
+        file.delete();
     }
 
     // https://stackoverflow.com/questions/1889188/how-to-create-files-hierarchy-in-androids-data-data-pkg-files-directory
     public void addTaskFile(Task task) {
-        String taskFile = getTaskFilename(task, false);
+        String taskFile = getTaskFilename(task);
         try {
             OutputStream fos = new FileOutputStream(taskFile, false);
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
@@ -205,15 +191,13 @@ public class TaskItFile {
     }
 
     public void deleteTaskFile(Task task) {
-        String filename = getTaskFilename(task, false);
-        String trashFilename = getTaskFilename(task, true);
+        String filename = getTaskFilename(task);
         File file = new File(filename);
-        File trashFile = new File(trashFilename);
-        file.renameTo(trashFile);
+        file.delete();
     }
     // https://stackoverflow.com/questions/1889188/how-to-create-files-hierarchy-in-androids-data-data-pkg-files-directory
     public void addBidFile(Bid bid) {
-        String bidFile = getBidFilename(bid, false);
+        String bidFile = getBidFilename(bid);
 
         try {
             OutputStream fos = new FileOutputStream(bidFile, false);
@@ -229,11 +213,9 @@ public class TaskItFile {
         }
     }
     public void deleteBidFile(Bid bid) {
-        String filename = getBidFilename(bid, false);
-        String trashFilename = getBidFilename(bid, true);
+        String filename = getBidFilename(bid);
         File file = new File(filename);
-        File trashFile = new File(trashFilename);
-        file.renameTo(trashFile);
+        file.delete();
     }
 
 }

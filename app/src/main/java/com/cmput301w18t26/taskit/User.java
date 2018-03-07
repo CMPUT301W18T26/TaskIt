@@ -16,7 +16,9 @@ public class User {
     private BidList bids;
     private Date date;
     private String owner;
+    // metadata for server/sync
     private String UUID;
+    private Date timestamp;
 
     public void setName(String name) {
         this.name = name;
@@ -105,5 +107,16 @@ public class User {
 
     public String getUUID() {
         return UUID;
+    }
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 }

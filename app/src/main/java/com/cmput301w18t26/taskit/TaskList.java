@@ -16,11 +16,8 @@ public class TaskList {
     }
 
     public boolean hasTask(Task task) {
-        Log.d("TaskList", "Entering");
-        Log.d("TaskList", String.valueOf(tasks.size()));
         for (int i=0; i<tasks.size(); i++) {
-            Log.d("TaskList", String.valueOf(getTask(i).getID()) +" : "+ String.valueOf(task.getID()));
-            if (getTask(i).getID()==(task.getID())) {
+            if (getTask(i).getUUID().equals(task.getUUID())) {
                 return true;
             }
         }
