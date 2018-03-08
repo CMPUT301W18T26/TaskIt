@@ -15,7 +15,7 @@ import io.searchbox.core.Index;
 public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
 
     public TaskItServerTest(){
-        super(TaskItDataActivity.class);
+        super(HomeActivity.class);
     }
 
     public void testBareAddGetDeleteUser() {

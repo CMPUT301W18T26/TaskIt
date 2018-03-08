@@ -12,7 +12,7 @@ import java.io.File;
 public class TaskItDataTest extends ActivityInstrumentationTestCase2{
 
     public TaskItDataTest(){
-        super(TaskItDataActivity.class);
+        super(HomeActivity.class);
     }
 
     public void testAddDeleteUser() {
