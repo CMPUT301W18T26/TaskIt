@@ -90,7 +90,11 @@ public class TaskItServer {
             verifySettings();
 
             for (User user : users) {
-                Index index = new Index.Builder(user).index(INDEX_TaskItMain).type(TYPE_USER).build();
+                Index index = new Index.Builder(user)
+                                        .index(INDEX_TaskItMain)
+                                        .type(TYPE_USER)
+                                        .id(user.getUUID())
+                                        .build();
 
                 try {
                     // where is the client?
@@ -120,7 +124,11 @@ public class TaskItServer {
             verifySettings();
 
             for (Task task : tasks) {
-                Index index = new Index.Builder(task).index(INDEX_TaskItMain).type(TYPE_TASK).build();
+                Index index = new Index.Builder(task)
+                                        .index(INDEX_TaskItMain)
+                                        .type(TYPE_TASK)
+                                        .id(task.getUUID())
+                                        .build();
 
                 try {
                     // where is the client?
@@ -150,7 +158,11 @@ public class TaskItServer {
             verifySettings();
 
             for (Bid bid : bids) {
-                Index index = new Index.Builder(bid).index(INDEX_TaskItMain).type(TYPE_BID).build();
+                Index index = new Index.Builder(bid)
+                                        .index(INDEX_TaskItMain)
+                                        .type(TYPE_BID)
+                                        .id(bid.getUUID())
+                                        .build();
 
                 try {
                     // where is the client?

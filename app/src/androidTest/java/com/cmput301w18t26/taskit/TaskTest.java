@@ -13,12 +13,6 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         super(TaskActivity.class);
     }
 
-    public void testSetGetID() {
-        Task task = new Task();
-        task.setID(0);
-        assertEquals(0, task.getID());
-    }
-
     public void testSetGetDate() {
         Task task = new Task();
         Date date = new Date();

@@ -20,6 +20,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.util.Date;
+import java.util.UUID;
 
 
 /**
@@ -70,6 +72,8 @@ public class TaskItData {
      * USER METHODS
      */
     public void addUser(User user) {
+        user.setUUID(UUID.randomUUID().toString());
+        user.setTimestamp(new Date());
         users.addUser(user);
         // Add user to filesystem
         fs.addUserFile(user);
@@ -91,6 +95,8 @@ public class TaskItData {
      * TASK METHODS
      */
     public void addTask(Task task) {
+        task.setUUID(UUID.randomUUID().toString());
+        task.setTimestamp(new Date());
         tasks.addTask(task);
         // Add the task to filesystem
         fs.addTaskFile(task);
@@ -112,6 +118,8 @@ public class TaskItData {
      * BID METHODS
      */
     public void addBid(Bid bid) {
+        bid.setUUID(UUID.randomUUID().toString());
+        bid.setTimestamp(new Date());
         bids.addBid(bid);
         // Add the bid to filesystem
         fs.addBidFile(bid);

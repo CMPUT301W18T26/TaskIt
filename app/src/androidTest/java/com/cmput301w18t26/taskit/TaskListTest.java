@@ -17,7 +17,7 @@ public class TaskListTest extends ActivityInstrumentationTestCase2 {
 
     public void testAddTask() {
         TaskList tasks = new TaskList();
-        Task task = new Task();
+        Task task = new MockTask();
         tasks.addTask(task);
 
         assertTrue(tasks.hasTask(task));
@@ -25,7 +25,7 @@ public class TaskListTest extends ActivityInstrumentationTestCase2 {
 
     public void testHasTask() {
         TaskList tasks = new TaskList();
-        Task task = new Task();
+        Task task = new MockTask();
         assertFalse(tasks.hasTask(task));
         tasks.addTask(task);
         assertTrue(tasks.hasTask(task));
@@ -33,16 +33,16 @@ public class TaskListTest extends ActivityInstrumentationTestCase2 {
 
     public void testGetTask() {
         TaskList tasks = new TaskList();
-        Task task = new Task();
+        Task task = new MockTask();
         tasks.addTask(task);
         Task returnedTask = tasks.getTask(0);
-        assertEquals(task.getID(), returnedTask.getID());
+        assertEquals(task.getUUID(), returnedTask.getUUID());
     }
 
 
     public void testDelete() {
         TaskList tasks = new TaskList();
-        Task task = new Task();
+        Task task = new MockTask();
         tasks.addTask(task);
         tasks.deleteTask(task);
         assertFalse(tasks.hasTask(task));
@@ -51,13 +51,13 @@ public class TaskListTest extends ActivityInstrumentationTestCase2 {
     public void testGetTaskCount() {
         TaskList tasks = new TaskList();
         assertEquals(0, tasks.getTaskCount());
-        Task task1 = new Task();
+        Task task1 = new MockTask();
         tasks.addTask(task1);
         assertEquals(1, tasks.getTaskCount());
-        Task task2 = new Task();
+        Task task2 = new MockTask();
         tasks.addTask(task2);
         assertEquals(2, tasks.getTaskCount());
-        Task task3 = new Task();
+        Task task3 = new MockTask();
         tasks.addTask(task3);
         assertEquals(3, tasks.getTaskCount());
         tasks.deleteTask(task3);

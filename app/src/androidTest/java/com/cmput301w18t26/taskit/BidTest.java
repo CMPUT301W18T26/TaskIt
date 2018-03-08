@@ -13,11 +13,6 @@ public class BidTest extends ActivityInstrumentationTestCase2 {
         super(BidActivity.class);
     }
 
-    public void testSetGetID() {
-        Bid bid = new Bid();
-        bid.setID(0);
-        assertEquals(0, bid.getID());
-    }
     public void testSetGetDate() {
         Bid bid = new Bid();
         Date date = new Date();

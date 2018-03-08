@@ -28,7 +28,7 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
         teardownServer.execute();
 
         // Add a user
-        User user = new MockUser("AliceBobOnline");
+        User user = new MockUser();
         adduser.execute(user);
 
         // Need to sleep to be sure the data is available on server
@@ -53,6 +53,13 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
         assertTrue(users.hasUser(user));
 
         delUser.execute(user);
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // Retrieve the data from server
         TaskItServer.getUserJob getUser2 = new TaskItServer.getUserJob();
         getUser2.execute("");
@@ -76,7 +83,7 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
 
         TaskItServer server = new TaskItServer();
 
-        User user = new MockUser("AliceBobOnline");
+        User user = new MockUser();
         server.addUser(user);
 
         // Need to sleep to be sure the data is available on server
@@ -92,6 +99,13 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
         assertTrue(users.hasUser(user));
 
         server.delUser(user);
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         users = server.getUsers();
 
         assertFalse(users.hasUser(user));
@@ -134,6 +148,13 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
         assertTrue(tasks.hasTask(task));
 
         delTask.execute(task);
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // Retrieve the data from server
 
         getTask2.execute("");
@@ -172,6 +193,13 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
         assertTrue(tasks.hasTask(task));
 
         server.delTask(task);
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         tasks = server.getTasks();
 
         assertFalse(tasks.hasTask(task));
@@ -214,6 +242,13 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
         assertTrue(bids.hasBid(bid));
 
         delBid.execute(bid);
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // Retrieve the data from server
 
         getBid2.execute("");
@@ -252,6 +287,13 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
         assertTrue(bids.hasBid(bid));
 
         server.delBid(bid);
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         bids = server.getBids();
 
         assertFalse(bids.hasBid(bid));

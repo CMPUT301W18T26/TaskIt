@@ -1,14 +1,14 @@
 package com.cmput301w18t26.taskit;
 
 import java.util.Date;
-
+import java.util.UUID;
 /**
  * Created by kevingordon on 2018-03-04.
  */
 
 public class MockTask extends Task {
     public MockTask() {
-        setID(0);
+        setUUID(UUID.randomUUID().toString());
         setDate(new Date());
         setUser("AliceBob");
         setDescription("A very lovely mock task");

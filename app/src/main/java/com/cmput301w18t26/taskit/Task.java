@@ -7,7 +7,6 @@ import java.util.Date;
  */
 
 public class Task {
-    private int ID;
     private Date date;
     private String user;
     private String description;
@@ -17,13 +16,9 @@ public class Task {
     private String status;
     private String title;
     private String owner;
+    // metadata for server/sync
     private String UUID;
-
-    public long getID() {return ID;}
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
+    private Date timestamp;
 
     public void setDate(Date date) {
         this.date = date;
@@ -93,5 +88,16 @@ public class Task {
 
     public String getUUID() {
         return UUID;
+    }
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 }

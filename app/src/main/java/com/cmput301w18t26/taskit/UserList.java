@@ -26,7 +26,7 @@ public class UserList {
 
     public int getIndex(User user) {
         for (int i=0; i<users.size(); i++) {
-            if (getUser(i).getUsername().equals(user.getUsername())) {
+            if (getUser(i).getUUID().equals(user.getUUID())) {
                 return i;
             }
         }

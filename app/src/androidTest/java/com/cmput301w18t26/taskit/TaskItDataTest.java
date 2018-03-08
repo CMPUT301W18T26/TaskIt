@@ -22,12 +22,14 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         TaskItFile.setContext(c);
         TaskItData db = TaskItData.getInstance();
 
-        User user = new MockUser("AliceBob");
-
-        String filename = TaskItFile.getUserFilename(user, false);
-        File file = new File(filename);
+        User user = new MockUser();
 
         db.addUser(user);
+
+        String filename = TaskItFile.getUserFilename(user);
+        File file = new File(filename);
+
+
 
         assertTrue(file.exists());
 
@@ -46,10 +48,10 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
 
         Task task = new MockTask();
 
-        String filename = TaskItFile.getTaskFilename(task, false);
-        File file = new File(filename);
-
         db.addTask(task);
+
+        String filename = TaskItFile.getTaskFilename(task);
+        File file = new File(filename);
 
         assertTrue(file.exists());
 
@@ -68,10 +70,10 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
 
         Bid bid = new MockBid();
 
-        String filename = TaskItFile.getBidFilename(bid, false);
-        File file = new File(filename);
-
         db.addBid(bid);
+
+        String filename = TaskItFile.getBidFilename(bid);
+        File file = new File(filename);
 
         assertTrue(file.exists());
 
@@ -88,9 +90,7 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         TaskItFile.setContext(c);
         TaskItData db = TaskItData.getInstance();
 
-        String username = "LoadMe";
-
-        User user = new MockUser(username);
+        User user = new MockUser();
         Task task = new MockTask();
         Bid bid = new MockBid();
 
