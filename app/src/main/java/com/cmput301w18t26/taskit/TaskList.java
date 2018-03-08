@@ -32,6 +32,8 @@ public class TaskList {
         return -1;
     }
 
+    public ArrayList<Task> getTasks() {return tasks;}
+
     public Task getTask(int index) {
         return tasks.get(index);
     }

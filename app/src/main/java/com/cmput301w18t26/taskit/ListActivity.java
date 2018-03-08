@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+
 /**
  * Created by kevingordon on 2018-02-26.
  */
@@ -14,6 +17,11 @@ import android.widget.ListView;
 public class ListActivity extends AppCompatActivity {
 
     protected static final String TYPE = "type";
+    private ListView listOfTasks;
+    private ArrayList<Task> TaskList;
+    private TaskAdapter adapter;
+    private TaskItData db;
+    TaskList tasks;
 
     private ListView bidlist;
 
@@ -21,6 +29,10 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listtask);
+        listOfTasks = (ListView) findViewById(R.id.listOfTasks);
+        db = TaskItData.getInstance();
+        db.refresh();
+        TaskList = db.getTasks().getTasks();
         Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
         setTitle(type);
@@ -42,15 +54,25 @@ public class ListActivity extends AppCompatActivity {
         });
 
 
-        bidlist = (ListView) findViewById(R.id.tasklist);
+        //bidlist = (ListView) findViewById(R.id.tasklist);
 
-        bidlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-            }
-        });
+        //bidlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            //@Override
+            //public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+            //}
+        //});
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+        //loadFromFile();
+        adapter = new TaskAdapter(ListActivity.this, TaskList);
+        listOfTasks.setAdapter(adapter);
+        //listOfTasks.setOnItemClickListener(new ListClickHandler());
     }
 
 }
