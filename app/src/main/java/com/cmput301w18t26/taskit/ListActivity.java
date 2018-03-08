@@ -31,7 +31,7 @@ public class ListActivity extends AppCompatActivity {
     protected static final String POSITION = "position";
 
     private ListView listOfTasks;
-    private ArrayList<Task> taskList = new ArrayList<Task>();
+    private TaskList taskList = new TaskList();
     private Task task1 = new Task();
     private TaskAdapter adapter;
     private TaskItData db;
@@ -45,7 +45,6 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.listtask);
         listOfTasks = (ListView) findViewById(R.id.listOfTasks);
         db = TaskItData.getInstance();
-        db.refresh();
         Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
         setTitle(type);
@@ -82,16 +81,7 @@ public class ListActivity extends AppCompatActivity {
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
-        taskList = db.getTasks().getTasks();
-        task1.setTitle("Water Flower");
-        task1.setLocation("Earth");
-        task1.setOwner("Kietherson");
-        task1.setDescription("Water a flower.");
-        task1.setStatus("open");
-        Date myDate = new Date(2014, 02, 11);
-        task1.setDate(myDate);
-        taskList.add(task1);
-        Log.w("taskList", taskList.toString());
+        taskList = db.getTasks();
         adapter = new TaskAdapter(ListActivity.this, taskList);
         listOfTasks.setAdapter(adapter);
         listOfTasks.setOnItemClickListener(new ListClickHandler());

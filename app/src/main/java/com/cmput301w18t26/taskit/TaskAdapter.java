@@ -24,8 +24,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
      * @param tasks current subscription
      */
 
-    public TaskAdapter(Activity context, ArrayList<Task> tasks) {
-        super(context, R.layout.list_single, tasks);
+    public TaskAdapter(Activity context, TaskList tasks) {
+        super(context, R.layout.list_single, tasks.getTasks());
         this.context = context;
     }
 

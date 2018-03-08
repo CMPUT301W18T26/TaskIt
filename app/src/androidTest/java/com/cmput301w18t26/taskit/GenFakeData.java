@@ -53,7 +53,8 @@ public class GenFakeData extends ActivityInstrumentationTestCase2 {
                                     "Babysitting",
                                     "Mow the lawn",
                                     "Clean the attic",
-                                    "Hide the body"};
+                                    "Hide the body",
+                                    "Water Flower"};
             User u;
             // for each user
             for (int i=0; i<users.getUserCount(); i++) {
