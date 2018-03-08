@@ -22,7 +22,7 @@ public class UserActivity extends AppCompatActivity {
         setTitle(type);
         if (type.equals("Register") || type.equals("Update")) {
             setContentView(R.layout.edituser);
-            Button actionButton = (Button) findViewById(R.id.register);
+            Button actionButton = (Button) findViewById(R.id.confirmuser);
             actionButton.setText(type);
             actionButton.setOnClickListener(new View.OnClickListener() {
 
