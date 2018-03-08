@@ -64,12 +64,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:contentDescription="Description:"
+        android:text="Description:"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskTitle"
-        tools:text="Description:" />
+        app:layout_constraintTop_toBottomOf="@+id/taskTitle" />
 
     <TextView
         android:id="@+id/taskStatus"
