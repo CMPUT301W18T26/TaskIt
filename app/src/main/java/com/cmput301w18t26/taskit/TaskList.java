@@ -11,6 +11,9 @@ import java.util.Collection;
 
 public class TaskList {
     private ArrayList<Task> tasks = new ArrayList<Task>();
+
+    public ArrayList<Task> getTasks() {return tasks;}
+
     public void addTask(Task task) {
         tasks.add(task);
     }
@@ -32,8 +35,6 @@ public class TaskList {
         return -1;
     }
 
-    public ArrayList<Task> getTasks() {return tasks;}
-
     public Task getTask(int index) {
         return tasks.get(index);
     }
@@ -43,7 +44,11 @@ public class TaskList {
     }
 
     public void deleteTask(Task task) {
-        tasks.remove(task);
+        int index = getIndex(task);
+
+        if (index > -1) {
+            tasks.remove(index);
+        }
     }
 
     public int getTaskCount() {

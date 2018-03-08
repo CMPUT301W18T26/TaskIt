@@ -12,6 +12,9 @@ import java.util.List;
 
 public class UserList {
     private ArrayList<User> users = new ArrayList<User>();
+
+    public ArrayList<User> getTasks() {return users;}
+
     public void addUser(User user) {
         users.add(user);
     }

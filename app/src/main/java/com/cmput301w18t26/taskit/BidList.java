@@ -10,6 +10,9 @@ import java.util.Collection;
 public class BidList {
 
     private ArrayList<Bid> bids = new ArrayList<Bid>();
+
+    public ArrayList<Bid> getBids() {return bids;}
+
     public void addBid(Bid bid) {
         bids.add(bid);
     }
@@ -40,7 +43,11 @@ public class BidList {
     }
 
     public void deleteBid(Bid bid) {
-        bids.remove(bid);
+        int index = getIndex(bid);
+
+        if (index > -1) {
+            bids.remove(index);
+        }
     }
 
     public int getBidCount() {
