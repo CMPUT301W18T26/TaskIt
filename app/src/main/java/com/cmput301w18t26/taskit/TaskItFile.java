@@ -74,6 +74,39 @@ public class TaskItFile {
         return o;
     }
 
+    public static void deleteAllFromFile() {
+        String dirName;
+        File dir;
+        String[] filenames;
+        String filename;
+
+        // user handling
+        dirName = getDirname(USER);
+        dir = new File(dirName);
+        File[] files = dir.listFiles();
+
+
+        for (int i = 0; i < files.length; i++) {
+            files[i].delete();
+        }
+        // task handling
+        dirName = getDirname(TASK);
+        dir = new File(dirName);
+        files = dir.listFiles();
+
+
+        for (int i = 0; i < files.length; i++) {
+            files[i].delete();
+        }
+        // bid handling
+        dirName = getDirname(BID);
+        dir = new File(dirName);
+        files = dir.listFiles();
+
+        for (int i = 0; i < files.length; i++) {
+            files[i].delete();
+        }
+    }
     public void loadAllFromFile(UserList u, TaskList t, BidList b) {
         String dirName;
         File dir;

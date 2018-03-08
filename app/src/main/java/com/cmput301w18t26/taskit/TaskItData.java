@@ -144,6 +144,8 @@ public class TaskItData {
         return bids;
     }
 
+
+    // TODO: search functions. Will likely need more than these. Any suggestions?
     /**
      * Get a list of tasks for a specific user.
      *
@@ -164,5 +166,9 @@ public class TaskItData {
     public BidList taskBids(Task task){
         return new BidList();
     }
+
+
+
+    // TODO:
 
 }

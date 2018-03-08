@@ -17,4 +17,16 @@ public class MockTask extends Task {
         setStatus("Requested");
         setTitle("Super great Task right here!");
     }
+
+    public MockTask(String owner, String title) {
+        setUUID(UUID.randomUUID().toString());
+        setDate(new Date());
+        setUser(owner);
+        setDescription("A very lovely mock task");
+        setLocation("Edmonton");
+        setBids(new BidList());
+        setStatus("Requested");
+        setTitle(title);
+        setOwner(owner);
+    }
 }

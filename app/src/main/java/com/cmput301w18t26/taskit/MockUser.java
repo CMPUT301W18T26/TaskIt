@@ -15,4 +15,13 @@ public class MockUser extends User {
         int[] ranks = {1, 2, 3, 4, 5};
         setRanks(ranks);
     }
+    public MockUser(String username) {
+        setUUID(UUID.randomUUID().toString());
+        setName(username);
+        setEmail(username+"@charlie.com");
+        setPhone(1234567890);
+        setUsername(username);
+        int[] ranks = {1, 2, 3, 4, 5};
+        setRanks(ranks);
+    }
 }

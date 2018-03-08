@@ -15,4 +15,14 @@ public class MockBid extends Bid {
         setAmount(3.50);
         setStatus("BID");
     }
+
+
+    public MockBid(String owner) {
+        setUUID(UUID.randomUUID().toString());
+        setDate(new Date());
+        setUser(owner);
+        setOwner(owner);
+        setAmount(3.50);
+        setStatus("BID");
+    }
 }
