@@ -40,16 +40,18 @@ public class TaskItData {
     private TaskList tasks;
     private UserList users;
     private BidList bids;
-    private static String currentuser;
+    private static User currentuser;
     private TaskItFile fs;
+    private TaskItSync sync;
+    private TaskItServer server;
 
 //    private static Context context;
 
-    public static String getCurrentuser() {
+    public static User getCurrentuser() {
         return currentuser;
     }
 
-    public static void setCurrentuser(String currentuser) {
+    public static void setCurrentuser(User currentuser) {
         TaskItData.currentuser = currentuser;
     }
     
@@ -63,6 +65,11 @@ public class TaskItData {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        this.server = new TaskItServer();
+
+        this.sync = new TaskItSync(fs, server);
+
     }
 
     public static TaskItData getInstance() {
@@ -180,7 +187,8 @@ public class TaskItData {
         return tasks.getTask(uuid);
     }
 
-
-    // TODO:
+    public void sync() {
+        sync.sync();
+    }
 
 }
