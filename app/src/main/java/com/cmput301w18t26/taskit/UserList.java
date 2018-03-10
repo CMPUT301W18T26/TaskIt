@@ -36,6 +36,24 @@ public class UserList {
         return -1;
     }
 
+    public int getIndexByUsername(String username) {
+        for (int i=0; i<users.size(); i++) {
+            if (getUser(i).getUsername().equals(username)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int getIndex(String uuid) {
+        for (int i=0; i<users.size(); i++) {
+            if (getUser(i).getUUID().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public User getUser(int index) {
         return users.get(index);
     }
@@ -43,6 +61,10 @@ public class UserList {
     public User getUser(User user) {
         return users.get(getIndex(user));
     }
+
+    public User getUser(String uuid) {return users.get(getIndex(uuid));}
+
+    public User getUserByUsername(String username) {return users.get(getIndexByUsername(username));}
 
     public void deleteUser(User user) {
         int index = getIndex(user);

@@ -3,10 +3,13 @@ package com.cmput301w18t26.taskit;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.Set;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -95,6 +98,4 @@ public class TaskActivity extends AppCompatActivity {
         editTitleText.setText(title,TextView.BufferType.EDITABLE);
         editDescText.setText(description,TextView.BufferType.EDITABLE);
     }
-
-    private void displayStatuses (Intent intent){}
 }
