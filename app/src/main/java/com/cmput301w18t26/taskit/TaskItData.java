@@ -178,6 +178,12 @@ public class TaskItData {
         }
     }
 
+    public Task getTask(String uuid) {
+        Task t = new Task();
+        t.setUUID(uuid);
+        return tasks.getTask(t);
+    }
+
 
     // TODO:
 
