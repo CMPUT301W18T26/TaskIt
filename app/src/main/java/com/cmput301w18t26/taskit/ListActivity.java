@@ -21,14 +21,7 @@ import java.util.Date;
 
 public class ListActivity extends AppCompatActivity {
 
-    protected static final String TITLE = "title";
-    protected static final String LOCATION = "location";
-    protected static final String OWNER = "owner";
-    protected static final String DESCRIPTION = "description";
-    protected static final String STATUS = "status";
-    protected static final String DATE = "date";
     protected static final String TYPE = "type";
-    protected static final String POSITION = "position";
 
     private ListView listOfTasks;
     private TaskList taskList = new TaskList();
