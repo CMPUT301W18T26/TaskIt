@@ -27,12 +27,14 @@ public class TaskActivity extends AppCompatActivity {
     private TextView locationText;
     private EditText editTitleText;
     private EditText editDescText;
+    private TaskItData db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
+        db = TaskItData.getInstance();
         if (type.equals("New Task")) {
             setContentView(R.layout.edittask);
             Button createTaskButton = (Button) findViewById(R.id.createtask);
@@ -47,13 +49,14 @@ public class TaskActivity extends AppCompatActivity {
             });
         } else {
             setContentView(R.layout.viewtask);
-            getTaskDetails(intent);
+            final Task task = db.getTask(intent.getStringExtra("UUID"));
+            getTaskDetails(task);
 
             Button editTaskButton = (Button) findViewById(R.id.edittask);
             editTaskButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v){
-                    editTaskDetails(intent);
+                    editTaskDetails(task);
                 }
 
             });
@@ -62,13 +65,7 @@ public class TaskActivity extends AppCompatActivity {
         setTitle(type);
     }
 
-    private void getTaskDetails(Intent intent) {
-        String title = intent.getStringExtra(ListActivity.TITLE);
-        String description = intent.getStringExtra(ListActivity.DESCRIPTION);
-        String status = intent.getStringExtra(ListActivity.STATUS);
-        String owner = intent.getStringExtra(ListActivity.OWNER);
-        String location = intent.getStringExtra(ListActivity.LOCATION);
-        String date = intent.getStringExtra(ListActivity.DATE);
+    private void getTaskDetails(Task task) {
 
         titleText = (TextView) findViewById(R.id.tasktitle);
         descriptionText = (TextView) findViewById(R.id.taskdescription);
@@ -77,25 +74,22 @@ public class TaskActivity extends AppCompatActivity {
         ownerText = (TextView) findViewById(R.id.taskowner);
         dateText = (TextView) findViewById(R.id.taskdate);
 
-        titleText.setText(title);
-        descriptionText.setText(description);
-        statusText.setText(status);
-        locationText.setText(location);
-        ownerText.setText(owner);
-        dateText.setText(date);
+        titleText.setText(task.getTitle());
+        descriptionText.setText(task.getDescription());
+        statusText.setText(task.getStatus());
+        locationText.setText(task.getLocation());
+        ownerText.setText(task.getOwner());
+        dateText.setText(task.getDateString());
 
     }
 
-    private void editTaskDetails (Intent intent) {
+    private void editTaskDetails (Task task) {
         setContentView(R.layout.add_modify_task);
-
-        String title = intent.getStringExtra(ListActivity.TITLE);
-        String description = intent.getStringExtra(ListActivity.DESCRIPTION);
 
         editTitleText = (EditText) findViewById(R.id.editTitle);
         editDescText = (EditText) findViewById(R.id.editDescription);
 
-        editTitleText.setText(title,TextView.BufferType.EDITABLE);
-        editDescText.setText(description,TextView.BufferType.EDITABLE);
+        editTitleText.setText(task.getTitle(),TextView.BufferType.EDITABLE);
+        editDescText.setText(task.getDescription(),TextView.BufferType.EDITABLE);
     }
 }
