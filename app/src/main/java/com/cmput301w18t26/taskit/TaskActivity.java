@@ -3,10 +3,13 @@ package com.cmput301w18t26.taskit;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.Set;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -22,12 +25,14 @@ public class TaskActivity extends AppCompatActivity {
     private TextView descriptionText;
     private TextView ownerText;
     private TextView locationText;
-    TaskItData db;
+    private EditText editTitleText;
+    private EditText editDescText;
+    private TaskItData db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
         db = TaskItData.getInstance();
         if (type.equals("New Task")) {
@@ -44,23 +49,47 @@ public class TaskActivity extends AppCompatActivity {
             });
         } else {
             setContentView(R.layout.viewtask);
-            Task task = db.getTask(intent.getStringExtra("UUID"));
+            final Task task = db.getTask(intent.getStringExtra("UUID"));
+            getTaskDetails(task);
 
-            titleText = (TextView) findViewById(R.id.tasktitle);
-            descriptionText = (TextView) findViewById(R.id.taskdescription);
-            statusText = (TextView) findViewById(R.id.taskstatus);
-            locationText = (TextView) findViewById(R.id.tasklocation);
-            ownerText = (TextView) findViewById(R.id.taskowner);
-            dateText = (TextView) findViewById(R.id.taskdate);
+            Button editTaskButton = (Button) findViewById(R.id.edittask);
+            editTaskButton.setOnClickListener(new View.OnClickListener() {
 
-            titleText.setText(task.getTitle());
-            descriptionText.setText(task.getDescription());
-            statusText.setText(task.getStatus());
-            locationText.setText(task.getLocation());
-            ownerText.setText(task.getOwner());
-            dateText.setText(task.getDateString());
+                public void onClick(View v){
+                    editTaskDetails(task);
+                }
+
+            });
 
         }
         setTitle(type);
+    }
+
+    private void getTaskDetails(Task task) {
+
+        titleText = (TextView) findViewById(R.id.tasktitle);
+        descriptionText = (TextView) findViewById(R.id.taskdescription);
+        statusText = (TextView) findViewById(R.id.taskstatus);
+        locationText = (TextView) findViewById(R.id.tasklocation);
+        ownerText = (TextView) findViewById(R.id.taskowner);
+        dateText = (TextView) findViewById(R.id.taskdate);
+
+        titleText.setText(task.getTitle());
+        descriptionText.setText(task.getDescription());
+        statusText.setText(task.getStatus());
+        locationText.setText(task.getLocation());
+        ownerText.setText(task.getOwner());
+        dateText.setText(task.getDateString());
+
+    }
+
+    private void editTaskDetails (Task task) {
+        setContentView(R.layout.add_modify_task);
+
+        editTitleText = (EditText) findViewById(R.id.editTitle);
+        editDescText = (EditText) findViewById(R.id.editDescription);
+
+        editTitleText.setText(task.getTitle(),TextView.BufferType.EDITABLE);
+        editDescText.setText(task.getDescription(),TextView.BufferType.EDITABLE);
     }
 }
