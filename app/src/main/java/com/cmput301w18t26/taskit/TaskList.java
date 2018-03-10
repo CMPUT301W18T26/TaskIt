@@ -35,12 +35,25 @@ public class TaskList {
         return -1;
     }
 
+    public int getIndex(String uuid) {
+        for (int i=0; i<tasks.size(); i++) {
+            if (getTask(i).getUUID().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public Task getTask(int index) {
         return tasks.get(index);
     }
 
     public Task getTask(Task task) {
         return tasks.get(getIndex(task));
+    }
+
+    public Task getTask(String uuid) {
+        return tasks.get(getIndex(uuid));
     }
 
     public void deleteTask(Task task) {

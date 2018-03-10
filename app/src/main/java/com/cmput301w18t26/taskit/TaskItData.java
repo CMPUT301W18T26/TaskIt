@@ -169,9 +169,7 @@ public class TaskItData {
 
 
     public boolean userExists(String username) {
-        User u = new User();
-        u.setUsername(username);
-        if (users.getIndex(u) > -1) {
+        if (users.getIndexByUsername(username) > -1) {
             return true;
         } else {
             return false;
@@ -179,9 +177,7 @@ public class TaskItData {
     }
 
     public Task getTask(String uuid) {
-        Task t = new Task();
-        t.setUUID(uuid);
-        return tasks.getTask(t);
+        return tasks.getTask(uuid);
     }
 
 
