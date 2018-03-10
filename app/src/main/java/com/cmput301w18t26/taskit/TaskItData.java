@@ -53,6 +53,9 @@ public class TaskItData {
         TaskItData.currentuser = currentuser;
     }
     
+    public User getUserByUsername(String username) {
+        return users.getUserByUsername(username);
+    }
 
     private TaskItData() {
         this.users = new UserList();
