@@ -42,6 +42,8 @@ public class TaskItData {
     private BidList bids;
     private static String currentuser;
     private TaskItFile fs;
+    private TaskItSync sync;
+    private TaskItServer server;
 
 //    private static Context context;
 
@@ -63,6 +65,11 @@ public class TaskItData {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        this.server = new TaskItServer();
+
+        this.sync = new TaskItSync(fs, server);
+
     }
 
     public static TaskItData getInstance() {
@@ -180,7 +187,8 @@ public class TaskItData {
         return tasks.getTask(uuid);
     }
 
-
-    // TODO:
+    public void sync() {
+        sync.sync();
+    }
 
 }
