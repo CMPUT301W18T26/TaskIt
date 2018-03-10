@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/task_title" />
+        android:text="@string/task_title"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="25dp" />
 
     <EditText
         android:id="@+id/update_title"
@@ -20,13 +22,17 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:selectAllOnFocus="true"
-        android:singleLine="false" />
+        android:singleLine="false"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="60dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/task_description" />
+        android:text="@string/task_description"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="199dp" />
 
     <EditText
         android:id="@+id/update_description"
@@ -34,21 +40,27 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ems="10"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="106dp" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/add_location" />
+        android:text="@string/add_location"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="302dp" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="49dp"
         android:layout_weight="1"
-        android:text="@string/add_photos" />
+        android:text="@string/add_photos"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="350dp" />
 
     <Button
         android:id="@+id/createtask"
@@ -56,6 +68,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:backgroundTint="@android:color/holo_green_dark"
-        android:text="@string/create_task" />
+        android:text="@string/create_task"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="450dp" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
