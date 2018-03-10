@@ -1,5 +1,6 @@
 package com.cmput301w18t26.taskit;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -99,5 +100,9 @@ public class Task {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getDateString(){
+        return new SimpleDateFormat("dd/MM/yyyy").format(date);
     }
 }

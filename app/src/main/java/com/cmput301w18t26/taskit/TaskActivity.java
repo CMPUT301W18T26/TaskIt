@@ -22,12 +22,14 @@ public class TaskActivity extends AppCompatActivity {
     private TextView descriptionText;
     private TextView ownerText;
     private TextView locationText;
+    TaskItData db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
+        db = TaskItData.getInstance();
         if (type.equals("New Task")) {
             setContentView(R.layout.edittask);
             Button createTaskButton = (Button) findViewById(R.id.createtask);
@@ -42,12 +44,7 @@ public class TaskActivity extends AppCompatActivity {
             });
         } else {
             setContentView(R.layout.viewtask);
-            String title = intent.getStringExtra(ListActivity.TITLE);
-            String description = intent.getStringExtra(ListActivity.DESCRIPTION);
-            String status = intent.getStringExtra(ListActivity.STATUS);
-            String owner = intent.getStringExtra(ListActivity.OWNER);
-            String location = intent.getStringExtra(ListActivity.LOCATION);
-            String date = intent.getStringExtra(ListActivity.DATE);
+            Task task = db.getTask(intent.getStringExtra("UUID"));
 
             titleText = (TextView) findViewById(R.id.tasktitle);
             descriptionText = (TextView) findViewById(R.id.taskdescription);
@@ -56,12 +53,12 @@ public class TaskActivity extends AppCompatActivity {
             ownerText = (TextView) findViewById(R.id.taskowner);
             dateText = (TextView) findViewById(R.id.taskdate);
 
-            titleText.setText(title);
-            descriptionText.setText(description);
-            statusText.setText(status);
-            locationText.setText(location);
-            ownerText.setText(owner);
-            dateText.setText(date);
+            titleText.setText(task.getTitle());
+            descriptionText.setText(task.getDescription());
+            statusText.setText(task.getStatus());
+            locationText.setText(task.getLocation());
+            ownerText.setText(task.getOwner());
+            dateText.setText(task.getDateString());
 
         }
         setTitle(type);
