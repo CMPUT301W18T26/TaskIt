@@ -168,6 +168,18 @@ public class TaskItData {
     }
 
 
+    public boolean userExists(String username) {
+        if (users.getIndexByUsername(username) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Task getTask(String uuid) {
+        return tasks.getTask(uuid);
+    }
+
 
     // TODO:
 

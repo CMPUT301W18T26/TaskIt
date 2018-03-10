@@ -13,5 +13,12 @@ public class BidActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bid);
+
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+
     }
 }

@@ -34,6 +34,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //      LatLng location = task.getLocation().[convert to LatLng]
         //      googleMap.addMarker(new MarkerOptions().position(location).title(task.getTitle());
         // }
-
+        //
+        // additionally can optionally constraint camera view to within 5 km of user location.
     }
 }

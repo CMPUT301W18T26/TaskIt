@@ -21,14 +21,7 @@ import java.util.Date;
 
 public class ListActivity extends AppCompatActivity {
 
-    protected static final String TITLE = "title";
-    protected static final String LOCATION = "location";
-    protected static final String OWNER = "owner";
-    protected static final String DESCRIPTION = "description";
-    protected static final String STATUS = "status";
-    protected static final String DATE = "date";
     protected static final String TYPE = "type";
-    protected static final String POSITION = "position";
 
     private ListView listOfTasks;
     private TaskList taskList = new TaskList();
@@ -101,24 +94,9 @@ public class ListActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
             // TODO Auto-generated method stub
             Task task = (Task)adapter.getItemAtPosition(position);
-            String title = task.getTitle();
-            String location = task.getLocation();
-            String owner = task.getOwner();
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            String date = df.format(task.getDate());
-            String description = task.getDescription();
-            String status = task.getStatus();
-
-
             Intent intent = new Intent(ListActivity.this, TaskActivity.class);
-            intent.putExtra(TYPE, "Task");
-            intent.putExtra(TITLE, title);
-            intent.putExtra(LOCATION, location);
-            intent.putExtra(OWNER, owner);
-            intent.putExtra(DATE, date);
-            intent.putExtra(DESCRIPTION, description);
-            intent.putExtra(STATUS, status);
-            intent.putExtra(POSITION, position);
+            String UUID = task.getUUID();
+            intent.putExtra("UUID", UUID);
 
             startActivity(intent);
 
