@@ -35,7 +35,7 @@ public class UserActivity extends AppCompatActivity {
         String type = intent.getStringExtra(HomeActivity.TYPE);
         setTitle(type);
         db = TaskItData.getInstance();
-        db.refresh();
+
         if (type.equals("Register")) {
             setContentView(R.layout.registeruser);
             usernameEdit = (EditText) findViewById(R.id.username);
@@ -95,7 +95,8 @@ public class UserActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     db.getCurrentUser().setName(nameEdit.getText().toString());
                     db.getCurrentUser().setEmail(emailEdit.getText().toString());
-                    db.getCurrentUser().setPhone(Integer.parseInt(phoneEdit.getText().toString()));
+                    db.getCurrentUser().setPhone(Long.parseLong(phoneEdit.getText().toString()));
+                    db.updateUser(db.getCurrentUser());
                     Intent updateIntent = new Intent(getApplicationContext(),UserActivity.class);
                     updateIntent.putExtra(TYPE, "My Profile");
                     startActivity(updateIntent);
