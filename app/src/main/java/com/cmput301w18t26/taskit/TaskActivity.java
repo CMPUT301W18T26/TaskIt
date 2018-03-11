@@ -60,7 +60,6 @@ public class TaskActivity extends AppCompatActivity {
                 public void onClick(View v){
                     editTaskDetails(task);
                 }
-
             });
 
             Button viewBids = (Button) findViewById(R.id.viewBids);
@@ -71,7 +70,6 @@ public class TaskActivity extends AppCompatActivity {
                     startActivity(bidList);
                     setResult(RESULT_OK);
                 }
-
             });
 
         }
@@ -96,7 +94,7 @@ public class TaskActivity extends AppCompatActivity {
 
     }
 
-    private void editTaskDetails (Task task) {
+    private void editTaskDetails (final Task task) {
         setContentView(R.layout.add_modify_task);
         Spinner s = (Spinner) findViewById(R.id.spinner);
         String status = task.getStatus();
@@ -113,7 +111,28 @@ public class TaskActivity extends AppCompatActivity {
         editTitleText = (EditText) findViewById(R.id.editTitle);
         editDescText = (EditText) findViewById(R.id.editDescription);
 
+
         editTitleText.setText(task.getTitle(),TextView.BufferType.EDITABLE);
         editDescText.setText(task.getDescription(),TextView.BufferType.EDITABLE);
+
+
+        Button confirmEdits = (Button) findViewById(R.id.confirmedit);
+        confirmEdits.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v){
+                modifyDetails (task,editTitleText,editDescText);
+            }
+        });
+
+    }
+
+    private void modifyDetails (Task task, EditText title,EditText desc){
+        String editedTitle = title.getText().toString();
+        String editedDesc = desc.getText().toString();
+
+        task.setTitle(editedTitle);
+        task.setDescription(editedDesc);
+
+        finishActivity(0);
     }
 }
