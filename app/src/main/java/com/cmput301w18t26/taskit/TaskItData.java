@@ -103,6 +103,11 @@ public class TaskItData {
         // Request sync?
     }
 
+    public void updateUser(User user) {
+        user.setTimestamp(new Date());
+        fs.addUserFile(user);
+    }
+
     public UserList getUsers() {
         return users;
     }
@@ -124,6 +129,11 @@ public class TaskItData {
         // Move task to trash (filesystem)
         fs.deleteTaskFile(task);
         // Request sync?
+    }
+
+    public void updateTask(Task task) {
+        task.setTimestamp(new Date());
+        fs.addTaskFile(task);
     }
 
     public TaskList getTasks() {
@@ -148,6 +158,13 @@ public class TaskItData {
         fs.deleteBidFile(bid);
         // Request sync?
     }
+
+    public void updateBid(Bid bid) {
+        bid.setTimestamp(new Date());
+        fs.addBidFile(bid);
+    }
+
+
     public BidList getBids() {
         return bids;
     }
