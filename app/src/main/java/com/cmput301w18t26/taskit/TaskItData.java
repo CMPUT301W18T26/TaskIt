@@ -68,7 +68,7 @@ public class TaskItData {
 
         this.server = new TaskItServer();
 
-        this.sync = new TaskItSync(fs, server);
+        //this.sync = new TaskItSync(fs, server);
 
     }
 
