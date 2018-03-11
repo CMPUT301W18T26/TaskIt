@@ -40,19 +40,17 @@ public class TaskItData {
     private TaskList tasks;
     private UserList users;
     private BidList bids;
-    private static User currentuser;
+    private User currentUser;
     private TaskItFile fs;
     public static TaskItSync sync;
 
-//    private static Context context;
-
-    public static User getCurrentuser() {
-        return currentuser;
+    public User getCurrentUser() {
+        return currentUser;
     }
 
-    public static void setCurrentuser(User currentuser) {
-        currentuser = currentuser;
-        sync.setCurrentUser(currentuser.getUsername());
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+        sync.setCurrentUser(currentUser.getUsername());
     }
     
     public User getUserByUsername(String username) {
