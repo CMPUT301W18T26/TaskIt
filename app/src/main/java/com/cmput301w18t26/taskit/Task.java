@@ -88,6 +88,9 @@ public class Task {
     public boolean isOwner(String s) {
         return owner.equals(s);
     }
+    public boolean isOwner(User u) {
+        return owner.equals(u.getOwner());
+    }
 
     public String getUUID() {
         return UUID;

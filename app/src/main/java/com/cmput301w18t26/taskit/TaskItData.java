@@ -42,8 +42,7 @@ public class TaskItData {
     private BidList bids;
     private static User currentuser;
     private TaskItFile fs;
-    private TaskItSync sync;
-    private TaskItServer server;
+    public static TaskItSync sync;
 
 //    private static Context context;
 
@@ -52,7 +51,8 @@ public class TaskItData {
     }
 
     public static void setCurrentuser(User currentuser) {
-        TaskItData.currentuser = currentuser;
+        currentuser = currentuser;
+        sync.setCurrentUser(currentuser.getUsername());
     }
     
     public User getUserByUsername(String username) {
@@ -69,9 +69,7 @@ public class TaskItData {
             e.printStackTrace();
         }
 
-        this.server = new TaskItServer();
-
-        //this.sync = new TaskItSync(fs, server);
+        this.sync = new TaskItSync();
 
     }
 
@@ -105,6 +103,11 @@ public class TaskItData {
         // Request sync?
     }
 
+    public void updateUser(User user) {
+        user.setTimestamp(new Date());
+        fs.addUserFile(user);
+    }
+
     public UserList getUsers() {
         return users;
     }
@@ -126,6 +129,11 @@ public class TaskItData {
         // Move task to trash (filesystem)
         fs.deleteTaskFile(task);
         // Request sync?
+    }
+
+    public void updateTask(Task task) {
+        task.setTimestamp(new Date());
+        fs.addTaskFile(task);
     }
 
     public TaskList getTasks() {
@@ -150,6 +158,13 @@ public class TaskItData {
         fs.deleteBidFile(bid);
         // Request sync?
     }
+
+    public void updateBid(Bid bid) {
+        bid.setTimestamp(new Date());
+        fs.addBidFile(bid);
+    }
+
+
     public BidList getBids() {
         return bids;
     }
@@ -172,10 +187,20 @@ public class TaskItData {
      * @param task
      * @return
      */
-
     public BidList taskBids(Task task){
         return new BidList();
     }
+
+    /**
+     * Get Tasks with status.
+     *
+     * @param status
+     * @return
+     */
+    public TaskList tasksWithStatus(String status){
+        return new TaskList();
+    }
+
 
 
     public boolean userExists(String username) {
@@ -192,6 +217,10 @@ public class TaskItData {
 
     public void sync() {
         sync.sync();
+        users.clear();
+        tasks.clear();
+        bids.clear();
+        fs.loadAllFromFile(users, tasks, bids);
     }
 
 }

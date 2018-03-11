@@ -57,7 +57,9 @@ public class Bid {
     public boolean isOwner(String s) {
         return owner.equals(s);
     }
-
+    public boolean isOwner(User u) {
+        return owner.equals(u.getUsername());
+    }
 
     public String getUUID() {
         return UUID;

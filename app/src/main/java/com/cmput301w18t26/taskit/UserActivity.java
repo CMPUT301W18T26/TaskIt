@@ -51,7 +51,7 @@ public class UserActivity extends AppCompatActivity {
                     String usernameInput = usernameEdit.getText().toString();
                     String nameInput = nameEdit.getText().toString();
                     String emailInput = emailEdit.getText().toString();
-                    int phoneInput = Integer.parseInt(phoneEdit.getText().toString());
+                    long phoneInput = Integer.parseInt(phoneEdit.getText().toString());
                     if (db.userExists(usernameInput)) {
                         invalidUsername.setText("Username already exists");
                         invalidUsername.setVisibility(View.VISIBLE);

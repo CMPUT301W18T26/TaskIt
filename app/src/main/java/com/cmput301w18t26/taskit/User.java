@@ -9,7 +9,7 @@ import java.util.Date;
 public class User {
     private String name;
     private String email;
-    private int phone;
+    private long phone;
     private String username;
     private int[] ranks;
     private TaskList tasks;
@@ -40,7 +40,7 @@ public class User {
         this.phone = phone;
     }
 
-    public int getPhone() {
+    public long getPhone() {
         return phone;
     }
 
@@ -103,6 +103,9 @@ public class User {
 
     public boolean isOwner(String s) {
         return owner.equals(s);
+    }
+    public boolean isOwner(User u) {
+        return owner.equals(u.getOwner());
     }
 
     public String getUUID() {

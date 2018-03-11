@@ -57,4 +57,12 @@ public class BidList {
     public void addAll(Collection<Bid> l) {
         bids.addAll(l);
     }
+
+    public void addAll(BidList l) {
+        bids.addAll(l.getBids());
+    }
+
+    public void clear() {
+        bids.clear();
+    }
 }
