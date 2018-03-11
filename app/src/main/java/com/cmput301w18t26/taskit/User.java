@@ -9,7 +9,7 @@ import java.util.Date;
 public class User {
     private String name;
     private String email;
-    private int phone;
+    private long phone;
     private String username;
     private int[] ranks;
     private TaskList tasks;
@@ -40,7 +40,7 @@ public class User {
         this.phone = phone;
     }
 
-    public int getPhone() {
+    public long getPhone() {
         return phone;
     }
 
