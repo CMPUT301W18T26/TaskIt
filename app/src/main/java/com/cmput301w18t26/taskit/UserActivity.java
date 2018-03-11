@@ -51,7 +51,7 @@ public class UserActivity extends AppCompatActivity {
                     String usernameInput = usernameEdit.getText().toString();
                     String nameInput = nameEdit.getText().toString();
                     String emailInput = emailEdit.getText().toString();
-                    int phoneInput = Integer.parseInt(phoneEdit.getText().toString());
+                    long phoneInput = Long.parseLong(phoneEdit.getText().toString());
                     if (db.userExists(usernameInput)) {
                         invalidUsername.setText("Username already exists");
                         invalidUsername.setVisibility(View.VISIBLE);
@@ -61,8 +61,8 @@ public class UserActivity extends AppCompatActivity {
                         user.setName(nameInput);
                         user.setEmail(emailInput);
                         user.setPhone(phoneInput);
+                        db.setCurrentuser(user);
                         db.addUser(user);
-                        db.setCurrentuser(db.getUserByUsername(usernameInput));
                         Intent homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
                         startActivity(homeIntent);
                         setResult(RESULT_OK);

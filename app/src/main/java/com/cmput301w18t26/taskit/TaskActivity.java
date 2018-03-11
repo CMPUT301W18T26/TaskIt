@@ -72,6 +72,17 @@ public class TaskActivity extends AppCompatActivity {
                 }
             });
 
+            Button addBidButton = (Button) findViewById(R.id.bidTask);
+            final Intent bidActivity = new Intent(getApplicationContext(), BidActivity.class);
+            addBidButton.setOnClickListener(new View.OnClickListener(){
+
+                public void onClick(View v){
+                    startActivity(bidActivity);
+                    setResult(RESULT_OK);
+                }
+
+            });
+
         }
         setTitle(type);
     }
