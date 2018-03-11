@@ -133,6 +133,9 @@ public class TaskActivity extends AppCompatActivity {
         task.setTitle(editedTitle);
         task.setDescription(editedDesc);
 
-        finishActivity(0);
+        db.updateTask(task);
+
+        setContentView(R.layout.viewtask);
+        getTaskDetails(task);
     }
 }
