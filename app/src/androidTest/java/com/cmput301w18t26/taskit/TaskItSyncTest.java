@@ -52,7 +52,7 @@ public class TaskItSyncTest extends ActivityInstrumentationTestCase2 {
         User u = new MockUser();
 
         u.setUsername(username);
-        db.setCurrentuser(u);
+        db.setCurrentUser(u);
 
         db.addUser(u);
 
@@ -87,7 +87,7 @@ public class TaskItSyncTest extends ActivityInstrumentationTestCase2 {
         User u = new MockUser();
 
         u.setUsername(username);
-        db.setCurrentuser(u);
+        db.setCurrentUser(u);
 
         db.addUser(u);
 
@@ -138,7 +138,7 @@ public class TaskItSyncTest extends ActivityInstrumentationTestCase2 {
         u1.setUsername(username1);
         u2.setUsername(username2);
 
-        db.setCurrentuser(u1);
+        db.setCurrentUser(u1);
 
         db.addUser(u1);
 
@@ -152,7 +152,7 @@ public class TaskItSyncTest extends ActivityInstrumentationTestCase2 {
 
         db.deleteUser(u1);
 
-        db.setCurrentuser(u2);
+        db.setCurrentUser(u2);
 
         db.sync();
 
@@ -195,7 +195,7 @@ public class TaskItSyncTest extends ActivityInstrumentationTestCase2 {
         u1.setUsername(username1);
         u2.setUsername(username2);
 
-        db.setCurrentuser(u1);
+        db.setCurrentUser(u1);
 
         db.addUser(u1);
 
@@ -207,7 +207,7 @@ public class TaskItSyncTest extends ActivityInstrumentationTestCase2 {
             e.printStackTrace();
         }
 
-        db.setCurrentuser(u2);
+        db.setCurrentUser(u2);
         TaskItServer.deleteUserJob deleteUser = new TaskItServer.deleteUserJob();
         deleteUser.execute(u1);
 

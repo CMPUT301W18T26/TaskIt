@@ -28,8 +28,8 @@ import java.util.concurrent.TimeUnit;
 
  */
 public class TaskItSync {
-    // GROSS
-    private String currentUser;
+
+    private String currentUser = "";
 
     private UserList localUsers;
     private UserList remoteUsers;
