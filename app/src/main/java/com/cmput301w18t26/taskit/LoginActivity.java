@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent homeIntent = new Intent(getApplicationContext(),HomeActivity.class);
                     startActivity(homeIntent);
                     setResult(RESULT_OK);
+                    db.sync();
                 } else {
                     invalidUsername.setVisibility(View.VISIBLE);
                 }

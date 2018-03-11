@@ -36,7 +36,7 @@ public class User {
         return email;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(long phone) {
         this.phone = phone;
     }
 

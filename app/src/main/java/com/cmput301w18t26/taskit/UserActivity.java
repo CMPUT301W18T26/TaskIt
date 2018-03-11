@@ -61,8 +61,8 @@ public class UserActivity extends AppCompatActivity {
                         user.setName(nameInput);
                         user.setEmail(emailInput);
                         user.setPhone(phoneInput);
+                        db.setCurrentuser(user);
                         db.addUser(user);
-                        db.setCurrentuser(db.getUserByUsername(usernameInput));
                         Intent homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
                         startActivity(homeIntent);
                         setResult(RESULT_OK);
