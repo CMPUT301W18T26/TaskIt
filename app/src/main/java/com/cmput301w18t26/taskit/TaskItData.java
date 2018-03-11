@@ -223,11 +223,12 @@ public class TaskItData {
     }
 
     public void sync() {
-        sync.sync();
-        users.clear();
-        tasks.clear();
-        bids.clear();
-        fs.loadAllFromFile(users, tasks, bids);
+        // Todo: wrap these in a sort of timeout for offline functionality
+        //        sync.sync();
+        //        users.clear();
+        //        tasks.clear();
+        //        bids.clear();
+        //        fs.loadAllFromFile(users, tasks, bids);
     }
 
 }

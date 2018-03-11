@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         TaskItFile.setContext(this);
         db = TaskItData.getInstance();
-        db.sync();
+        db.refresh();
 
 
         setTitle("Login");
