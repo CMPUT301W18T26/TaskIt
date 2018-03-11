@@ -97,7 +97,7 @@ public class ListActivity extends AppCompatActivity {
             Intent intent = new Intent(ListActivity.this, TaskActivity.class);
             String UUID = task.getUUID();
             intent.putExtra("UUID", UUID);
-
+            intent.putExtra(TYPE, "Existing Task");
             startActivity(intent);
 
         }

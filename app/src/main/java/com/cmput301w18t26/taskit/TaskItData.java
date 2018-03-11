@@ -55,6 +55,9 @@ public class TaskItData {
         sync.setCurrentUser(currentuser.getUsername());
     }
     
+    public User getUserByUsername(String username) {
+        return users.getUserByUsername(username);
+    }
 
     private TaskItData() {
         this.users = new UserList();

@@ -20,6 +20,8 @@ public class Task {
     // metadata for server/sync
     private String UUID;
     private Date timestamp;
+    public static String[] statuses = {"Bidded","Requested","Accepted","Done"};
+    public static String[] changeableStatuses = {"Requested","Accepted","Done"};
 
     public void setDate(Date date) {
         this.date = date;
@@ -93,6 +95,7 @@ public class Task {
     public String getUUID() {
         return UUID;
     }
+
     public void setUUID(String UUID) {
         this.UUID = UUID;
     }
