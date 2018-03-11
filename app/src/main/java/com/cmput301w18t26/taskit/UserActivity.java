@@ -21,6 +21,7 @@ public class UserActivity extends AppCompatActivity {
     private EditText usernameEdit;
     private EditText emailEdit;
     private EditText phoneEdit;
+    private EditText nameEdit;
     private TextView usernameText;
     private TextView nameText;
     private TextView emailText;
@@ -40,6 +41,7 @@ public class UserActivity extends AppCompatActivity {
             usernameEdit = (EditText) findViewById(R.id.username);
             emailEdit = (EditText) findViewById(R.id.email);
             phoneEdit = (EditText) findViewById(R.id.phone);
+            nameEdit = (EditText) findViewById(R.id.name);
             invalidUsername = (TextView) findViewById(R.id.invalid_username);
             Button actionButton = (Button) findViewById(R.id.confirmuser);
             Button cancelButton = (Button) findViewById(R.id.cancel);
@@ -47,6 +49,7 @@ public class UserActivity extends AppCompatActivity {
 
                 public void onClick(View v) {
                     String usernameInput = usernameEdit.getText().toString();
+                    String nameInput = nameEdit.getText().toString();
                     String emailInput = emailEdit.getText().toString();
                     int phoneInput = Integer.parseInt(phoneEdit.getText().toString());
                     if (db.userExists(usernameInput)) {
@@ -55,6 +58,7 @@ public class UserActivity extends AppCompatActivity {
                     } else {
                         User user = new User();
                         user.setUsername(usernameInput);
+                        user.setName(nameInput);
                         user.setEmail(emailInput);
                         user.setPhone(phoneInput);
                         db.addUser(user);
@@ -76,12 +80,34 @@ public class UserActivity extends AppCompatActivity {
         } else if (type.equals("Update")) {
             setContentView(R.layout.edituser);
             Button actionButton = (Button) findViewById(R.id.confirmuser);
+            Button cancelButton = (Button) findViewById(R.id.cancel);
+            usernameText = (TextView) findViewById(R.id.username);
+            usernameText.setText(db.getCurrentuser().getUsername());
+            emailEdit = (EditText) findViewById(R.id.email);
+            emailEdit.setText(db.getCurrentuser().getEmail());
+            phoneEdit = (EditText) findViewById(R.id.phone);
+            phoneEdit.setText(String.valueOf(db.getCurrentuser().getPhone()));
+            nameEdit = (EditText) findViewById(R.id.name);
+            nameEdit.setText(db.getCurrentuser().getName());
             actionButton.setText(type);
             actionButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-                    Intent homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
-                    startActivity(homeIntent);
+                    db.getCurrentuser().setName(nameEdit.getText().toString());
+                    db.getCurrentuser().setEmail(emailEdit.getText().toString());
+                    db.getCurrentuser().setPhone(Integer.parseInt(phoneEdit.getText().toString()));
+                    Intent updateIntent = new Intent(getApplicationContext(),UserActivity.class);
+                    updateIntent.putExtra(TYPE, "My Profile");
+                    startActivity(updateIntent);
+                    setResult(RESULT_OK);
+                }
+            });
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    Intent updateIntent = new Intent(getApplicationContext(),UserActivity.class);
+                    updateIntent.putExtra(TYPE, "My Profile");
+                    startActivity(updateIntent);
                     setResult(RESULT_OK);
                 }
             });
@@ -98,7 +124,7 @@ public class UserActivity extends AppCompatActivity {
                 usernameText.setText(db.getCurrentuser().getUsername());
                 nameText.setText(db.getCurrentuser().getName());
                 emailText.setText(db.getCurrentuser().getEmail());
-                //phoneText.setText(db.getCurrentuser().getPhone());
+                phoneText.setText(String.valueOf(db.getCurrentuser().getPhone()));
             } else {
                 editButton.setVisibility(View.GONE);
             }
