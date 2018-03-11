@@ -63,6 +63,17 @@ public class TaskActivity extends AppCompatActivity {
 
             });
 
+            Button viewBids = (Button) findViewById(R.id.viewBids);
+            final Intent bidList = new Intent(getApplicationContext(),BidListActivity.class);
+            viewBids.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v){
+                    startActivity(bidList);
+                    setResult(RESULT_OK);
+                }
+
+            });
+
         }
         setTitle(type);
     }
