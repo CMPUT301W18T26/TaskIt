@@ -61,7 +61,7 @@ public class UserActivity extends AppCompatActivity {
                         user.setName(nameInput);
                         user.setEmail(emailInput);
                         user.setPhone(phoneInput);
-                        db.setCurrentuser(user);
+                        db.setCurrentUser(user);
                         db.addUser(user);
                         Intent homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
                         startActivity(homeIntent);
@@ -82,20 +82,20 @@ public class UserActivity extends AppCompatActivity {
             Button actionButton = (Button) findViewById(R.id.confirmuser);
             Button cancelButton = (Button) findViewById(R.id.cancel);
             usernameText = (TextView) findViewById(R.id.username);
-            usernameText.setText(db.getCurrentuser().getUsername());
+            usernameText.setText(db.getCurrentUser().getUsername());
             emailEdit = (EditText) findViewById(R.id.email);
-            emailEdit.setText(db.getCurrentuser().getEmail());
+            emailEdit.setText(db.getCurrentUser().getEmail());
             phoneEdit = (EditText) findViewById(R.id.phone);
-            phoneEdit.setText(String.valueOf(db.getCurrentuser().getPhone()));
+            phoneEdit.setText(String.valueOf(db.getCurrentUser().getPhone()));
             nameEdit = (EditText) findViewById(R.id.name);
-            nameEdit.setText(db.getCurrentuser().getName());
+            nameEdit.setText(db.getCurrentUser().getName());
             actionButton.setText(type);
             actionButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-                    db.getCurrentuser().setName(nameEdit.getText().toString());
-                    db.getCurrentuser().setEmail(emailEdit.getText().toString());
-                    db.getCurrentuser().setPhone(Integer.parseInt(phoneEdit.getText().toString()));
+                    db.getCurrentUser().setName(nameEdit.getText().toString());
+                    db.getCurrentUser().setEmail(emailEdit.getText().toString());
+                    db.getCurrentUser().setPhone(Integer.parseInt(phoneEdit.getText().toString()));
                     Intent updateIntent = new Intent(getApplicationContext(),UserActivity.class);
                     updateIntent.putExtra(TYPE, "My Profile");
                     startActivity(updateIntent);
@@ -121,10 +121,10 @@ public class UserActivity extends AppCompatActivity {
 
 
             if (type.equals("My Profile")) {
-                usernameText.setText(db.getCurrentuser().getUsername());
-                nameText.setText(db.getCurrentuser().getName());
-                emailText.setText(db.getCurrentuser().getEmail());
-                phoneText.setText(String.valueOf(db.getCurrentuser().getPhone()));
+                usernameText.setText(db.getCurrentUser().getUsername());
+                nameText.setText(db.getCurrentUser().getName());
+                emailText.setText(db.getCurrentUser().getEmail());
+                phoneText.setText(String.valueOf(db.getCurrentUser().getPhone()));
             } else {
                 editButton.setVisibility(View.GONE);
             }

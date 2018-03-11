@@ -24,7 +24,7 @@ public class BidActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
         db = TaskItData.getInstance();
-        final User user = db.getCurrentuser();
+        final User user = db.getCurrentUser();
 
         Button bidButton = (Button) findViewById(R.id.bidButton);
         bidButton.setOnClickListener(new View.OnClickListener() {

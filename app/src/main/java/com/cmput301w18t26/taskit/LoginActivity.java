@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String userInput = username.getText().toString();
                 if (db.userExists(userInput)) {
-                    db.setCurrentuser(db.getUserByUsername(userInput));
+                    db.setCurrentUser(db.getUserByUsername(userInput));
                     Intent homeIntent = new Intent(getApplicationContext(),HomeActivity.class);
                     startActivity(homeIntent);
                     setResult(RESULT_OK);
