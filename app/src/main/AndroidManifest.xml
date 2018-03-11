@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".TaskActivity">
         </activity>
+        <activity android:name=".BidListActivity">
+        </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDTQmsOdm_SD7aRwaT7CJ6wcTAmS9tPjWo"/>

@@ -5,6 +5,7 @@ package com.cmput301w18t26.taskit;
  */
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -133,6 +134,7 @@ public class TaskItFile {
         }.getType();
         for (int i = 0; i < filenames.length; i++) {
             filename = dirName + "/" + filenames[i];
+
             t.addTask((Task) loadFromFile(filename, taskType));
         }
         // bid handling

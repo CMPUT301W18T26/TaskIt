@@ -4,7 +4,10 @@ package com.cmput301w18t26.taskit;
  * Created by kevingordon on 2018-03-06.
  */
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Get the data from the filesystem (local)
@@ -25,7 +28,8 @@ import java.util.ArrayList;
 
  */
 public class TaskItSync {
-    private String appUser = "AliceBob";
+    // GROSS
+    private String currentUser;
 
     private UserList localUsers;
     private UserList remoteUsers;
@@ -37,12 +41,45 @@ public class TaskItSync {
     private BidList remoteBids;
 
     private TaskItFile fs;
-    private TaskItServer server;
+    public TaskItServer server;
+
+    public TaskItSync() {
+        localUsers = new UserList();
+        remoteUsers = new UserList();
+
+        remoteTasks = new TaskList();
+        localTasks = new TaskList();
+
+        remoteBids = new BidList();
+        localBids = new BidList();
+
+        try {
+            this.fs = TaskItFile.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.server = new TaskItServer();
+    }
+
+    public void setCurrentUser(String username) {
+        currentUser = username;
+    }
+
 
     public void sync() {
+        localUsers.clear();
+        localTasks.clear();
+        localBids.clear();
+        remoteUsers.clear();
+        remoteTasks.clear();
+        remoteBids.clear();
+
         fs.loadAllFromFile(localUsers, localTasks, localBids);
         server.loadAllFromServer(remoteUsers, remoteTasks, remoteBids);
 
+        Log.d("TaskItSync", "Current user: "+ currentUser);
+        Log.d("TaskItSync", "syncing... fs count: "+String.valueOf(localUsers.getUserCount()));
+        Log.d("TaskItSync", "syncing... svr count: "+String.valueOf(remoteUsers.getUserCount()));
         syncUsers();
         syncTasks();
         syncBids();
@@ -50,18 +87,25 @@ public class TaskItSync {
 
     private void syncUsers() {
         User currUser;
+        Log.d("TaskItSync", "Looping over local");
         for (int i=0;i<localUsers.getUserCount(); i++) {
             currUser = localUsers.getUser(i);
-            if (currUser.isOwner(appUser)) { // Owner's file
+            Log.d("TaskItSync", "syncing " + currUser.getUsername());
+            if (currUser.isOwner(currentUser)) { // Owner's file
+                Log.d("TaskItSync", "owner's file...");
                 if (!remoteUsers.hasUser(currUser)) { // Local, not remote
+                    Log.d("TaskItSync", "in local, not remote...");
                     server.addUser(currUser);
                 } else { // In both
+                    Log.d("TaskItSync", "in both");
                     User rUser = remoteUsers.getUser(currUser);
                     User lUser = localUsers.getUser(currUser);
                     if (rUser.getTimestamp().after(lUser.getTimestamp())) { // remote is current
+                        Log.d("TaskItSync", "remote is most current");
                         fs.deleteUserFile(lUser);
                         fs.addUserFile(rUser);
                     } else { // local is current
+                        Log.d("TaskItSync", "local is current");
                         server.delUser(rUser);
                         server.addUser(lUser);
                     }
@@ -69,15 +113,20 @@ public class TaskItSync {
                     remoteUsers.deleteUser(currUser);
                 }
             } else { // Others file
+                Log.d("TaskItSync", "other is owner");
                 if (!remoteUsers.hasUser(currUser)) { // Local, not remote
+                    Log.d("TaskItSync", "local not remote");
                     fs.deleteUserFile(currUser);
                 } else { // In both
+                    Log.d("TaskItSync", "in both");
                     User rUser = remoteUsers.getUser(currUser);
                     User lUser = localUsers.getUser(currUser);
                     if (rUser.getTimestamp().after(lUser.getTimestamp())) { // remote is current
+                        Log.d("TaskItSync", "remote is most current");
                         fs.deleteUserFile(lUser);
                         fs.addUserFile(rUser);
                     } else { // local is current
+                        Log.d("TaskItSync", "local is most current");
                         server.delUser(rUser);
                         server.addUser(lUser);
                     }
@@ -88,15 +137,21 @@ public class TaskItSync {
 
         }
 
+        Log.d("TaskItSync", "looping over remote");
         // Anything in both will have been processed by the above
         for (int i=0;i<remoteUsers.getUserCount(); i++) {
             currUser = remoteUsers.getUser(i);
-            if (currUser.isOwner(appUser)) { // Owner's file
+            Log.d("TaskItSync", currUser.getUsername());
+            if (currUser.isOwner(currentUser)) { // Owner's file
+                Log.d("TaskItSync", "is owner");
                 if (!localUsers.hasUser(currUser)) { // Remote, not local
+                    Log.d("TaskItSync", "remote not local");
                     server.delUser(currUser);
                 }
             } else { // Others file
+                Log.d("TaskItSync", "other is owner");
                 if (!localUsers.hasUser(currUser)) { // Remote, not local
+                    Log.d("TaskItSync", "remote not local");
                     fs.addUserFile(currUser);
                 }
             }
@@ -107,7 +162,7 @@ public class TaskItSync {
         Task currTask;
         for (int i=0;i<localTasks.getTaskCount(); i++) {
             currTask = localTasks.getTask(i);
-            if (currTask.isOwner(appUser)) { // Owner's file
+            if (currTask.isOwner(currentUser)) { // Owner's file
                 if (!remoteTasks.hasTask(currTask)) { // Local, not remote
                     server.addTask(currTask);
                 } else { // In both
@@ -145,7 +200,7 @@ public class TaskItSync {
 
         for (int i=0;i<remoteTasks.getTaskCount(); i++) {
             currTask = remoteTasks.getTask(i);
-            if (currTask.isOwner(appUser)) { // Owner's file
+            if (currTask.isOwner(currentUser)) { // Owner's file
                 if (!localTasks.hasTask(currTask)) { // Remote, not local
                     server.delTask(currTask);
                 }
@@ -161,7 +216,7 @@ public class TaskItSync {
         Bid currBid;
         for (int i=0;i<localBids.getBidCount(); i++) {
             currBid = localBids.getBid(i);
-            if (currBid.isOwner(appUser)) { // Owner's file
+            if (currBid.isOwner(currentUser)) { // Owner's file
                 if (!remoteBids.hasBid(currBid)) { // Local, not remote
                     server.addBid(currBid);
                 } else { // In both
@@ -199,7 +254,7 @@ public class TaskItSync {
 
         for (int i=0;i<remoteBids.getBidCount(); i++) {
             currBid = remoteBids.getBid(i);
-            if (currBid.isOwner(appUser)) { // Owner's file
+            if (currBid.isOwner(currentUser)) { // Owner's file
                 if (!localBids.hasBid(currBid)) { // Remote, not local
                     server.delBid(currBid);
                 }

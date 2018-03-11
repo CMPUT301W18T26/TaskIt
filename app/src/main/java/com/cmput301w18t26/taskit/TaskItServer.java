@@ -14,6 +14,7 @@ import com.searchly.jestdroid.JestDroidClient;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.searchbox.client.JestResult;
@@ -99,7 +100,9 @@ public class TaskItServer {
                 try {
                     // where is the client?
                     DocumentResult result = client.execute(index);
+                    Log.d("TaskItServer", "I'm trying to add a user");
                     if (result.isSucceeded()) {
+                        Log.d("TaskItServer", "it 'succeeded', apparently");
                         Log.d("TaskItServer", String.valueOf(result.getId())+result.getJsonString());
 //                        tweet.setId(result.getId());
                     } else {
@@ -203,6 +206,7 @@ public class TaskItServer {
                     List<User> foundUser = result.getSourceAsObjectList(User.class);
                     users.addAll(foundUser);
                 } else {
+                    Log.d("TaskItServer", result.getJsonString());
                     Log.d("TaskItServer", "Something bad in get User");
                 }
             }
@@ -368,6 +372,7 @@ public class TaskItServer {
     // TODO implement delete jobs + methods
 
     public void loadAllFromServer(UserList u, TaskList t, BidList b) {
+        Log.d("TaskItServer", "Entering loadallfromserver");
         TaskItServer.getUserJob getUser = new TaskItServer.getUserJob();
         TaskItServer.getTaskJob getTask = new TaskItServer.getTaskJob();
         TaskItServer.getBidJob getBid = new TaskItServer.getBidJob();
@@ -377,9 +382,9 @@ public class TaskItServer {
         getBid.execute("");
 
         try {
-            u = getUser.get();
-            t = getTask.get();
-            b = getBid.get();
+            u.addAll(getUser.get());
+            t.addAll(getTask.get());
+            b.addAll(getBid.get());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -464,6 +469,11 @@ public class TaskItServer {
             e.printStackTrace();
         }
         return l;
+    }
+
+    public void setupServer() {
+        TaskItServer.setupServerJob setup = new TaskItServer.setupServerJob();
+        setup.execute();
     }
 
 

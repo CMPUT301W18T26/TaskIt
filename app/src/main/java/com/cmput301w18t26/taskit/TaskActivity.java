@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Set;
@@ -58,7 +60,16 @@ public class TaskActivity extends AppCompatActivity {
                 public void onClick(View v){
                     editTaskDetails(task);
                 }
+            });
 
+            Button viewBids = (Button) findViewById(R.id.viewBids);
+            final Intent bidList = new Intent(getApplicationContext(),BidListActivity.class);
+            viewBids.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v){
+                    startActivity(bidList);
+                    setResult(RESULT_OK);
+                }
             });
 
         }
@@ -83,13 +94,45 @@ public class TaskActivity extends AppCompatActivity {
 
     }
 
-    private void editTaskDetails (Task task) {
+    private void editTaskDetails (final Task task) {
         setContentView(R.layout.add_modify_task);
+        Spinner s = (Spinner) findViewById(R.id.spinner);
+        String status = task.getStatus();
+
+        // Sets the dropdown menu, puts default position as the current task status
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, Task.changeableStatuses);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        int spinnerpos = adapter.getPosition(status);
+        s.setAdapter(adapter);
+        s.setSelection(spinnerpos);
 
         editTitleText = (EditText) findViewById(R.id.editTitle);
         editDescText = (EditText) findViewById(R.id.editDescription);
 
+
         editTitleText.setText(task.getTitle(),TextView.BufferType.EDITABLE);
         editDescText.setText(task.getDescription(),TextView.BufferType.EDITABLE);
+
+
+        Button confirmEdits = (Button) findViewById(R.id.confirmedit);
+        confirmEdits.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v){
+                modifyDetails (task,editTitleText,editDescText);
+            }
+        });
+
+    }
+
+    private void modifyDetails (Task task, EditText title,EditText desc){
+        String editedTitle = title.getText().toString();
+        String editedDesc = desc.getText().toString();
+
+        task.setTitle(editedTitle);
+        task.setDescription(editedDesc);
+
+        finishActivity(0);
     }
 }

@@ -29,8 +29,6 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         String filename = TaskItFile.getUserFilename(user);
         File file = new File(filename);
 
-
-
         assertTrue(file.exists());
 
         db.deleteUser(user);

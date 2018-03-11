@@ -20,6 +20,8 @@ public class Task {
     // metadata for server/sync
     private String UUID;
     private Date timestamp;
+    public static String[] statuses = {"Bidded","Requested","Accepted","Done"};
+    public static String[] changeableStatuses = {"Requested","Accepted","Done"};
 
     public void setDate(Date date) {
         this.date = date;
@@ -85,6 +87,9 @@ public class Task {
     }
     public boolean isOwner(String s) {
         return owner.equals(s);
+    }
+    public boolean isOwner(User u) {
+        return owner.equals(u.getOwner());
     }
 
     public String getUUID() {
