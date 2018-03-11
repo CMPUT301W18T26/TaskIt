@@ -13,7 +13,7 @@ import java.util.List;
 public class UserList {
     private ArrayList<User> users = new ArrayList<User>();
 
-    public ArrayList<User> getTasks() {return users;}
+    public ArrayList<User> getUsers() {return users;}
 
     public void addUser(User user) {
         users.add(user);
@@ -80,5 +80,11 @@ public class UserList {
 
     public void addAll(Collection<User> l) {
         users.addAll(l);
+    }
+
+    public void addAll(UserList l) {users.addAll(l.getUsers());}
+
+    public void clear() {
+        users.clear();
     }
 }

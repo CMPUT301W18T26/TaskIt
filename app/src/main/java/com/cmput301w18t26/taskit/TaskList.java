@@ -71,4 +71,12 @@ public class TaskList {
     public void addAll(Collection<Task> l) {
         tasks.addAll(l);
     }
+
+    public void addAll(TaskList l) {
+        tasks.addAll(l.getTasks());
+    }
+
+    public void clear() {
+        tasks.clear();
+    }
 }

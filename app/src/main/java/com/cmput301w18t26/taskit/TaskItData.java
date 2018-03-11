@@ -42,8 +42,7 @@ public class TaskItData {
     private BidList bids;
     private static User currentuser;
     private TaskItFile fs;
-    private TaskItSync sync;
-    private TaskItServer server;
+    public static TaskItSync sync;
 
 //    private static Context context;
 
@@ -52,7 +51,8 @@ public class TaskItData {
     }
 
     public static void setCurrentuser(User currentuser) {
-        TaskItData.currentuser = currentuser;
+        currentuser = currentuser;
+        sync.setCurrentUser(currentuser.getUsername());
     }
     
 
@@ -66,9 +66,7 @@ public class TaskItData {
             e.printStackTrace();
         }
 
-        this.server = new TaskItServer();
-
-        this.sync = new TaskItSync(fs, server);
+        this.sync = new TaskItSync();
 
     }
 
@@ -169,10 +167,20 @@ public class TaskItData {
      * @param task
      * @return
      */
-
     public BidList taskBids(Task task){
         return new BidList();
     }
+
+    /**
+     * Get Tasks with status.
+     *
+     * @param status
+     * @return
+     */
+    public TaskList tasksWithStatus(String status){
+        return new TaskList();
+    }
+
 
 
     public boolean userExists(String username) {
@@ -189,6 +197,10 @@ public class TaskItData {
 
     public void sync() {
         sync.sync();
+        users.clear();
+        tasks.clear();
+        bids.clear();
+        fs.loadAllFromFile(users, tasks, bids);
     }
 
 }
