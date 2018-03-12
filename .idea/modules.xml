@@ -4,8 +4,10 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TaskIt.iml" filepath="$PROJECT_DIR$/TaskIt.iml" />
       <module fileurl="file://E:\Documents\SH\CMPUT301\TaskIt\TaskIt.iml" filepath="E:\Documents\SH\CMPUT301\TaskIt\TaskIt.iml" />
+      <module fileurl="file://D:\AndroidProjects\CMPUT301\TaskIt\TaskIt.iml" filepath="D:\AndroidProjects\CMPUT301\TaskIt\TaskIt.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://E:\Documents\SH\CMPUT301\TaskIt\app\app.iml" filepath="E:\Documents\SH\CMPUT301\TaskIt\app\app.iml" />
+      <module fileurl="file://D:\AndroidProjects\CMPUT301\TaskIt\app\app.iml" filepath="D:\AndroidProjects\CMPUT301\TaskIt\app\app.iml" />
     </modules>
   </component>
 </project>
