@@ -91,22 +91,17 @@ public class TaskItData {
         users.addUser(user);
         // Add user to filesystem
         fs.addUserFile(user);
-        // Request sync?
-        sync();
     }
 
     public void deleteUser(User user) {
         users.deleteUser(user);
         // Move user to trash (filesystem)
         fs.deleteUserFile(user);
-        // Request sync?
-        sync();
     }
 
     public void updateUser(User user) {
         user.setTimestamp(new Date());
         fs.addUserFile(user);
-        sync();
     }
 
     public UserList getUsers() {
@@ -122,22 +117,17 @@ public class TaskItData {
         tasks.addTask(task);
         // Add the task to filesystem
         fs.addTaskFile(task);
-        // Request sync?
-        sync();
     }
 
     public void deleteTask(Task task) {
         tasks.deleteTask(task);
         // Move task to trash (filesystem)
         fs.deleteTaskFile(task);
-        // Request sync?
-        sync();
     }
 
     public void updateTask(Task task) {
         task.setTimestamp(new Date());
         fs.addTaskFile(task);
-        sync();
     }
 
     public TaskList getTasks() {
@@ -153,22 +143,17 @@ public class TaskItData {
         bids.addBid(bid);
         // Add the bid to filesystem
         fs.addBidFile(bid);
-        // Request sync?
-        sync();
     }
 
     public void deleteBid(Bid bid) {
         bids.deleteBid(bid);
         // Move bid to trash (filesystem)
         fs.deleteBidFile(bid);
-        // Request sync?
-        sync();
     }
 
     public void updateBid(Bid bid) {
         bid.setTimestamp(new Date());
         fs.addBidFile(bid);
-        sync();
     }
 
 
@@ -224,11 +209,11 @@ public class TaskItData {
 
     public void sync() {
         // Todo: wrap these in a sort of timeout for offline functionality
-        //        sync.sync();
-        //        users.clear();
-        //        tasks.clear();
-        //        bids.clear();
-        //        fs.loadAllFromFile(users, tasks, bids);
+        sync.sync();
+        users.clear();
+        tasks.clear();
+        bids.clear();
+        fs.loadAllFromFile(users, tasks, bids);
     }
 
 }

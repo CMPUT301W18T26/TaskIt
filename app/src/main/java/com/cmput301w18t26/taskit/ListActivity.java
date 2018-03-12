@@ -2,6 +2,7 @@ package com.cmput301w18t26.taskit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -28,6 +30,7 @@ public class ListActivity extends AppCompatActivity {
     private Task task1 = new Task();
     private TaskAdapter adapter;
     private TaskItData db;
+    SwipeRefreshLayout swiperefresh;
     TaskList tasks;
 
     private ListView bidlist;
@@ -68,6 +71,32 @@ public class ListActivity extends AppCompatActivity {
         //});
 
 
+        /*
+         * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
+         * performs a swipe-to-refresh gesture.
+         */
+        swiperefresh = findViewById(R.id.swiperefresh);
+        swiperefresh.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i("ListActivity", "onRefresh called from SwipeRefreshLayout");
+
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        listRefresh();
+                    }
+                }
+        );
+
+
+    }
+
+    private void listRefresh() {
+        db.sync();
+        Log.i("ListActivity", "Sync complete");
+        swiperefresh.setRefreshing(false);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -102,5 +131,7 @@ public class ListActivity extends AppCompatActivity {
 
         }
     }
+
+
 
 }
