@@ -184,6 +184,15 @@ public class TaskItData {
     }
 
     /**
+     * Get a list of bids for tasks I have bid on.
+     *  call userTasks with current user? or leave for caller?
+     *
+     */
+    public BidList userBids(User user){
+        return new BidList();
+    }
+
+    /**
      * Get Tasks with status.
      *
      * @param status
@@ -193,6 +202,16 @@ public class TaskItData {
         return new TaskList();
     }
 
+
+    /**
+     * Get tasks with status for specific user
+     *
+     * @param user, status
+     * @return
+     */
+    public TaskList tasksWithStatus(User user, String status){
+        return new TaskList();
+    }
 
 
     public boolean userExists(String username) {
