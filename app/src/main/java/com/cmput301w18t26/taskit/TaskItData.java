@@ -213,6 +213,24 @@ public class TaskItData {
         return new TaskList();
     }
 
+    public TaskList keywordSearch(String keywords){
+        // break keywords into words
+
+        // For each task in tasks
+        //   TODO: task string representation
+        //   lookInHere = task.toString();
+        //   for each keyword:
+        //      look for the keyword in lookInHere
+        //      if found:
+        //        add it to a new list
+        //      else:
+        //        continue
+        Task t = new Task();
+        t.toString()
+
+    }
+
+
 
     public boolean userExists(String username) {
         if (users.getIndexByUsername(username) > -1) {
