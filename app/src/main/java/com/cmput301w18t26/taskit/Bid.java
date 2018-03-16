@@ -12,6 +12,7 @@ public class Bid {
     private double amount;
     private String status;
     private String owner;
+    private String parentTask;
     // metadata for server/sync
     private String UUID;
     private Date timestamp;
@@ -51,19 +52,27 @@ public class Bid {
     public void setOwner(String o) {
         owner = o;
     }
+
     public String getOwner() {
         return owner;
     }
+
     public boolean isOwner(String s) {
         return owner.equals(s);
     }
+
     public boolean isOwner(User u) {
         return owner.equals(u.getUsername());
+    }
+
+    public boolean isParentTask(Task t) {
+        return parentTask.equals(t.getUUID());
     }
 
     public String getUUID() {
         return UUID;
     }
+
     public void setUUID(String UUID) {
         this.UUID = UUID;
     }
@@ -74,5 +83,13 @@ public class Bid {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getParentTask() {
+        return parentTask;
+    }
+
+    public void setParentTask(String parentTask) {
+        this.parentTask = parentTask;
     }
 }

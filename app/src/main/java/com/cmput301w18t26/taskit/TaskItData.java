@@ -170,7 +170,13 @@ public class TaskItData {
      * @return
      */
     public TaskList userTasks(User user){
-        return new TaskList();
+        TaskList filtered = new TaskList();
+        for (Task t: tasks.getTasks()) {
+            if (t.isOwner(user)) {
+                filtered.addTask(t);
+            }
+        }
+        return filtered;
     };
 
     /**
@@ -180,7 +186,13 @@ public class TaskItData {
      * @return
      */
     public BidList taskBids(Task task){
-        return new BidList();
+        BidList filtered = new BidList();
+        for (Bid b: bids.getBids()) {
+            if (b.isParentTask(task)) {
+                filtered.addBid(b);
+            }
+        }
+        return filtered;
     }
 
     /**
@@ -189,7 +201,13 @@ public class TaskItData {
      *
      */
     public BidList userBids(User user){
-        return new BidList();
+        BidList filtered = new BidList();
+        for (Bid b: bids.getBids()) {
+            if (b.isOwner(user)) {
+                filtered.addBid(b);
+            }
+        }
+        return filtered;
     }
 
     /**
@@ -199,7 +217,13 @@ public class TaskItData {
      * @return
      */
     public TaskList tasksWithStatus(String status){
-        return new TaskList();
+        TaskList filtered = new TaskList();
+        for (Task t: tasks.getTasks()) {
+            if (status.equals(t.getStatus())) {
+                filtered.addTask(t);
+            }
+        }
+        return filtered;
     }
 
 
@@ -209,8 +233,14 @@ public class TaskItData {
      * @param user, status
      * @return
      */
-    public TaskList tasksWithStatus(User user, String status){
-        return new TaskList();
+    public TaskList userTasksWithStatus(User user, String status){
+        TaskList filtered = new TaskList();
+        for (Task t: tasks.getTasks()) {
+            if (t.isOwner(user) && status.equals(t.getStatus())) {
+                filtered.addTask(t);
+            }
+        }
+        return filtered;
     }
 
     public TaskList keywordSearch(String keywords){
@@ -225,9 +255,9 @@ public class TaskItData {
         //        add it to a new list
         //      else:
         //        continue
-        Task t = new Task();
-        t.toString()
-
+        // Task t = new Task();
+        // t.toString()
+        return new TaskList();
     }
 
 
