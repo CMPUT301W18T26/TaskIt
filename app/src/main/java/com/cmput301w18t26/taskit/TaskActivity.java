@@ -53,9 +53,14 @@ public class TaskActivity extends AppCompatActivity {
             });
         } else {
             setContentView(R.layout.viewtask);
+            Button bid = (Button) findViewById(R.id.bidTask);
             final Task task = db.getTask(intent.getStringExtra("UUID"));
             getTaskDetails(task);
+            User curruser = db.getCurrentUser();
 
+            if (task.isOwner(curruser)){
+                bid.setVisibility(View.GONE);
+            }
             Button editTaskButton = (Button) findViewById(R.id.edittask);
             editTaskButton.setOnClickListener(new View.OnClickListener() {
 
