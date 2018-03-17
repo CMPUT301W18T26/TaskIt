@@ -82,6 +82,7 @@ public class Task {
     public void setOwner(String o) {
         owner = o;
     }
+    public void setOwner(User u) {owner = u.getOwner();}
     public String getOwner() {
         return owner;
     }

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -43,6 +44,7 @@ public class TaskActivity extends AppCompatActivity {
             createTaskButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
+                    setTaskDetails();
                     Intent createTaskIntent = new Intent(getApplicationContext(),ListActivity.class);
                     createTaskIntent.putExtra(TYPE, "Requested Tasks");
                     startActivity(createTaskIntent);
@@ -91,6 +93,18 @@ public class TaskActivity extends AppCompatActivity {
 
         }
         setTitle(type);
+    }
+
+    private void setTaskDetails() {
+        titleText = (TextView) findViewById(R.id.update_title);
+        descriptionText = (TextView) findViewById(R.id.update_description);
+
+        Task t = new Task();
+        t.setTitle(titleText.getText().toString());
+        t.setDescription(descriptionText.getText().toString());
+        t.setDate(new Date());
+        t.setOwner(db.getCurrentUser().getOwner());
+        db.addTask(t);
     }
 
     private void getTaskDetails(Task task) {
