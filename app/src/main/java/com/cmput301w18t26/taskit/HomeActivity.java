@@ -35,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "My Tasks");
-                taskList.putExtra(FILTER, "myInProgress");
+                taskList.putExtra(FILTER, "myOwnedInProgress");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -55,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "My Tasks");
-                taskList.putExtra(FILTER, "3");
+                taskList.putExtra(FILTER, "tasksWithMyBids");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -65,7 +65,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "Requested Tasks");
-                taskList.putExtra(FILTER, "4");
+                taskList.putExtra(FILTER, "myTasksWithBids");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "Requested Tasks");
-                taskList.putExtra(FILTER, "5");
+                taskList.putExtra(FILTER, "myOwnedTasks");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "Search Tasks");
-                taskList.putExtra(FILTER, "6");
+                taskList.putExtra(FILTER, "allTasks");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }

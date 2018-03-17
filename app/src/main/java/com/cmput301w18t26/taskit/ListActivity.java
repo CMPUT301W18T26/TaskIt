@@ -107,13 +107,22 @@ public class ListActivity extends AppCompatActivity {
         super.onStart();
 
         switch (filter) {
-            case "My Tasks":
-                taskList = db.userTasks(db.getCurrentUser());
+            case "myOwnedInProgress":
+                taskList = db.userTasksWithStatus(db.getCurrentUser(), "Accepted");
                 break;
-            case "Requested Tasks":
+            case "myAssigned":
                 taskList = db.userTasksWithStatus(db.getCurrentUser(), "Requested");
                 break;
-            case "Search Tasks":
+            case "tasksWithMyBids":
+                taskList = db.getTasks();
+                break;
+            case "myTasksWithBids":
+                taskList = db.getTasks();
+                break;
+            case "myOwnedTasks":
+                taskList = db.getTasks();
+                break;
+            case "allTasks":
                 taskList = db.getTasks();
                 break;
         }
