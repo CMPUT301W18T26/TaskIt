@@ -22,8 +22,8 @@ public class BidTest extends ActivityInstrumentationTestCase2 {
     public void testSetGetUser() {
         Bid bid = new Bid();
         String user = "AliceBob";
-        bid.setUser(user);
-        assertEquals(user, bid.getUser());
+        bid.setOwner(user);
+        assertEquals(user, bid.getOwner());
     }
     public void testSetGetAmount() {
         Bid bid = new Bid();

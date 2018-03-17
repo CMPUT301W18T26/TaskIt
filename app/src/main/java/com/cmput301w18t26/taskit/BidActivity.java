@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.Date;
+
 /**
  * Created by kevingordon on 2018-02-26.
  */
@@ -40,12 +42,13 @@ public class BidActivity extends AppCompatActivity {
                 Bid bid = new Bid();
                 bid.setParentTask(uuid);
                 bid.setAmount(bidInput);
-                bid.setUser(user.getUsername());
+                bid.setOwner(user.getUsername());
+                bid.setDate(new Date());
                 Log.d("parenttask", bid.getParentTask());
                 Double actualamount = bid.getAmount();
                 String great = actualamount.toString();
                 Log.d("amount",great);
-                Log.d("user", bid.getUser());
+                Log.d("user", bid.getOwner());
                 db.addBid(bid);
                 finish();
 

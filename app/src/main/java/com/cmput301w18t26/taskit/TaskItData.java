@@ -61,6 +61,7 @@ public class TaskItData {
         this.users = new UserList();
         this.tasks = new TaskList();
         this.bids = new BidList();
+
         try {
             this.fs = TaskItFile.getInstance();
         } catch (Exception e) {
@@ -68,6 +69,10 @@ public class TaskItData {
         }
 
         this.sync = new TaskItSync();
+
+        User defaultUser = new User();
+        defaultUser.setUsername("admin");
+        setCurrentUser(defaultUser);
 
     }
 

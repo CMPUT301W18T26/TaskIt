@@ -37,16 +37,11 @@ public class BidListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
         final Task task = db.getTask(intent.getStringExtra("UUID"));
-        BidList bids = task.getBids();
-        Bid bid1 = bids.getBid(0);
-        String biddedtask = bid1.getParentTask();
 
-        Log.d("title", task.getTitle());
-        Log.d("desc", biddedtask);
+        bidList = db.taskBids(task);
 
         setTitle("Bids");
 
-        bidList = db.taskBids(task);
         adapter = new BidListAdapter(BidListActivity.this, bidList);
 
         bidlistview.setAdapter(adapter);
