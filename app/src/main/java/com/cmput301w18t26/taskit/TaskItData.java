@@ -249,15 +249,15 @@ public class TaskItData {
     }
 
     /**
-     * Get tasks with status for specific user
+     *
      *
      * @param user, status
      * @return
      */
-    public TaskList userAssignedTasks(User user, String status){
+    public TaskList userAssignedTasks(User user){
         TaskList filtered = new TaskList();
         for (Task t: tasks.getTasks()) {
-            if (t.isOwner(user) && status.equals(t.getStatus())) {
+            if (t.isAssignee(user)) {
                 filtered.addTask(t);
             }
         }

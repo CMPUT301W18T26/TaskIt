@@ -111,7 +111,7 @@ public class ListActivity extends AppCompatActivity {
                 taskList = db.userTasksWithStatus(db.getCurrentUser(), "Accepted");
                 break;
             case "myAssigned":
-                taskList = db.userTasksWithStatus(db.getCurrentUser(), "Requested");
+                taskList = db.userAssignedTasks(db.getCurrentUser());
                 break;
             case "tasksWithMyBids":
                 taskList = db.tasksWithUserBids(db.getCurrentUser());
