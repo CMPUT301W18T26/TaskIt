@@ -103,6 +103,8 @@ public class TaskActivity extends AppCompatActivity {
         t.setTitle(titleText.getText().toString());
         t.setDescription(descriptionText.getText().toString());
         t.setDate(new Date());
+        t.setLocation("Unknown");
+        t.setStatus("Requested");
         t.setOwner(db.getCurrentUser().getOwner());
         db.addTask(t);
     }
