@@ -107,7 +107,7 @@ public class TaskActivity extends AppCompatActivity {
 
     private void editTaskDetails (final Task task) {
         setContentView(R.layout.add_modify_task);
-        Spinner s = (Spinner) findViewById(R.id.spinner);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         String status = task.getStatus();
 
         // Sets the dropdown menu, puts default position as the current task status
@@ -116,8 +116,8 @@ public class TaskActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         int spinnerpos = adapter.getPosition(status);
-        s.setAdapter(adapter);
-        s.setSelection(spinnerpos);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(spinnerpos);
 
         editTitleText = (EditText) findViewById(R.id.editTitle);
         editDescText = (EditText) findViewById(R.id.editDescription);
@@ -131,18 +131,20 @@ public class TaskActivity extends AppCompatActivity {
         confirmEdits.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v){
-                modifyDetails (task,editTitleText,editDescText);
+                modifyDetails (task,editTitleText,editDescText,spinner);
             }
         });
 
     }
 
-    private void modifyDetails (Task task, EditText title,EditText desc){
+    private void modifyDetails (Task task, EditText title,EditText desc, Spinner spinner){
+        String newstatus = spinner.getSelectedItem().toString();
         String editedTitle = title.getText().toString();
         String editedDesc = desc.getText().toString();
 
         task.setTitle(editedTitle);
         task.setDescription(editedDesc);
+        task.setStatus(newstatus);
 
         db.updateTask(task);
 
