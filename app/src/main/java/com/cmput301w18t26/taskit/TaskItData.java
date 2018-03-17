@@ -264,6 +264,20 @@ public class TaskItData {
         return filtered;
     }
 
+    public TaskList tasksWithUserBids(User user){
+        TaskList filtered = new TaskList();
+        Task t;
+        for (Bid b: bids.getBids()) {
+            if (b.isOwner(user)) {
+                t = tasks.getTask(b.getParentTask());
+                if (!filtered.hasTask(t)) {
+                    filtered.addTask(t);
+                }
+            }
+        }
+        return filtered;
+    }
+
     public TaskList keywordSearch(String keywords){
         // break keywords into words
 
