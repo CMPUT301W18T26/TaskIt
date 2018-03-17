@@ -30,10 +30,10 @@ public class Task {
     }
 
     public boolean isAssignee(String s) {
-        return this.assignee.equals(s);
+        return this.assignee!=null && this.assignee.equals(s);
     }
     public boolean isAssignee(User u) {
-        return this.assignee.equals(u.getUsername());
+        return isAssignee(u.getUsername());
     }
 
     private String assignee;
