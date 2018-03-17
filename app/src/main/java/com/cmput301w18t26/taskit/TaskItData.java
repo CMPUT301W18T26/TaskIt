@@ -248,6 +248,22 @@ public class TaskItData {
         return filtered;
     }
 
+    /**
+     * Get tasks with status for specific user
+     *
+     * @param user, status
+     * @return
+     */
+    public TaskList userAssignedTasks(User user, String status){
+        TaskList filtered = new TaskList();
+        for (Task t: tasks.getTasks()) {
+            if (t.isOwner(user) && status.equals(t.getStatus())) {
+                filtered.addTask(t);
+            }
+        }
+        return filtered;
+    }
+
     public TaskList keywordSearch(String keywords){
         // break keywords into words
 

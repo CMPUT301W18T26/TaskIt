@@ -30,6 +30,7 @@ public class ListActivity extends AppCompatActivity {
     private Task task1 = new Task();
     private TaskAdapter adapter;
     private TaskItData db;
+    private String filter;
     SwipeRefreshLayout swiperefresh;
     TaskList tasks;
 
@@ -43,6 +44,7 @@ public class ListActivity extends AppCompatActivity {
         db = TaskItData.getInstance();
         Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
+        filter = intent.getStringExtra(HomeActivity.FILTER);
         setTitle(type);
 
         Button newTaskButton = (Button) findViewById(R.id.newtask);
@@ -103,7 +105,19 @@ public class ListActivity extends AppCompatActivity {
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
-        taskList = db.getTasks();
+
+        switch (filter) {
+            case "My Tasks":
+                taskList = db.userTasks(db.getCurrentUser());
+                break;
+            case "Requested Tasks":
+                taskList = db.userTasksWithStatus(db.getCurrentUser(), "Requested");
+                break;
+            case "Search Tasks":
+                taskList = db.getTasks();
+                break;
+        }
+
         adapter = new TaskAdapter(ListActivity.this, taskList);
         listOfTasks.setAdapter(adapter);
         listOfTasks.setOnItemClickListener(new ListClickHandler());

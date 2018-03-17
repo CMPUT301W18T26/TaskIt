@@ -13,6 +13,7 @@ import android.widget.Button;
 public class HomeActivity extends AppCompatActivity {
 
     protected static final String TYPE = "type";
+    protected static final String FILTER = "filter";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "My Tasks");
+                taskList.putExtra(FILTER, "myInProgress");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -43,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "My Tasks");
+                taskList.putExtra(FILTER, "myAssigned");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -52,6 +55,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "My Tasks");
+                taskList.putExtra(FILTER, "3");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -61,6 +65,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "Requested Tasks");
+                taskList.putExtra(FILTER, "4");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -70,6 +75,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "Requested Tasks");
+                taskList.putExtra(FILTER, "5");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
@@ -79,6 +85,7 @@ public class HomeActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "Search Tasks");
+                taskList.putExtra(FILTER, "6");
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
