@@ -45,10 +45,7 @@ public class TaskActivity extends AppCompatActivity {
 
                 public void onClick(View v) {
                     setTaskDetails();
-                    Intent createTaskIntent = new Intent(getApplicationContext(),ListActivity.class);
-                    createTaskIntent.putExtra(TYPE, "Requested Tasks");
-                    startActivity(createTaskIntent);
-                    setResult(RESULT_OK);
+                    finish();
                 }
             });
         } else {
