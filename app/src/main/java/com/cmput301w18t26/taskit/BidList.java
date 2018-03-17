@@ -50,6 +50,7 @@ public class BidList {
         }
     }
 
+
     public int getBidCount() {
         return bids.size();
     }

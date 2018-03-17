@@ -67,7 +67,10 @@ public class TaskActivity extends AppCompatActivity {
             viewBids.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v){
-                    startActivity(bidList);
+                    Intent intent = new Intent(TaskActivity.this, BidListActivity.class);
+                    String UUID = task.getUUID();
+                    intent.putExtra("UUID", UUID);
+                    startActivity(intent);
                     setResult(RESULT_OK);
                 }
             });
@@ -77,7 +80,10 @@ public class TaskActivity extends AppCompatActivity {
             addBidButton.setOnClickListener(new View.OnClickListener(){
 
                 public void onClick(View v){
-                    startActivity(bidActivity);
+                    Intent intent = new Intent(TaskActivity.this, BidActivity.class);
+                    String UUID = task.getUUID();
+                    intent.putExtra("UUID", UUID);
+                    startActivity(intent);
                     setResult(RESULT_OK);
                 }
 

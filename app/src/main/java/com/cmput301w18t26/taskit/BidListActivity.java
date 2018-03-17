@@ -3,6 +3,7 @@ package com.cmput301w18t26.taskit;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,9 +18,10 @@ public class BidListActivity extends AppCompatActivity {
 
     protected static final String TYPE = "type";
 
+
     private ListView bidlistview;
-    private BidList bidList = new BidList();
-    private Task task1 = new Task();
+    private BidList bidList; //= new BidList();
+    private Task taskselected = new Task();
     private BidListAdapter adapter;
     private TaskItData db;
     TaskList tasks;
@@ -34,8 +36,21 @@ public class BidListActivity extends AppCompatActivity {
         db = TaskItData.getInstance();
         Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
+        final Task task = db.getTask(intent.getStringExtra("UUID"));
+        BidList bids = task.getBids();
+        Bid bid1 = bids.getBid(0);
+        String biddedtask = bid1.getParentTask();
+
+        Log.d("title", task.getTitle());
+        Log.d("desc", biddedtask);
+
         setTitle("Bids");
 
+        bidList = db.taskBids(task);
+        adapter = new BidListAdapter(BidListActivity.this, bidList);
+
+        bidlistview.setAdapter(adapter);
+        bidlistview.setOnItemClickListener(new ListClickHandler());
 
         bidlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
@@ -47,15 +62,6 @@ public class BidListActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        // TODO Auto-generated method stub
-        super.onStart();
-        adapter = new BidListAdapter(BidListActivity.this, bidList);
-        bidList = db.getBids();
-        bidlistview.setAdapter(adapter);
-        bidlistview.setOnItemClickListener(new ListClickHandler());
-    }
 
     public class ListClickHandler implements AdapterView.OnItemClickListener {
 
