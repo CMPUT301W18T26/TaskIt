@@ -63,9 +63,8 @@ public class UserActivity extends AppCompatActivity {
                         user.setPhone(phoneInput);
                         db.setCurrentUser(user);
                         db.addUser(user);
-                        Intent homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
-                        startActivity(homeIntent);
                         setResult(RESULT_OK);
+                        finish();
                     }
                 }
             });
