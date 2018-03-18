@@ -38,7 +38,7 @@ public class UserActivity extends AppCompatActivity {
 
         if (type.equals("Register")) {
             setContentView(R.layout.registeruser);
-            usernameEdit = (EditText) findViewById(R.id.username);
+            usernameEdit = (EditText) findViewById(R.id.username1);
             emailEdit = (EditText) findViewById(R.id.email);
             phoneEdit = (EditText) findViewById(R.id.phone);
             nameEdit = (EditText) findViewById(R.id.name);
@@ -79,7 +79,7 @@ public class UserActivity extends AppCompatActivity {
             setContentView(R.layout.edituser);
             Button actionButton = (Button) findViewById(R.id.confirmuser);
             Button cancelButton = (Button) findViewById(R.id.cancel);
-            usernameText = (TextView) findViewById(R.id.username);
+            usernameText = (TextView) findViewById(R.id.username1);
             usernameText.setText(db.getCurrentUser().getUsername());
             emailEdit = (EditText) findViewById(R.id.email);
             emailEdit.setText(db.getCurrentUser().getEmail());

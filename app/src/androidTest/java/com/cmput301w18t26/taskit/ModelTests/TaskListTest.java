@@ -1,6 +1,11 @@
-package com.cmput301w18t26.taskit;
+package com.cmput301w18t26.taskit.ModelTests;
 
 import android.test.ActivityInstrumentationTestCase2;
+
+import com.cmput301w18t26.taskit.ListActivity;
+import com.cmput301w18t26.taskit.MockTask;
+import com.cmput301w18t26.taskit.Task;
+import com.cmput301w18t26.taskit.TaskList;
 
 /**
  * Created by kevingordon on 2018-02-26.

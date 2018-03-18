@@ -1,6 +1,11 @@
-package com.cmput301w18t26.taskit;
+package com.cmput301w18t26.taskit.ModelTests;
 
 import android.test.ActivityInstrumentationTestCase2;
+
+import com.cmput301w18t26.taskit.BidList;
+import com.cmput301w18t26.taskit.TaskList;
+import com.cmput301w18t26.taskit.User;
+import com.cmput301w18t26.taskit.UserActivity;
 
 import java.util.Date;
 
