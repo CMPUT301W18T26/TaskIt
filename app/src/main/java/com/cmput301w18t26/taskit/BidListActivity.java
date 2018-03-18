@@ -52,7 +52,7 @@ public class BidListActivity extends AppCompatActivity {
         bidlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-            Bid bid = (Bid) adapter.getItem(i);
+            final Bid bid = (Bid) adapter.getItem(i);
             //Bid bid = (Bid)adapter.getItemAtPosition(i);
 
             View promptview = getLayoutInflater().inflate(R.layout.bid_prompt,null);
@@ -61,9 +61,30 @@ public class BidListActivity extends AppCompatActivity {
             Button declineBid = (Button) promptview.findViewById(R.id.declinebid);
 
             bidprompt.setView(promptview);
-            AlertDialog dialog = bidprompt.create();
+            final AlertDialog dialog = bidprompt.create();
             dialog.show();
-            //String UUID = bid.getUUID();
+
+            final User currentuser = db.getCurrentUser();
+            acceptBid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    task.setAssignee(currentuser);
+                    task.setStatus("Assigned");
+                    dialog.hide();
+                    db.updateTask(task);
+                    finish();
+                }
+            });
+
+            declineBid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    db.deleteBid(bid);
+                    dialog.hide();
+                }
+            });
+
+
         }
         });
 

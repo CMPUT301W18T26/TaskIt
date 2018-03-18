@@ -31,11 +31,13 @@ public class TaskActivity extends AppCompatActivity {
     private EditText editTitleText;
     private EditText editDescText;
     private TaskItData db;
+    private Task task;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Intent intent = getIntent();
+        intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
         db = TaskItData.getInstance();
         if (type.equals("New Task")) {
@@ -51,7 +53,7 @@ public class TaskActivity extends AppCompatActivity {
         } else {
             setContentView(R.layout.viewtask);
             Button bid = (Button) findViewById(R.id.bidTask);
-            final Task task = db.getTask(intent.getStringExtra("UUID"));
+            task = db.getTask(intent.getStringExtra("UUID"));
             getTaskDetails(task);
             User curruser = db.getCurrentUser();
 
@@ -71,11 +73,14 @@ public class TaskActivity extends AppCompatActivity {
             viewBids.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v){
+                    Task task = db.getTask(intent.getStringExtra("UUID"));
                     Intent intent = new Intent(TaskActivity.this, BidListActivity.class);
                     String UUID = task.getUUID();
                     intent.putExtra("UUID", UUID);
                     startActivity(intent);
+                    getTaskDetails(task);
                     setResult(RESULT_OK);
+
                 }
             });
 
@@ -95,6 +100,15 @@ public class TaskActivity extends AppCompatActivity {
 
         }
         setTitle(type);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        intent = getIntent();
+        task = db.getTask(intent.getStringExtra("UUID"));
+        getTaskDetails(task);
+
     }
 
     private void setTaskDetails() {
