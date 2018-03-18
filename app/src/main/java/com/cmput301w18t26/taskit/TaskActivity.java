@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.Date;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -41,7 +42,14 @@ public class TaskActivity extends AppCompatActivity {
         intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
         db = TaskItData.getInstance();
-        if (type.equals("New Task")) {
+        if (type.equals("Edit")){
+            task = db.getTask(intent.getStringExtra("UUID"));
+            Log.d("contentview","should be modify now");
+            setContentView(R.layout.add_modify_task);
+            editTaskDetails(task);
+            setResult(RESULT_OK);
+        }
+        else if (type.equals("New Task")) {
             setContentView(R.layout.edittask);
             Button createTaskButton = (Button) findViewById(R.id.createtask);
             createTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +73,14 @@ public class TaskActivity extends AppCompatActivity {
             editTaskButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v){
-                    editTaskDetails(task);
+                    Intent editIntent = new Intent(getApplicationContext(), TaskActivity.class);
+                    String UUID = task.getUUID();
+                    editIntent.putExtra(TYPE, "Edit");
+                    editIntent.putExtra("UUID", UUID);
+                    startActivity(editIntent);
+                    setResult(RESULT_OK);
+
+
                 }
             });
             Button deleteTaskButton = (Button) findViewById(R.id.deletetask);
@@ -73,6 +88,7 @@ public class TaskActivity extends AppCompatActivity {
 
                 public void onClick(View v){
                     db.deleteTask(task);
+                    Log.d("delete","got to bidlist");
                     finish();
                 }
             });
@@ -86,6 +102,7 @@ public class TaskActivity extends AppCompatActivity {
                     Intent intent = new Intent(TaskActivity.this, BidListActivity.class);
                     String UUID = task.getUUID();
                     intent.putExtra("UUID", UUID);
+                    Log.d("view bids","got to bidlist");
                     startActivity(intent);
                     getTaskDetails(task);
                     setResult(RESULT_OK);
@@ -100,6 +117,7 @@ public class TaskActivity extends AppCompatActivity {
                 public void onClick(View v){
                     Intent intent = new Intent(TaskActivity.this, BidActivity.class);
                     String UUID = task.getUUID();
+                    Log.d("added bid","got to added");
                     intent.putExtra("UUID", UUID);
                     startActivity(intent);
                     setResult(RESULT_OK);
@@ -112,8 +130,8 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
-        super.onResume();
+    protected void onRestart(){
+        super.onRestart();
         intent = getIntent();
         task = db.getTask(intent.getStringExtra("UUID"));
         getTaskDetails(task);
@@ -161,7 +179,7 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     private void editTaskDetails (final Task task) {
-        setContentView(R.layout.add_modify_task);
+        //setContentView(R.layout.add_modify_task);
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         String status = task.getStatus();
 
@@ -202,8 +220,8 @@ public class TaskActivity extends AppCompatActivity {
         task.setStatus(newstatus);
 
         db.updateTask(task);
-
-        setContentView(R.layout.viewtask);
-        getTaskDetails(task);
+        finish();
+        //setContentView(R.layout.viewtask);
+        //getTaskDetails(task);
     }
 }

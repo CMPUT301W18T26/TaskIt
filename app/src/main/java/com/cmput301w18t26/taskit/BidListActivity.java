@@ -70,7 +70,7 @@ public class BidListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     task.setAssignee(currentuser);
                     task.setStatus("Assigned");
-                    dialog.hide();
+                    dialog.dismiss();
                     db.updateTask(task);
                     finish();
                 }
@@ -80,7 +80,7 @@ public class BidListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     db.deleteBid(bid);
-                    dialog.hide();
+                    dialog.dismiss();
                 }
             });
 
