@@ -23,7 +23,7 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 
 /**
- * Handles file io for TaskIt
+ * Handles file io 
  */
 public class TaskItFile {
     private static TaskItFile single_instance = null;

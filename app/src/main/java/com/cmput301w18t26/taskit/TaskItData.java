@@ -27,8 +27,11 @@ import java.util.UUID;
 /**
  * TaskItData will hold all the data for the entire application.
  *
- * It will push/pull from the filesystem
- *
+ * - push/pull from the filesystem
+ * - sync the server and the filesystem
+ * - get filtered lists (refactor into filter class, call these)
+ * - add/update/delete {tasks, users, bids}
+ * -
  */
 
 // Todo: cite https://www.geeksforgeeks.org/singleton-class-java/ in wiki
@@ -37,13 +40,51 @@ public class TaskItData {
 
     private static TaskItData single_instance = null;
 
+    //  add/update/delete
     private TaskList tasks;
     private UserList users;
     private BidList bids;
+
+    // the user currently logged in
     private User currentUser;
+
+    // File i/o
     private TaskItFile fs;
+
+    // Synchronize server and filesystem with sync
     public static TaskItSync sync;
 
+    // Initialize a db
+    private TaskItData() {
+        this.users = new UserList();
+        this.tasks = new TaskList();
+        this.bids = new BidList();
+
+        try {
+            // This will fail if no context is set in the TaskItFile singleton
+            this.fs = TaskItFile.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.sync = new TaskItSync();
+
+        // Todo: but ok for now; o.w. some methods check against a null object
+        User defaultUser = new User();
+        defaultUser.setUsername("admin");
+        setCurrentUser(defaultUser);
+
+    }
+
+    // A singleton
+    public static TaskItData getInstance() {
+        if (single_instance == null) {
+            single_instance = new TaskItData();
+        }
+        return single_instance;
+    }
+
+    // Manage the current user
     public User getCurrentUser() {
         return currentUser;
     }
@@ -52,37 +93,17 @@ public class TaskItData {
         this.currentUser = currentUser;
         sync.setCurrentUser(currentUser.getUsername());
     }
-    
+
     public User getUserByUsername(String username) {
         return users.getUserByUsername(username);
     }
 
-    private TaskItData() {
-        this.users = new UserList();
-        this.tasks = new TaskList();
-        this.bids = new BidList();
 
-        try {
-            this.fs = TaskItFile.getInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        this.sync = new TaskItSync();
 
-        User defaultUser = new User();
-        defaultUser.setUsername("admin");
-        setCurrentUser(defaultUser);
-
-    }
-
-    public static TaskItData getInstance() {
-        if (single_instance == null) {
-            single_instance = new TaskItData();
-        }
-        return single_instance;
-    }
-
+    // This will append data from the filesystem to the {user, tasks, bids}Lists
+    // Can result in duplicate data, usually clear the list prior
+    // ... consider refactor or delete
     public void refresh() {
         fs.loadAllFromFile(users, tasks, bids);
     }
@@ -91,24 +112,33 @@ public class TaskItData {
      * USER METHODS
      */
     public void addUser(User user) {
+        // Add metadata for sync and retrieval
         user.setUUID(UUID.randomUUID().toString());
         user.setTimestamp(new Date());
+
         users.addUser(user);
+
         // Add user to filesystem
         fs.addUserFile(user);
     }
 
     public void deleteUser(User user) {
         users.deleteUser(user);
-        // Move user to trash (filesystem)
+
+        // Delete from filesystem
         fs.deleteUserFile(user);
     }
 
     public void updateUser(User user) {
+        // Update metadata
         user.setTimestamp(new Date());
+
+        // Update by re-adding to the filesystem
         fs.addUserFile(user);
     }
 
+    // Sometimes you need the raw list.
+    // would be nice to have it immutable for consistency...
     public UserList getUsers() {
         return users;
     }
@@ -117,30 +147,40 @@ public class TaskItData {
      * TASK METHODS
      */
     public void addTask(Task task) {
+        // Add metadata for sync and retrieval
         task.setUUID(UUID.randomUUID().toString());
         task.setTimestamp(new Date());
+
         tasks.addTask(task);
+
         // Add the task to filesystem
         fs.addTaskFile(task);
     }
 
     public void deleteTask(Task task) {
+        // Cascade delete all bids for this task
         for (Bid b: bids.getBids()) {
             if (b.isParentTask(task)) {
                 deleteBid(b);
             }
         }
-        tasks.deleteTask(task);
-        // Move task to trash (filesystem)
-        fs.deleteTaskFile(task);
 
+        tasks.deleteTask(task);
+
+        // Delete from filesystem
+        fs.deleteTaskFile(task);
     }
 
     public void updateTask(Task task) {
+        // Update metadata
         task.setTimestamp(new Date());
+
+        // Update by re-adding to the filesystem
         fs.addTaskFile(task);
     }
 
+    // Sometimes you need the raw list.
+    // would be nice to have it immutable for consistency...
     public TaskList getTasks() {
         return tasks;
     }
@@ -149,31 +189,44 @@ public class TaskItData {
      * BID METHODS
      */
     public void addBid(Bid bid) {
+        // Add metadata for sync and retrieval
         bid.setUUID(UUID.randomUUID().toString());
         bid.setTimestamp(new Date());
+
         bids.addBid(bid);
+
         // Add the bid to filesystem
         fs.addBidFile(bid);
     }
 
     public void deleteBid(Bid bid) {
         bids.deleteBid(bid);
-        // Move bid to trash (filesystem)
+
+        // Delete from filesystem
         fs.deleteBidFile(bid);
     }
 
+
     public void updateBid(Bid bid) {
+        // Update metadata
         bid.setTimestamp(new Date());
+
+        // Update by re-adding to the filesystem
         fs.addBidFile(bid);
     }
 
 
+    // Sometimes you need the raw list.
+    // would be nice to have it immutable for consistency...
     public BidList getBids() {
         return bids;
     }
 
+    /**
+     *   Filter functions
+     *   Todo: refactor?
+     */
 
-    // TODO: search functions. Will likely need more than these. Any suggestions?
     /**
      * Get a list of tasks for a specific user.
      *
@@ -255,7 +308,7 @@ public class TaskItData {
     }
 
     /**
-     *
+     * Tasks that have been assigned to given user.
      *
      * @param user, status
      * @return
@@ -270,6 +323,12 @@ public class TaskItData {
         return filtered;
     }
 
+    /**
+     * Tasks that I have bidded on
+     *
+     * @param user
+     * @return
+     */
     public TaskList tasksWithUserBids(User user){
         TaskList filtered = new TaskList();
         Task t;
@@ -284,15 +343,8 @@ public class TaskItData {
         return filtered;
     }
 
-    public int getBidCount(Task task){
-        int count = 0;
-        for (Bid b: bids.getBids()) {
-            if (b.isParentTask(task)) {
-                count ++;
-            }
-        }
-        return count;
-    }
+
+
 
     public double getLowestBid(Task task){
         double lowestBid = -1;
@@ -320,12 +372,25 @@ public class TaskItData {
         return lowestBid;
     }
 
+    // Since deprecating each task owning a bidlist,
+    // this is how to get bid counts
+    public int getTaskBidCount(Task task){
+        int count = 0;
+        for (Bid b: bids.getBids()) {
+            if (b.isParentTask(task)) {
+                count ++;
+            }
+        }
+        return count;
+    }
+
     public TaskList keywordSearch(String keywords){
         // break keywords into words
 
         // For each task in tasks
         //   TODO: task string representation
         //   lookInHere = task.toString();
+        //
         //   for each keyword:
         //      look for the keyword in lookInHere
         //      if found:

@@ -312,5 +312,9 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
 
     }
 
-
+    public void testWipeServer() {
+        // Wipe the server
+        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+        teardownServer.execute();
+    }
 }
