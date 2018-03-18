@@ -81,6 +81,12 @@ public class BidListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     db.deleteBid(bid);
                     dialog.dismiss();
+                    adapter.remove(bid);
+                    adapter.notifyDataSetChanged();
+
+                    //adapter = new BidListAdapter(BidListActivity.this, bidList);
+                    //bidList = db.taskBids(task);
+                    //bidlistview.setAdapter(adapter);
                 }
             });
 
