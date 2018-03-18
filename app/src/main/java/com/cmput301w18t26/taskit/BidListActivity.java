@@ -68,7 +68,7 @@ public class BidListActivity extends AppCompatActivity {
             acceptBid.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    task.setAssignee(currentuser);
+                    task.setAssignee(bid.getOwner());
                     task.setStatus("Assigned");
                     dialog.dismiss();
                     db.updateTask(task);
