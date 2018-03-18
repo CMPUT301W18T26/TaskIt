@@ -46,7 +46,7 @@ public class BidListAdapter extends ArrayAdapter<Bid> {
         // Replace text with my own
         txtName.setText(getItem(position).getOwner());
         txtDate.setText(getItem(position).getDate().toString()); // TODO choose better fields to display
-        txtCharge.setText(Double.toString(getItem(position).getAmount()));
+        txtCharge.setText(String.format("%.2f", (getItem(position).getAmount())));
 
         return rowView;
     }

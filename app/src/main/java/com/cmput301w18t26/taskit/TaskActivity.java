@@ -177,7 +177,7 @@ public class TaskActivity extends AppCompatActivity {
         if (lowestBid == -1) {
             lowbidText.setText("None");
         } else {
-            lowbidText.setText(String.valueOf(db.getLowestBid(task)));
+            lowbidText.setText(String.format("%.2f", (db.getLowestBid(task))));
         }
 
         dateText.setText(task.getDateString());
