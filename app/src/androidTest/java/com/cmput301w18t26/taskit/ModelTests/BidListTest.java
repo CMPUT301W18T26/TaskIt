@@ -1,6 +1,11 @@
-package com.cmput301w18t26.taskit;
+package com.cmput301w18t26.taskit.ModelTests;
 
 import android.test.ActivityInstrumentationTestCase2;
+
+import com.cmput301w18t26.taskit.Bid;
+import com.cmput301w18t26.taskit.BidActivity;
+import com.cmput301w18t26.taskit.BidList;
+import com.cmput301w18t26.taskit.MockBid;
 
 /**
  * Created by kevingordon on 2018-02-26.

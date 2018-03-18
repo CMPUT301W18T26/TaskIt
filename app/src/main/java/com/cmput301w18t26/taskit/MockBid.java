@@ -11,7 +11,7 @@ public class MockBid extends Bid {
     public MockBid() {
         setUUID(UUID.randomUUID().toString());
         setDate(new Date());
-        setUser("AliceBob");
+        setOwner("AliceBob");
         setAmount(3.50);
         setStatus("BID");
     }
@@ -20,7 +20,6 @@ public class MockBid extends Bid {
     public MockBid(String owner) {
         setUUID(UUID.randomUUID().toString());
         setDate(new Date());
-        setUser(owner);
         setOwner(owner);
         setAmount(3.50);
         setStatus("BID");

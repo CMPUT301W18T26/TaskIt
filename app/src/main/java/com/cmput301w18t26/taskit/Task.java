@@ -17,6 +17,26 @@ public class Task {
     private String status;
     private String title;
     private String owner;
+
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
+    }
+    public void setAssignee(User assignee) {
+        this.assignee = assignee.getUsername();
+    }
+
+    public boolean isAssignee(String s) {
+        return this.assignee!=null && this.assignee.equals(s);
+    }
+    public boolean isAssignee(User u) {
+        return isAssignee(u.getUsername());
+    }
+
+    private String assignee;
     // metadata for server/sync
     private String UUID;
     private Date timestamp;
@@ -82,6 +102,7 @@ public class Task {
     public void setOwner(String o) {
         owner = o;
     }
+    public void setOwner(User u) {owner = u.getOwner();}
     public String getOwner() {
         return owner;
     }

@@ -83,11 +83,15 @@ public class GenFakeData extends ActivityInstrumentationTestCase2 {
                     randomNum = ThreadLocalRandom.current().nextInt(0, users.getUserCount());
                     u = users.getUser(randomNum);
                     Bid b = new MockBid(u.getOwner());
+                    b.setParentTask(t);
                     db.addBid(b);
                 }
             }
             assertTrue(true);
+            db.setCurrentUser(user1);
+            db.sync();
         }
+
 
 
 }

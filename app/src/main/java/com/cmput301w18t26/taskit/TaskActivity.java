@@ -11,7 +11,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -28,37 +30,72 @@ public class TaskActivity extends AppCompatActivity {
     private TextView ownerText;
     private TextView locationText;
     private EditText editTitleText;
+    private TextView lowbidText;
     private EditText editDescText;
     private TaskItData db;
+    private Task task;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Intent intent = getIntent();
+        intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
         db = TaskItData.getInstance();
-        if (type.equals("New Task")) {
+        if (type.equals("Edit")){
+            task = db.getTask(intent.getStringExtra("UUID"));
+            Log.d("contentview","should be modify now");
+            setContentView(R.layout.add_modify_task);
+            editTaskDetails(task);
+            setResult(RESULT_OK);
+        }
+        else if (type.equals("New Task")) {
             setContentView(R.layout.edittask);
             Button createTaskButton = (Button) findViewById(R.id.createtask);
             createTaskButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-                    Intent createTaskIntent = new Intent(getApplicationContext(),ListActivity.class);
-                    createTaskIntent.putExtra(TYPE, "Requested Tasks");
-                    startActivity(createTaskIntent);
-                    setResult(RESULT_OK);
+                    setTaskDetails();
+                    finish();
                 }
             });
         } else {
             setContentView(R.layout.viewtask);
-            final Task task = db.getTask(intent.getStringExtra("UUID"));
-            getTaskDetails(task);
-
+            Button bid = (Button) findViewById(R.id.bidTask);
+            Button deleteTaskButton = (Button) findViewById(R.id.deletetask);
             Button editTaskButton = (Button) findViewById(R.id.edittask);
+
+            task = db.getTask(intent.getStringExtra("UUID"));
+            getTaskDetails(task);
+            User curruser = db.getCurrentUser();
+
+            if (task.isOwner(curruser)){
+                bid.setVisibility(View.GONE);
+            } else {
+                deleteTaskButton.setVisibility(View.GONE);
+                editTaskButton.setVisibility(View.GONE);
+            }
+
             editTaskButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v){
-                    editTaskDetails(task);
+                    Intent editIntent = new Intent(getApplicationContext(), TaskActivity.class);
+                    String UUID = task.getUUID();
+                    editIntent.putExtra(TYPE, "Edit");
+                    editIntent.putExtra("UUID", UUID);
+                    startActivity(editIntent);
+                    setResult(RESULT_OK);
+
+
+                }
+            });
+
+            deleteTaskButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v){
+                    db.deleteTask(task);
+                    Log.d("delete","got to bidlist");
+                    finish();
                 }
             });
 
@@ -67,8 +104,15 @@ public class TaskActivity extends AppCompatActivity {
             viewBids.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v){
-                    startActivity(bidList);
+                    Task task = db.getTask(intent.getStringExtra("UUID"));
+                    Intent intent = new Intent(TaskActivity.this, BidListActivity.class);
+                    String UUID = task.getUUID();
+                    intent.putExtra("UUID", UUID);
+                    Log.d("view bids","got to bidlist");
+                    startActivity(intent);
+                    getTaskDetails(task);
                     setResult(RESULT_OK);
+
                 }
             });
 
@@ -77,7 +121,11 @@ public class TaskActivity extends AppCompatActivity {
             addBidButton.setOnClickListener(new View.OnClickListener(){
 
                 public void onClick(View v){
-                    startActivity(bidActivity);
+                    Intent intent = new Intent(TaskActivity.this, BidActivity.class);
+                    String UUID = task.getUUID();
+                    Log.d("added bid","got to added");
+                    intent.putExtra("UUID", UUID);
+                    startActivity(intent);
                     setResult(RESULT_OK);
                 }
 
@@ -85,6 +133,29 @@ public class TaskActivity extends AppCompatActivity {
 
         }
         setTitle(type);
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        intent = getIntent();
+        task = db.getTask(intent.getStringExtra("UUID"));
+        getTaskDetails(task);
+
+    }
+
+    private void setTaskDetails() {
+        titleText = (TextView) findViewById(R.id.update_title);
+        descriptionText = (TextView) findViewById(R.id.update_description);
+
+        Task t = new Task();
+        t.setTitle(titleText.getText().toString());
+        t.setDescription(descriptionText.getText().toString());
+        t.setDate(new Date());
+        t.setLocation("Unknown");
+        t.setStatus("Requested");
+        t.setOwner(db.getCurrentUser().getOwner());
+        db.addTask(t);
     }
 
     private void getTaskDetails(Task task) {
@@ -95,19 +166,27 @@ public class TaskActivity extends AppCompatActivity {
         locationText = (TextView) findViewById(R.id.tasklocation);
         ownerText = (TextView) findViewById(R.id.taskowner);
         dateText = (TextView) findViewById(R.id.taskdate);
+        lowbidText = (TextView) findViewById(R.id.tasklowbid);
 
         titleText.setText(task.getTitle());
         descriptionText.setText(task.getDescription());
         statusText.setText(task.getStatus());
         locationText.setText(task.getLocation());
         ownerText.setText(task.getOwner());
+        double lowestBid = db.getLowestBid(task);
+        if (lowestBid == -1) {
+            lowbidText.setText("None");
+        } else {
+            lowbidText.setText(String.valueOf(db.getLowestBid(task)));
+        }
+
         dateText.setText(task.getDateString());
 
     }
 
     private void editTaskDetails (final Task task) {
-        setContentView(R.layout.add_modify_task);
-        Spinner s = (Spinner) findViewById(R.id.spinner);
+        //setContentView(R.layout.add_modify_task);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         String status = task.getStatus();
 
         // Sets the dropdown menu, puts default position as the current task status
@@ -116,8 +195,8 @@ public class TaskActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         int spinnerpos = adapter.getPosition(status);
-        s.setAdapter(adapter);
-        s.setSelection(spinnerpos);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(spinnerpos);
 
         editTitleText = (EditText) findViewById(R.id.editTitle);
         editDescText = (EditText) findViewById(R.id.editDescription);
@@ -131,22 +210,24 @@ public class TaskActivity extends AppCompatActivity {
         confirmEdits.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v){
-                modifyDetails (task,editTitleText,editDescText);
+                modifyDetails (task,editTitleText,editDescText,spinner);
             }
         });
 
     }
 
-    private void modifyDetails (Task task, EditText title,EditText desc){
+    private void modifyDetails (Task task, EditText title,EditText desc, Spinner spinner){
+        String newstatus = spinner.getSelectedItem().toString();
         String editedTitle = title.getText().toString();
         String editedDesc = desc.getText().toString();
 
         task.setTitle(editedTitle);
         task.setDescription(editedDesc);
+        task.setStatus(newstatus);
 
         db.updateTask(task);
-
-        setContentView(R.layout.viewtask);
-        getTaskDetails(task);
+        finish();
+        //setContentView(R.layout.viewtask);
+        //getTaskDetails(task);
     }
 }

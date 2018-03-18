@@ -61,6 +61,7 @@ public class TaskItData {
         this.users = new UserList();
         this.tasks = new TaskList();
         this.bids = new BidList();
+
         try {
             this.fs = TaskItFile.getInstance();
         } catch (Exception e) {
@@ -68,6 +69,10 @@ public class TaskItData {
         }
 
         this.sync = new TaskItSync();
+
+        User defaultUser = new User();
+        defaultUser.setUsername("admin");
+        setCurrentUser(defaultUser);
 
     }
 
@@ -241,6 +246,72 @@ public class TaskItData {
             }
         }
         return filtered;
+    }
+
+    /**
+     *
+     *
+     * @param user, status
+     * @return
+     */
+    public TaskList userAssignedTasks(User user){
+        TaskList filtered = new TaskList();
+        for (Task t: tasks.getTasks()) {
+            if (t.isAssignee(user)) {
+                filtered.addTask(t);
+            }
+        }
+        return filtered;
+    }
+
+    public TaskList tasksWithUserBids(User user){
+        TaskList filtered = new TaskList();
+        Task t;
+        for (Bid b: bids.getBids()) {
+            if (b.isOwner(user)) {
+                t = tasks.getTask(b.getParentTask());
+                if (!filtered.hasTask(t)) {
+                    filtered.addTask(t);
+                }
+            }
+        }
+        return filtered;
+    }
+
+    public int getBidCount(Task task){
+        int count = 0;
+        for (Bid b: bids.getBids()) {
+            if (b.isParentTask(task)) {
+                count ++;
+            }
+        }
+        return count;
+    }
+
+    public double getLowestBid(Task task){
+        double lowestBid = -1;
+        for (Bid b: bids.getBids()) {
+            if (b.isParentTask(task) && lowestBid == -1) {
+                lowestBid = b.getAmount();
+            } else if (b.isParentTask(task)) {
+                if (b.getAmount() < lowestBid) {
+                    lowestBid = b.getAmount();
+                }
+            }
+        }
+        return lowestBid;
+    }
+
+    public double getLowestBidForUser(Task task, User user){
+        double lowestBid = Double.POSITIVE_INFINITY;
+        for (Bid b: bids.getBids()) {
+            if (b.isParentTask(task) && b.isOwner(user)) {
+                if (b.getAmount() < lowestBid) {
+                    lowestBid = b.getAmount();
+                }
+            }
+        }
+        return lowestBid;
     }
 
     public TaskList keywordSearch(String keywords){

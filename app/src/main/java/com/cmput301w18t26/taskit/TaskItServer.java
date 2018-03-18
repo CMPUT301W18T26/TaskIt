@@ -402,8 +402,6 @@ public class TaskItServer {
         }
     }
 
-
-
     public void addUser(User user) {
         TaskItServer.addUserJob addUser = new TaskItServer.addUserJob();
         addUser.execute(user);
@@ -418,7 +416,6 @@ public class TaskItServer {
         TaskItServer.addBidJob addBid = new TaskItServer.addBidJob();
         addBid.execute(bid);
     }
-
 
     public void delUser(User user) {
         TaskItServer.deleteUserJob delUser = new TaskItServer.deleteUserJob();

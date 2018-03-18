@@ -8,7 +8,6 @@ import java.util.Date;
 
 public class Bid {
     private Date date;
-    private String user;
     private double amount;
     private String status;
     private String owner;
@@ -23,14 +22,6 @@ public class Bid {
 
     public Date getDate() {
         return date;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getUser() {
-        return user;
     }
 
     public void setAmount(double amount) {
@@ -91,5 +82,9 @@ public class Bid {
 
     public void setParentTask(String parentTask) {
         this.parentTask = parentTask;
+    }
+
+    public void setParentTask(Task parentTask) {
+        this.parentTask = parentTask.getUUID();
     }
 }

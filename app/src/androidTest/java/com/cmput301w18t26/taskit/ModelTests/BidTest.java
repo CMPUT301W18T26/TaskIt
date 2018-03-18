@@ -1,6 +1,9 @@
-package com.cmput301w18t26.taskit;
+package com.cmput301w18t26.taskit.ModelTests;
 
 import android.test.ActivityInstrumentationTestCase2;
+
+import com.cmput301w18t26.taskit.Bid;
+import com.cmput301w18t26.taskit.BidActivity;
 
 import java.util.Date;
 
@@ -22,8 +25,8 @@ public class BidTest extends ActivityInstrumentationTestCase2 {
     public void testSetGetUser() {
         Bid bid = new Bid();
         String user = "AliceBob";
-        bid.setUser(user);
-        assertEquals(user, bid.getUser());
+        bid.setOwner(user);
+        assertEquals(user, bid.getOwner());
     }
     public void testSetGetAmount() {
         Bid bid = new Bid();

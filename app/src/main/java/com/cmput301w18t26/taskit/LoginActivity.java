@@ -1,6 +1,5 @@
 package com.cmput301w18t26.taskit;
 
-import android.app.Activity;
 import android.content.Intent;
 //import android.content.Context;
 import android.os.Bundle;
@@ -33,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         TaskItFile.setContext(this);
         db = TaskItData.getInstance();
-        db.refresh();
+        db.sync();
 
 
         setTitle("Login");
@@ -54,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     invalidUsername.setVisibility(View.VISIBLE);
                 }
-
             }
         });
 

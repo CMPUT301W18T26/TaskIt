@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
 
+    private TaskItData db;
     private final Activity context;
 
     /**
@@ -27,6 +28,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     public TaskAdapter(Activity context, TaskList tasks) {
         super(context, R.layout.list_single, tasks.getTasks());
         this.context = context;
+        db = TaskItData.getInstance();
     }
 
     /**
@@ -42,15 +44,26 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.list_single, null, true);
-        TextView txtName = (TextView) rowView.findViewById(R.id.txt_name);
-        TextView txtDate = (TextView) rowView.findViewById(R.id.txt_date);
-        TextView txtCharge= (TextView) rowView.findViewById(R.id.txt_charge);
+        TextView txtTitle = (TextView) rowView.findViewById(R.id.txt_title);
+        TextView txtStatus = (TextView) rowView.findViewById(R.id.txt_status);
+        TextView txtUsername= (TextView) rowView.findViewById(R.id.txt_username);
+        TextView txtBid= (TextView) rowView.findViewById(R.id.bid);
+        TextView txtMyBid= (TextView) rowView.findViewById(R.id.mybid);
 
         // Replace text with my own
-        txtName.setText(getItem(position).getTitle());
-        txtDate.setText(getItem(position).getLocation());
-        txtCharge.setText(getItem(position).getOwner());
-
+        txtTitle.setText(getItem(position).getTitle());
+        txtStatus.setText(getItem(position).getStatus());
+        txtUsername.setText(getItem(position).getOwner());
+        double lowestBid = db.getLowestBid(getItem(position));
+        if (lowestBid != -1) {
+            txtBid.setText("Lowest Bid: " + String.valueOf(lowestBid));
+        } else {
+            txtBid.setText("Lowest Bid: None");
+        }
+        double lowestBidForUser = db.getLowestBidForUser(getItem(position), db.getCurrentUser());
+        if (lowestBidForUser != Double.POSITIVE_INFINITY) {
+            txtMyBid.setText("My Bid: " + String.valueOf(lowestBidForUser));
+        }
         return rowView;
     }
 

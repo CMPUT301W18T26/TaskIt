@@ -1,7 +1,19 @@
-package com.cmput301w18t26.taskit;
+package com.cmput301w18t26.taskit.ControllerTests;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+
+import com.cmput301w18t26.taskit.Bid;
+import com.cmput301w18t26.taskit.BidList;
+import com.cmput301w18t26.taskit.HomeActivity;
+import com.cmput301w18t26.taskit.MockBid;
+import com.cmput301w18t26.taskit.MockTask;
+import com.cmput301w18t26.taskit.MockUser;
+import com.cmput301w18t26.taskit.Task;
+import com.cmput301w18t26.taskit.TaskItServer;
+import com.cmput301w18t26.taskit.TaskList;
+import com.cmput301w18t26.taskit.User;
+import com.cmput301w18t26.taskit.UserList;
 
 import java.util.concurrent.TimeUnit;
 
