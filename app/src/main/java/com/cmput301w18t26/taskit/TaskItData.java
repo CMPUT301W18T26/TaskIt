@@ -125,9 +125,15 @@ public class TaskItData {
     }
 
     public void deleteTask(Task task) {
+        for (Bid b: bids.getBids()) {
+            if (b.isParentTask(task)) {
+                deleteBid(b);
+            }
+        }
         tasks.deleteTask(task);
         // Move task to trash (filesystem)
         fs.deleteTaskFile(task);
+
     }
 
     public void updateTask(Task task) {
