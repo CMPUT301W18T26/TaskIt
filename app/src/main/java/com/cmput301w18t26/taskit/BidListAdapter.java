@@ -39,9 +39,9 @@ public class BidListAdapter extends ArrayAdapter<Bid> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.list_single, null, true);
-        TextView txtName = (TextView) rowView.findViewById(R.id.txt_name);
-        TextView txtDate = (TextView) rowView.findViewById(R.id.txt_date);
-        TextView txtCharge= (TextView) rowView.findViewById(R.id.txt_charge);
+        TextView txtName = (TextView) rowView.findViewById(R.id.txt_title);
+        TextView txtDate = (TextView) rowView.findViewById(R.id.txt_status);
+        TextView txtCharge= (TextView) rowView.findViewById(R.id.txt_username);
 
         // Replace text with my own
         txtName.setText(getItem(position).getOwner());

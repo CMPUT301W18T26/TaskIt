@@ -302,6 +302,18 @@ public class TaskItData {
         return lowestBid;
     }
 
+    public double getLowestBidForUser(Task task, User user){
+        double lowestBid = Double.POSITIVE_INFINITY;
+        for (Bid b: bids.getBids()) {
+            if (b.isParentTask(task) && b.isOwner(user)) {
+                if (b.getAmount() < lowestBid) {
+                    lowestBid = b.getAmount();
+                }
+            }
+        }
+        return lowestBid;
+    }
+
     public TaskList keywordSearch(String keywords){
         // break keywords into words
 
