@@ -62,14 +62,20 @@ public class TaskActivity extends AppCompatActivity {
         } else {
             setContentView(R.layout.viewtask);
             Button bid = (Button) findViewById(R.id.bidTask);
+            Button deleteTaskButton = (Button) findViewById(R.id.deletetask);
+            Button editTaskButton = (Button) findViewById(R.id.edittask);
+
             task = db.getTask(intent.getStringExtra("UUID"));
             getTaskDetails(task);
             User curruser = db.getCurrentUser();
 
             if (task.isOwner(curruser)){
                 bid.setVisibility(View.GONE);
+            } else {
+                deleteTaskButton.setVisibility(View.GONE);
+                editTaskButton.setVisibility(View.GONE);
             }
-            Button editTaskButton = (Button) findViewById(R.id.edittask);
+
             editTaskButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v){
@@ -83,7 +89,7 @@ public class TaskActivity extends AppCompatActivity {
 
                 }
             });
-            Button deleteTaskButton = (Button) findViewById(R.id.deletetask);
+
             deleteTaskButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v){
