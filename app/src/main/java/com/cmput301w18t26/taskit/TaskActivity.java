@@ -29,6 +29,7 @@ public class TaskActivity extends AppCompatActivity {
     private TextView ownerText;
     private TextView locationText;
     private EditText editTitleText;
+    private TextView lowbidText;
     private EditText editDescText;
     private TaskItData db;
 
@@ -63,6 +64,14 @@ public class TaskActivity extends AppCompatActivity {
 
                 public void onClick(View v){
                     editTaskDetails(task);
+                }
+            });
+            Button deleteTaskButton = (Button) findViewById(R.id.deletetask);
+            deleteTaskButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v){
+                    db.deleteTask(task);
+                    finish();
                 }
             });
 
@@ -119,12 +128,20 @@ public class TaskActivity extends AppCompatActivity {
         locationText = (TextView) findViewById(R.id.tasklocation);
         ownerText = (TextView) findViewById(R.id.taskowner);
         dateText = (TextView) findViewById(R.id.taskdate);
+        lowbidText = (TextView) findViewById(R.id.tasklowbid);
 
         titleText.setText(task.getTitle());
         descriptionText.setText(task.getDescription());
         statusText.setText(task.getStatus());
         locationText.setText(task.getLocation());
         ownerText.setText(task.getOwner());
+        double lowestBid = db.getLowestBid(task);
+        if (lowestBid == -1) {
+            lowbidText.setText("None");
+        } else {
+            lowbidText.setText(String.valueOf(db.getLowestBid(task)));
+        }
+
         dateText.setText(task.getDateString());
 
     }

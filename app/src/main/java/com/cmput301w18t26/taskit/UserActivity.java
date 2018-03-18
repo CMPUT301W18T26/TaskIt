@@ -71,8 +71,7 @@ public class UserActivity extends AppCompatActivity {
             cancelButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-                    Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(loginIntent);
+                    finish();
                     setResult(RESULT_OK);
                 }
             });
@@ -96,19 +95,15 @@ public class UserActivity extends AppCompatActivity {
                     db.getCurrentUser().setEmail(emailEdit.getText().toString());
                     db.getCurrentUser().setPhone(Long.parseLong(phoneEdit.getText().toString()));
                     db.updateUser(db.getCurrentUser());
-                    Intent updateIntent = new Intent(getApplicationContext(),UserActivity.class);
-                    updateIntent.putExtra(TYPE, "My Profile");
-                    startActivity(updateIntent);
                     setResult(RESULT_OK);
+                    finish();
                 }
             });
             cancelButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-                    Intent updateIntent = new Intent(getApplicationContext(),UserActivity.class);
-                    updateIntent.putExtra(TYPE, "My Profile");
-                    startActivity(updateIntent);
                     setResult(RESULT_OK);
+                    finish();
                 }
             });
         } else {
@@ -132,7 +127,7 @@ public class UserActivity extends AppCompatActivity {
             editButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-                    Intent updateIntent = new Intent(getApplicationContext(),UserActivity.class);
+                    Intent updateIntent = new Intent(getApplicationContext(), UserActivity.class);
                     updateIntent.putExtra(TYPE, "Update");
                     startActivity(updateIntent);
                     setResult(RESULT_OK);
@@ -140,5 +135,18 @@ public class UserActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = getIntent();
+        String type = intent.getStringExtra(HomeActivity.TYPE);
+        if (type.equals("My Profile")) {
+            usernameText.setText(db.getCurrentUser().getUsername());
+            nameText.setText(db.getCurrentUser().getName());
+            emailText.setText(db.getCurrentUser().getEmail());
+            phoneText.setText(String.valueOf(db.getCurrentUser().getPhone()));
+        }
     }
 }
