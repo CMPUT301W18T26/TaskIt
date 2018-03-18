@@ -278,6 +278,30 @@ public class TaskItData {
         return filtered;
     }
 
+    public int getBidCount(Task task){
+        int count = 0;
+        for (Bid b: bids.getBids()) {
+            if (b.isParentTask(task)) {
+                count ++;
+            }
+        }
+        return count;
+    }
+
+    public double getLowestBid(Task task){
+        double lowestBid = -1;
+        for (Bid b: bids.getBids()) {
+            if (b.isParentTask(task) && lowestBid == -1) {
+                lowestBid = b.getAmount();
+            } else if (b.isParentTask(task)) {
+                if (b.getAmount() < lowestBid) {
+                    lowestBid = b.getAmount();
+                }
+            }
+        }
+        return lowestBid;
+    }
+
     public TaskList keywordSearch(String keywords){
         // break keywords into words
 

@@ -50,6 +50,7 @@ public class BidActivity extends AppCompatActivity {
                 Log.d("amount",great);
                 Log.d("user", bid.getOwner());
                 db.addBid(bid);
+                task.setStatus("Bidded");
                 finish();
 
             }
