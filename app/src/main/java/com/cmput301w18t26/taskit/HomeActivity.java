@@ -28,6 +28,8 @@ public class HomeActivity extends AppCompatActivity {
         Button allRequestedButton = (Button) findViewById(R.id.allrequestedtasks);
         Button searchTasksButton = (Button) findViewById(R.id.searchtasks);
         Button profileButton = (Button) findViewById(R.id.profile);
+        Button mapButton = (Button) findViewById(R.id.mapbutton);
+
         final Intent taskList = new Intent(getApplicationContext(),ListActivity.class);
 
 
@@ -97,6 +99,14 @@ public class HomeActivity extends AppCompatActivity {
                 Intent registerIntent = new Intent(getApplicationContext(),UserActivity.class);
                 registerIntent.putExtra(TYPE, "My Profile");
                 startActivity(registerIntent);
+                setResult(RESULT_OK);
+            }
+        });
+
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                startActivity(intent);
                 setResult(RESULT_OK);
             }
         });

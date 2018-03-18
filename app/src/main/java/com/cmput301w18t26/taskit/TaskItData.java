@@ -125,9 +125,15 @@ public class TaskItData {
     }
 
     public void deleteTask(Task task) {
+        for (Bid b: bids.getBids()) {
+            if (b.isParentTask(task)) {
+                deleteBid(b);
+            }
+        }
         tasks.deleteTask(task);
         // Move task to trash (filesystem)
         fs.deleteTaskFile(task);
+
     }
 
     public void updateTask(Task task) {
@@ -294,6 +300,18 @@ public class TaskItData {
             if (b.isParentTask(task) && lowestBid == -1) {
                 lowestBid = b.getAmount();
             } else if (b.isParentTask(task)) {
+                if (b.getAmount() < lowestBid) {
+                    lowestBid = b.getAmount();
+                }
+            }
+        }
+        return lowestBid;
+    }
+
+    public double getLowestBidForUser(Task task, User user){
+        double lowestBid = Double.POSITIVE_INFINITY;
+        for (Bid b: bids.getBids()) {
+            if (b.isParentTask(task) && b.isOwner(user)) {
                 if (b.getAmount() < lowestBid) {
                     lowestBid = b.getAmount();
                 }

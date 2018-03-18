@@ -1,7 +1,10 @@
-package com.cmput301w18t26.taskit;
+package com.cmput301w18t26.taskit.ControllerTests;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
+
+import com.cmput301w18t26.taskit.HomeActivity;
+import com.cmput301w18t26.taskit.TaskItFile;
 
 /**
  * Created by kevingordon on 2018-03-17.
