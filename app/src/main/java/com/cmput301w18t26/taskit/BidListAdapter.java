@@ -40,7 +40,7 @@ public class BidListAdapter extends ArrayAdapter<Bid> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.list_single, null, true);
         TextView txtName = (TextView) rowView.findViewById(R.id.txt_title);
-        TextView txtDate = (TextView) rowView.findViewById(R.id.txt_status);
+        TextView txtDate = (TextView) rowView.findViewById(R.id.mybid);
         TextView txtCharge= (TextView) rowView.findViewById(R.id.txt_username);
 
         // Replace text with my own

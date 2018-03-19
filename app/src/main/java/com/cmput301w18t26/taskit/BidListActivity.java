@@ -53,7 +53,7 @@ public class BidListActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
             final Bid bid = (Bid) adapter.getItem(i);
-            //Bid bid = (Bid)adapter.getItemAtPosition(i);
+
 
             View promptview = getLayoutInflater().inflate(R.layout.bid_prompt,null);
             AlertDialog.Builder bidprompt = new AlertDialog.Builder(BidListActivity.this);
