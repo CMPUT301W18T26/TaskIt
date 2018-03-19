@@ -7,39 +7,60 @@ import java.util.Date;
  * Created by kevingordon on 2018-02-26.
  */
 
+/**
+ * Represents a single task.
+ * @author UAlberta-Cmput301-Team26 crew
+ * @see TaskList
+ */
 public class Task {
     private Date date;
+
+    /**
+     * Username of the task requester
+     */
     private String user;
+
+    /**
+     * Description of this task
+     */
     private String description;
+
+    /**
+     * Location of this task.
+     */
     private String location;
     // private image[] photos;
-    private BidList bids;
+
+    /**
+     * Task status. {"Bidded","Requested","Assigned","Done"}
+     */
     private String status;
+
+    /**
+     * Task title
+     */
     private String title;
+
+    /**
+     * Task owner username.
+     */
     private String owner;
 
-    public String getAssignee() {
-        return assignee;
-    }
-
-    public void setAssignee(String assignee) {
-        this.assignee = assignee;
-    }
-    public void setAssignee(User assignee) {
-        this.assignee = assignee.getUsername();
-    }
-
-    public boolean isAssignee(String s) {
-        return this.assignee!=null && this.assignee.equals(s);
-    }
-    public boolean isAssignee(User u) {
-        return isAssignee(u.getUsername());
-    }
-
+    /**
+     * Username of user task is assigned to.
+     */
     private String assignee;
-    // metadata for server/sync
+
+    /**
+     * Metadata for sync. UUID for task.
+     */
     private String UUID;
+
+    /**
+     * Metadata for sync. Timestamp task created/updated.
+     */
     private Date timestamp;
+
     public static String[] statuses = {"Bidded","Requested","Assigned","Done"};
     public static String[] changeableStatuses = {"Requested","Assigned","Done"};
 
@@ -75,14 +96,6 @@ public class Task {
         return location;
     }
 
-    public void setBids(BidList bids) {
-        this.bids = bids;
-    }
-
-    public BidList getBids() {
-        return bids;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -102,13 +115,17 @@ public class Task {
     public void setOwner(String o) {
         owner = o;
     }
+
     public void setOwner(User u) {owner = u.getOwner();}
+
     public String getOwner() {
         return owner;
     }
+
     public boolean isOwner(String s) {
         return owner.equals(s);
     }
+
     public boolean isOwner(User u) {
         return owner.equals(u.getOwner());
     }
@@ -132,4 +149,25 @@ public class Task {
     public String getDateString(){
         return new SimpleDateFormat("dd/MM/yyyy").format(date);
     }
+
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
+    }
+
+    public void setAssignee(User assignee) {
+        this.assignee = assignee.getUsername();
+    }
+
+    public boolean isAssignee(String s) {
+        return this.assignee!=null && this.assignee.equals(s);
+    }
+
+    public boolean isAssignee(User u) {
+        return isAssignee(u.getUsername());
+    }
+
 }

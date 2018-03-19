@@ -32,14 +32,38 @@ import io.searchbox.indices.mapping.PutMapping;
  * Created by kevingordon on 2018-03-05.
  */
 
+/**
+ * Handles server I/O for the application
+ *
+ * - push/pull {bids, tasks, users}
+ *
+ * @author UAlberta-Cmput301-Team26 crew
+ * @see TaskItFile
+ * @see TaskItData
+ * @see TaskItSync
+ */
 public class TaskItServer {
 
+    /**
+     * We use the jestdroid client
+     */
     public static JestDroidClient client;
+
+    /**
+     * The name of the elastic search index for this application
+     */
     private static String INDEX_TaskItMain = "cmput301w18t26_main";
+
+    /**
+     * Some type for state checking.
+     */
     private static String TYPE_USER = "user";
     private static String TYPE_TASK = "task";
     private static String TYPE_BID = "bid";
 
+    /**
+     * Setup the server.
+     */
     public static class setupServerJob extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -62,6 +86,9 @@ public class TaskItServer {
         }
     }
 
+    /**
+     * Delete the index for this application from the elastic search server.
+     */
     public static class teardownServerJob extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -84,6 +111,12 @@ public class TaskItServer {
         }
     }
 
+    /**
+     *        ----    Add {user, task, bid} methods    ----
+     * These create async tasks and will add a collection of the
+     * corresponding object to the server.
+     *
+     */
     public static class addUserJob extends AsyncTask<User, Void, Void> {
 
         @Override
@@ -188,6 +221,13 @@ public class TaskItServer {
         }
     }
 
+    /**
+     *        ----    Get {user, task, bid} methods    ----
+     * These create async tasks and will retrieve their corresponding objects
+     * from the server, returning them in their corresponding model class.
+     * Eg. returns BidList, UserList, TaskList
+     *
+     */
     public static class getUserJob extends AsyncTask<String, Void, UserList> {
         @Override
         protected UserList doInBackground(String... search_parameters) {
@@ -271,6 +311,12 @@ public class TaskItServer {
         }
     }
 
+    /**
+     *       ----    Delete {user, task, bid} methods    ----
+     * These create async tasks and will delete a collection of the
+     * corresponding object from the server.
+     *
+     */
     public static class deleteUserJob extends AsyncTask<User, Void, Void> {
 
         @Override
@@ -367,8 +413,13 @@ public class TaskItServer {
         }
     }
 
-    // TODO implement delete jobs + methods
-
+    /**
+     * Loads all the application data from the server into the corresponding
+     * container class.
+     * @param u UserList to add user objects retrieved from the server
+     * @param t TaskList to add task objects retrieved from the server
+     * @param b BidList to add bid objects retrieved from the server*
+     */
     public void loadAllFromServer(UserList u, TaskList t, BidList b) {
         Log.d("TaskItServer", "Entering loadallfromserver");
         TaskItServer.getUserJob getUser = new TaskItServer.getUserJob();
@@ -389,6 +440,9 @@ public class TaskItServer {
 
     }
 
+    /**
+     * Configures the jest droid client.
+     */
     public static void verifySettings() {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
@@ -400,36 +454,70 @@ public class TaskItServer {
         }
     }
 
+    /**
+     * Convenience function that adds a given user to the server.
+     * Creates the async job and executes it.
+     * @param user user to add to the server
+     */
     public void addUser(User user) {
         TaskItServer.addUserJob addUser = new TaskItServer.addUserJob();
         addUser.execute(user);
     }
 
+    /**
+     * Convenience function that adds a given task to the server.
+     * Creates the async job and executes it.
+     * @param task task to add to the server
+     */
     public void addTask(Task task) {
         TaskItServer.addTaskJob addTask = new TaskItServer.addTaskJob();
         addTask.execute(task);
     }
 
+    /**
+     * Convenience function that adds a given bid to the server.
+     * Creates the async job and executes it.
+     * @param bid bid to add to the server
+     */
     public void addBid(Bid bid) {
         TaskItServer.addBidJob addBid = new TaskItServer.addBidJob();
         addBid.execute(bid);
     }
 
+    /**
+     * Convenience function that deletes a given user from the server.
+     * Creates the async job and executes it.
+     * @param user user to remove from the server
+     */
     public void delUser(User user) {
         TaskItServer.deleteUserJob delUser = new TaskItServer.deleteUserJob();
         delUser.execute(user);
     }
 
+    /**
+     * Convenience function that deletes a given task from the server.
+     * Creates the async job and executes it.
+     * @param task task to remove from the server
+     */
     public void delTask(Task task) {
         TaskItServer.deleteTaskJob delTask = new TaskItServer.deleteTaskJob();
         delTask.execute(task);
     }
 
+    /**
+     * Convenience function that deletes a given bid from the server.
+     * Creates the async job and executes it.
+     * @param bid bid to remove from the server
+     */
     public void delBid(Bid bid) {
         TaskItServer.deleteBidJob delBid = new TaskItServer.deleteBidJob();
         delBid.execute(bid);
     }
 
+    /**
+     * Retrieves a list of users from the server
+     * @return a UserList containing all user data from the server.
+     */
     public UserList getUsers() {
         UserList l = new UserList();
         TaskItServer.getUserJob getUser = new TaskItServer.getUserJob();
@@ -442,6 +530,10 @@ public class TaskItServer {
         return l;
     }
 
+    /**
+     * Retrieves a list of tasks from the server
+     * @return a TaskList containing all task data from the server.
+     */
     public TaskList getTasks() {
         TaskList l = new TaskList();
         TaskItServer.getTaskJob getTask = new TaskItServer.getTaskJob();
@@ -454,6 +546,10 @@ public class TaskItServer {
         return l;
     }
 
+    /**
+     * Retrieves a list of bids from the server
+     * @return a BidList containing all the bid data from the server.
+     */
     public BidList getBids() {
         BidList l = new BidList();
         TaskItServer.getBidJob getBid = new TaskItServer.getBidJob();
@@ -466,6 +562,9 @@ public class TaskItServer {
         return l;
     }
 
+    /**
+     * A convenience method to setup and execute a job to setup the server
+     */
     public void setupServer() {
         TaskItServer.setupServerJob setup = new TaskItServer.setupServerJob();
         setup.execute();

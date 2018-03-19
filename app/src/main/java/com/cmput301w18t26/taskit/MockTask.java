@@ -13,7 +13,6 @@ public class MockTask extends Task {
         setUser("AliceBob");
         setDescription("A very lovely mock task");
         setLocation("Quad");
-        setBids(new BidList());
         setStatus("Requested");
         setTitle("Super great Task right here!");
     }
@@ -24,7 +23,6 @@ public class MockTask extends Task {
         setUser(owner);
         setDescription("A very lovely mock task");
         setLocation("Edmonton");
-        setBids(new BidList());
         setStatus("Requested");
         setOwner(owner);
     }
@@ -35,7 +33,6 @@ public class MockTask extends Task {
         setUser(owner);
         setDescription("A very lovely mock task");
         setLocation("Edmonton");
-        setBids(new BidList());
         setStatus("Requested");
         setTitle(title);
         setOwner(owner);

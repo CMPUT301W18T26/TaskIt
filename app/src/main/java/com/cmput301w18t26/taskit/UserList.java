@@ -10,9 +10,22 @@ import java.util.List;
  * Created by kevingordon on 2018-02-26.
  */
 
+/**
+ * Represents a list of users.
+ * @author UAlberta-Cmput301-Team26 crew
+ * @see User
+ */
 public class UserList {
+
+    /**
+     * List of users.
+     */
     private ArrayList<User> users = new ArrayList<User>();
 
+    /**
+     * Some services (adapters in particular) need a list type.
+     * @return the bare arraylist of users
+     */
     public ArrayList<User> getUsers() {return users;}
 
     public void addUser(User user) {
@@ -27,6 +40,11 @@ public class UserList {
         }
     }
 
+    /**
+     * Find users in userlist using their UUIDs
+     * @param user the user to check for membership
+     * @return index of user if found, -1 o.w.
+     */
     public int getIndex(User user) {
         for (int i=0; i<users.size(); i++) {
             if (getUser(i).getUUID().equals(user.getUUID())) {
@@ -36,6 +54,11 @@ public class UserList {
         return -1;
     }
 
+    /**
+     * Find users in userlist using their usernames
+     * @param username of the user to check for membership
+     * @return index of user if found, -1 o.w.
+     */
     public int getIndexByUsername(String username) {
         for (int i=0; i<users.size(); i++) {
             if (getUser(i).getUsername().equals(username)) {
@@ -45,6 +68,11 @@ public class UserList {
         return -1;
     }
 
+    /**
+     * Find users in userlist using their UUIDs
+     * @param uuid of the user to check for membership
+     * @return index of user if found, -1 o.w.
+     */
     public int getIndex(String uuid) {
         for (int i=0; i<users.size(); i++) {
             if (getUser(i).getUUID().equals(uuid)) {

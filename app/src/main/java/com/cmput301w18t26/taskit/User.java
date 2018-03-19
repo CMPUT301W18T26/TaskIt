@@ -6,18 +6,52 @@ import java.util.Date;
  * Created by kevingordon on 2018-02-26.
  */
 
+/**
+ * Represents a single User.
+ * @author UAlberta-Cmput301-Team26 crew
+ * @see TaskList
+ */
 public class User {
+    /**
+     * User's name.
+     */
     private String name;
+
+    /**
+     * User's email address.
+     */
     private String email;
+
+    /**
+     * User's phone number.
+     */
     private long phone;
+
+    /**
+     * User's unique username.
+     */
     private String username;
+
+    /**
+     * Array of rankings for this user.
+     */
     private int[] ranks;
-    private TaskList tasks;
-    private BidList bids;
+
     private Date date;
+
+    /**
+     * Owner of this user.
+     */
     private String owner;
-    // metadata for server/sync
+
+    /**
+     * Used for sync. UUID of this user
+     */
     private String UUID;
+
+    /**
+     * Used for sync. Timestamp user created/edited
+     */
     private Date timestamp;
 
     public void setName(String name) {
@@ -61,22 +95,11 @@ public class User {
         return ranks;
     }
 
-    public void setTasks(TaskList tasks) {
-        this.tasks = tasks;
-    }
-
-    public TaskList getTasks() {
-        return tasks;
-    }
-
-    public void setBids(BidList bids) {
-        this.bids = bids;
-    }
-
-    public BidList getBids() {
-        return bids;
-    }
-
+    /**
+     * Ranks are array of integers, compute the average.
+     *
+     * @return the average of user's rankings
+     */
     public double getRank() {
         // Return -1 if no ranks
         double sum = 0;
@@ -104,6 +127,7 @@ public class User {
     public boolean isOwner(String s) {
         return owner.equals(s);
     }
+
     public boolean isOwner(User u) {
         return owner.equals(u.getOwner());
     }
@@ -111,6 +135,7 @@ public class User {
     public String getUUID() {
         return UUID;
     }
+
     public void setUUID(String UUID) {
         this.UUID = UUID;
     }

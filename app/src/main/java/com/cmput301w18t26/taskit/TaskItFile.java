@@ -23,27 +23,58 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 
 /**
- * Handles file io 
+ * Handles file I/O for the application
+ *
+ * - read/write {bids, tasks, users}
+ *
+ * @author UAlberta-Cmput301-Team26 crew
+ * @see TaskItData
+ * @see TaskItServer
+ * @see TaskItSync
  */
 public class TaskItFile {
+
+    /**
+     * TaskItFile will be a singleton
+     */
     private static TaskItFile single_instance = null;
 
+    /**
+     * sub directory for user objects
+     */
     private static final String userDirName = "user";
+
+    /**
+     * sub directory for task objects
+     */
     private static final String taskDirName = "task";
+
+    /**
+     * sub directory for bid objects
+     */
     private static final String bidDirName = "bids";
 
+    /**
+     * State variables
+     */
     public static final int USER = 1;
     public static final int TASK = 2;
     public static final int BID = 3;
-    public static final int TRASH = 4;
 
+    /**
+     * Android requires a context to determine file path
+     */
     private static Context context;
 
     public static void setContext(Context c) {
         context = c;
     }
 
-
+    /**
+     * Create singleton if not already created.
+     * @return singleton instance of this class
+     * @throws NoContextException if a context was not set prior to initialization.
+     */
     public static TaskItFile getInstance() throws NoContextException {
         if (context == null) {
             throw new NoContextException();
@@ -53,6 +84,12 @@ public class TaskItFile {
         return single_instance;
     }
 
+    /**
+     * Load a file of a given type with the given filename.
+     * @param filename full filename of the object
+     * @param type the object type
+     * @return the object with the given filename
+     */
     private Object loadFromFile(String filename, Type type) {
         Object o = new Object();
         try {
@@ -75,6 +112,9 @@ public class TaskItFile {
         return o;
     }
 
+    /**
+     * Delete all files for this application
+     */
     public static void deleteAllFromFile() {
         String dirName;
         File dir;
@@ -108,6 +148,13 @@ public class TaskItFile {
             files[i].delete();
         }
     }
+
+    /**
+     * Load all application files into the provided lists.
+     * @param u userlist to load user objects into
+     * @param t tasklist to load task objects into
+     * @param b bidlist  to load bid  objects into
+     */
     public void loadAllFromFile(UserList u, TaskList t, BidList b) {
         String dirName;
         File dir;
@@ -150,8 +197,12 @@ public class TaskItFile {
         }
     }
 
-        // get the string of the directory belonging to a model collection
-        // create the directory if needed
+    /**
+     * Get the string of the directory belonging to a model collection.
+     * Creates the directory if needed.
+     * @param model model-class type to get directory of.
+     * @return the directory name for a given model-class type.
+     */
     private static String getDirname(int model) {
         String dirPath = context.getFilesDir().toString();
 
@@ -167,16 +218,36 @@ public class TaskItFile {
         return dirPath;
     }
 
+    /**
+     * Given a user, return its full filename.
+     * Use the user's UUID.
+     * @param user user whose filename we wish returned
+     * @return the filename for the given user.
+     */
     public static String getUserFilename(User user) {
         String userFile;
         userFile = getDirname(USER) + "/" + user.getUUID();
         return userFile;
     }
+
+    /**
+     * Given a task, return its full filename.
+     * Use the task's UUID.
+     * @param task user whose filename we wish returned
+     * @return the filename for the given task.
+     */
     public static String getTaskFilename(Task task) {
         String taskFile;
         taskFile = getDirname(TASK) + "/" + task.getUUID();
         return taskFile;
     }
+
+    /**
+     * Given a bid, return its full filename.
+     * Use the bid's UUID.
+     * @param bid user whose filename we wish returned
+     * @return the filename for the given bid.
+     */
     public static String getBidFilename(Bid bid) {
         String bidFile;
         bidFile = getDirname(BID) + "/" + bid.getUUID();
@@ -185,6 +256,11 @@ public class TaskItFile {
 
     // TODO: cite the following in wiki
     // https://stackoverflow.com/questions/1889188/how-to-create-files-hierarchy-in-androids-data-data-pkg-files-directory
+
+    /**
+     * Write the given user object to file.
+     * @param user the user to write to file.
+     */
     public void addUserFile(User user) {
         String userFile = getUserFilename(user);
 
@@ -202,6 +278,10 @@ public class TaskItFile {
         }
     }
 
+    /**
+     * Delete the file associated with this user object.
+     * @param user the user object whose file we wish to delete.
+     */
     public void deleteUserFile(User user) {
         String filename = getUserFilename(user);
         File file = new File(filename);
@@ -209,6 +289,11 @@ public class TaskItFile {
     }
 
     // https://stackoverflow.com/questions/1889188/how-to-create-files-hierarchy-in-androids-data-data-pkg-files-directory
+
+    /**
+     * Write the given task object to file.
+     * @param task the task to write to file
+     */
     public void addTaskFile(Task task) {
         String taskFile = getTaskFilename(task);
         try {
@@ -225,12 +310,21 @@ public class TaskItFile {
         }
     }
 
+    /**
+     * Delete the file associated with this task object.
+     * @param task the task object whose file we wish to delete.
+     */
     public void deleteTaskFile(Task task) {
         String filename = getTaskFilename(task);
         File file = new File(filename);
         file.delete();
     }
+
     // https://stackoverflow.com/questions/1889188/how-to-create-files-hierarchy-in-androids-data-data-pkg-files-directory
+    /**
+     * Write the given bid object to file
+     * @param bid the bid to write to file
+     */
     public void addBidFile(Bid bid) {
         String bidFile = getBidFilename(bid);
 
@@ -247,6 +341,11 @@ public class TaskItFile {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Delete the file associated with this bid.
+     * @param bid the bid object whose file we wish to delete.
+     */
     public void deleteBidFile(Bid bid) {
         String filename = getBidFilename(bid);
         File file = new File(filename);

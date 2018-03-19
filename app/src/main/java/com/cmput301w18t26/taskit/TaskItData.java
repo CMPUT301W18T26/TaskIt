@@ -23,38 +23,63 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.UUID;
 
+// Todo: cite https://www.geeksforgeeks.org/singleton-class-java/ in wiki
 
 /**
- * TaskItData will hold all the data for the entire application.
+ * Holds the data for the entire application.
+ * Issues commands to sync and filesystem.
+ * Filters data with queries.
  *
  * - push/pull from the filesystem
  * - sync the server and the filesystem
  * - get filtered lists (refactor into filter class, call these)
  * - add/update/delete {tasks, users, bids}
- * -
+ *
+ * @author UAlberta-Cmput301-Team26 crew
+ * @see TaskItFile
+ * @see TaskItServer
+ * @see TaskItSync
  */
-
-// Todo: cite https://www.geeksforgeeks.org/singleton-class-java/ in wiki
 public class TaskItData {
 
-
+    /**
+     * TaskItData will be a singleton
+     */
     private static TaskItData single_instance = null;
 
-    //  add/update/delete
+    /**
+     * The tasks for this application
+     */
     private TaskList tasks;
+
+    /**
+     * The users for this application
+     */
     private UserList users;
+
+    /**
+     * The bids for this application
+     */
     private BidList bids;
 
-    // the user currently logged in
+    /**
+     * The user that is currently logged in to the application.
+     */
     private User currentUser;
 
-    // File i/o
+    /**
+     * For filesystem I/O.
+     */
     private TaskItFile fs;
 
-    // Synchronize server and filesystem with sync
+    /**
+     * For synchronization of memory, filesystem, and server
+     */
     public static TaskItSync sync;
 
-    // Initialize a db
+    /**
+     * Initialize the database
+     */
     private TaskItData() {
         this.users = new UserList();
         this.tasks = new TaskList();
@@ -76,7 +101,10 @@ public class TaskItData {
 
     }
 
-    // A singleton
+    /**
+     * Create singleton if not already created.
+     * @return singleton instance of this class.
+     */
     public static TaskItData getInstance() {
         if (single_instance == null) {
             single_instance = new TaskItData();
@@ -84,7 +112,6 @@ public class TaskItData {
         return single_instance;
     }
 
-    // Manage the current user
     public User getCurrentUser() {
         return currentUser;
     }
@@ -94,19 +121,22 @@ public class TaskItData {
         sync.setCurrentUser(currentUser.getUsername());
     }
 
-    public User getUserByUsername(String username) {
-        return users.getUserByUsername(username);
-    }
-
-
-
-
     // This will append data from the filesystem to the {user, tasks, bids}Lists
     // Can result in duplicate data, usually clear the list prior
     // ... consider refactor or delete
-    public void refresh() {
-        fs.loadAllFromFile(users, tasks, bids);
-    }
+    // public void refresh() {
+    //    fs.loadAllFromFile(users, tasks, bids);
+    // }
+
+    /**
+     *       ----  Data add/delete/update methods  ----
+     *
+     * The following methods add metadata to the provided objects.
+     * The objects are added to their corresponding lists.
+     * The objects are added/removed from the filesystem.
+     * A sync call is made to update the server of changes.
+     *
+     */
 
     /**
      * USER METHODS
@@ -241,15 +271,16 @@ public class TaskItData {
     }
 
     /**
-     *   Filter functions
-     *   Todo: refactor?
+     *       ----    Filter methods    -----
+     * The following methods query the database,
+     * returning subsets of the data.
      */
 
     /**
-     * Get a list of tasks for a specific user.
+     * Get a list of tasks for a given user.
      *
-     * @param user
-     * @return
+     * @param user the user whose tasks we wish returned.
+     * @return list of tasks for the given user.
      */
     public TaskList userTasks(User user){
         TaskList filtered = new TaskList();
@@ -262,10 +293,10 @@ public class TaskItData {
     };
 
     /**
-     * Get a list of bids for a specific task.
+     * Get a list of bids for a given task.
      *
-     * @param task
-     * @return
+     * @param task the task whose bids we wish returned.
+     * @return list of bids for the given task.
      */
     public BidList taskBids(Task task){
         BidList filtered = new BidList();
@@ -277,26 +308,21 @@ public class TaskItData {
         return filtered;
     }
 
-    /**
-     * Get a list of bids for tasks I have bid on.
-     *  call userTasks with current user? or leave for caller?
-     *
-     */
-    public BidList userBids(User user){
-        BidList filtered = new BidList();
-        for (Bid b: bids.getBids()) {
-            if (b.isOwner(user)) {
-                filtered.addBid(b);
-            }
-        }
-        return filtered;
-    }
+    // public BidList userBids(User user){
+    //    BidList filtered = new BidList();
+    //     for (Bid b: bids.getBids()) {
+    //         if (b.isOwner(user)) {
+    //             filtered.addBid(b);
+    //         }
+    //     }
+    //     return filtered;
+    // }
 
     /**
-     * Get Tasks with status.
+     * Get Tasks with a given status.
      *
-     * @param status
-     * @return
+     * @param status the status of the tasks we wish returned
+     * @return list of tasks with the given status
      */
     public TaskList tasksWithStatus(String status){
         TaskList filtered = new TaskList();
@@ -310,10 +336,11 @@ public class TaskItData {
 
 
     /**
-     * Get tasks with status for specific user
+     * Get tasks with given status for given user
      *
-     * @param user, status
-     * @return
+     * @param user user whose tasks we we returned
+     * @param status status of the user's task we wish returned
+     * @return list of tasks with given owner and status
      */
     public TaskList userTasksWithStatus(User user, String status){
         TaskList filtered = new TaskList();
@@ -328,8 +355,8 @@ public class TaskItData {
     /**
      * Tasks that have been assigned to given user.
      *
-     * @param user, status
-     * @return
+     * @param user user to whom the tasks have been assigned
+     * @return list of tasks where the given user is the assignee
      */
     public TaskList userAssignedTasks(User user){
         TaskList filtered = new TaskList();
@@ -342,10 +369,10 @@ public class TaskItData {
     }
 
     /**
-     * Tasks that I have bidded on
+     * Tasks that a given user has bidded on
      *
-     * @param user
-     * @return
+     * @param user user that has bidded on tasks
+     * @return list of tasks that the given user has bid on
      */
     public TaskList tasksWithUserBids(User user){
         TaskList filtered = new TaskList();
@@ -362,8 +389,11 @@ public class TaskItData {
     }
 
 
-
-
+    /**
+     * Compute the lowest bid for this given task
+     * @param task task to compute the lowest bid of
+     * @return the lowest bid for the given task
+     */
     public double getLowestBid(Task task){
         double lowestBid = -1;
         for (Bid b: bids.getBids()) {
@@ -378,6 +408,12 @@ public class TaskItData {
         return lowestBid;
     }
 
+    /**
+     * Compute the lowest bid by a given user for the given task
+     * @param task the task to compute the lowest bid of
+     * @param user the user whose bids will be checked
+     * @return the lowest bid by the given user for the given task
+     */
     public double getLowestBidForUser(Task task, User user){
         double lowestBid = Double.POSITIVE_INFINITY;
         for (Bid b: bids.getBids()) {
@@ -390,8 +426,11 @@ public class TaskItData {
         return lowestBid;
     }
 
-    // Since deprecating each task owning a bidlist,
-    // this is how to get bid counts
+    /**
+     * compute the number of bids for a given task
+     * @param task task whose bids we wish to count
+     * @return the number of bids for the given task
+     */
     public int getTaskBidCount(Task task){
         int count = 0;
         for (Bid b: bids.getBids()) {
@@ -402,6 +441,9 @@ public class TaskItData {
         return count;
     }
 
+    /**
+     * In progress
+     */
     public TaskList keywordSearch(String keywords){
         // break keywords into words
 
@@ -420,8 +462,20 @@ public class TaskItData {
         return new TaskList();
     }
 
+    /**
+     * Get the user corresponding to the given username
+     * @param username the username of the user we wish to retrieve
+     * @return
+     */
+    public User getUserByUsername(String username) {
+        return users.getUserByUsername(username);
+    }
 
-
+    /**
+     * Check if a user exists with the given username
+     * @param username the username of the user we wish to check existence
+     * @return true if a user with the given username exists, false o.w.
+     */
     public boolean userExists(String username) {
         if (users.getIndexByUsername(username) > -1) {
             return true;
@@ -430,10 +484,21 @@ public class TaskItData {
         }
     }
 
+    /**
+     * Get a task with the given UUID
+     * @param uuid the uuid of the task to retrieve
+     * @return the task with the given UUID
+     */
     public Task getTask(String uuid) {
         return tasks.getTask(uuid);
     }
 
+    /**
+     * Sync the application data with the server.
+     * First sync the filesystem and the server.
+     * Next clear our in-memory application data.
+     * Finally, load the newly synced filesystem data into memory.
+     */
     public void sync() {
         // Todo: wrap these in a sort of timeout for offline functionality
         sync.sync();
