@@ -17,6 +17,7 @@ import com.cmput301w18t26.taskit.User;
 import com.cmput301w18t26.taskit.UserList;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -37,16 +38,23 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         TaskItData db = TaskItData.getInstance();
 
         String username = "Bob";
-        User u = new MockUser(username);
-        db.setCurrentUser(u);
-        db.addUser(u);
+        User u1 = new MockUser(username);
+        User u2 = new MockUser(username);
+        db.setCurrentUser(u2);
+        db.addUser(u1);
 
-        String filename = TaskItFile.getUserFilename(u);
+        String filename = TaskItFile.getUserFilename(u1);
         File file = new File(filename);
+
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         assertTrue(file.exists());
 
-        db.deleteUser(u);
+        db.deleteUser(u1);
 
         assertFalse(file.exists());
 
@@ -74,6 +82,7 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         db.deleteTask(t);
 
         assertFalse(file.exists());
+        db.deleteUser(u);
 
     }
 
@@ -104,6 +113,8 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
 
         assertFalse(file.exists());
 
+        db.deleteTask(t);
+        db.deleteUser(u);
     }
 
 
