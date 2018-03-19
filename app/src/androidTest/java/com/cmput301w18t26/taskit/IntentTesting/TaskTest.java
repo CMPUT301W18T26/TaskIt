@@ -9,9 +9,11 @@ import android.widget.EditText;
 import com.cmput301w18t26.taskit.HomeActivity;
 import com.cmput301w18t26.taskit.ListActivity;
 import com.cmput301w18t26.taskit.LoginActivity;
+import com.cmput301w18t26.taskit.MockTask;
 import com.cmput301w18t26.taskit.MockUser;
 import com.cmput301w18t26.taskit.R;
 import com.cmput301w18t26.taskit.Task;
+import com.cmput301w18t26.taskit.TaskActivity;
 import com.cmput301w18t26.taskit.TaskItData;
 import com.cmput301w18t26.taskit.TaskItFile;
 import com.cmput301w18t26.taskit.TaskList;
@@ -95,13 +97,40 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         assertFalse(solo.waitForText(taskName, 1, 3000));
 
         // Get the add new task button
+        Button addTaskButton = (Button) solo.getView(R.id.newtask);
+        solo.clickOnView(addTaskButton);
         // fill out the tasks
+        String testtitle = "An example task!";
+        String testdescr = "A fun and exciting description!";
+        solo.enterText((EditText) solo.getView(R.id.update_title), testtitle);
+        solo.enterText((EditText) solo.getView(R.id.update_description), testdescr);
         // add task
+        Task testTask = new MockTask();
+        testTask.setTitle(testtitle);
+        testTask.setDescription(testdescr);
+        Button confirmNewTask = (Button) solo.getView(R.id.createtask);
+        solo.clickOnView(confirmNewTask);
+        solo.waitForActivity(ListActivity.class, 3000);
         // check that it's there
+        solo.waitForText("An example task!");
+        solo.clickOnText(testtitle);
         // modify it
+        Button editTaskButton = (Button) solo.getView(R.id.edittask);
+        solo.clickOnView(editTaskButton);
+        String edittitle = "An edited example task!";
+        String editdesc = "An edited fun and exciting description!";
+        solo.clearEditText((EditText) solo.getView(R.id.editTitle));
+        solo.clearEditText((EditText) solo.getView(R.id.editDescription));
+        solo.enterText((EditText) solo.getView(R.id.editTitle), edittitle);
+        solo.enterText((EditText) solo.getView(R.id.editDescription), editdesc);
         // check that it changed
+        Button confirmedit = (Button) solo.getView(R.id.confirmedit);
+        solo.clickOnView(confirmedit);
         // delete it
+        Button deletetask = (Button) solo.getView(R.id.deletetask);
+        solo.clickOnView(deletetask);
         // check that it's gone
+        solo.waitForActivity(ListActivity.class, 3000);
 
 
 
