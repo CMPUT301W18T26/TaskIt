@@ -25,23 +25,6 @@ import com.robotium.solo.Solo;
  * Created by kevingordon on 2018-03-17.
  */
 
-import android.app.Activity;
-import android.content.Context;
-import android.test.ActivityInstrumentationTestCase2;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-
-import com.cmput301w18t26.taskit.HomeActivity;
-import com.cmput301w18t26.taskit.LoginActivity;
-import com.cmput301w18t26.taskit.R;
-import com.cmput301w18t26.taskit.TaskItData;
-import com.cmput301w18t26.taskit.TaskItFile;
-import com.cmput301w18t26.taskit.User;
-import com.cmput301w18t26.taskit.UserActivity;
-import com.robotium.solo.Solo;
-
-import java.util.List;
 
 
 public class TaskTest extends ActivityInstrumentationTestCase2 {
@@ -72,6 +55,13 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         String name1 = "testName1";
         String name2 = "testName2";
         String taskName = "cuztomName";
+
+//        Task notyourTask = new MockTask();
+//        notyourTask.setOwner("Kevin");
+//        notyourTask.setTitle("Someone else's task");
+//        notyourTask.setDescription("Someone else's description");
+//        db.addTask(notyourTask);
+//        db.sync();
 
         User foo = new MockUser();
         TaskList tl;
@@ -131,6 +121,11 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         solo.clickOnView(deletetask);
         // check that it's gone
         solo.waitForActivity(ListActivity.class, 3000);
+
+
+        //bid on task
+        //solo.clickOnText("Someone else's task");
+
 
 
         // End with cleanup of the mess we made...

@@ -14,6 +14,10 @@ import java.util.Date;
  * Created by kevingordon on 2018-02-26.
  */
 
+/**
+ * Retrieves the info a user has entered when the user clicks the confirm bid button
+ * Sets the details of the bid and creates a new Bid object
+ */
 public class BidActivity extends AppCompatActivity {
 
     protected static final String TYPE = "type";
@@ -34,7 +38,6 @@ public class BidActivity extends AppCompatActivity {
         bidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //System.out.print
                 final Task task = db.getTask(intent.getStringExtra("UUID"));
                 bidText = (EditText) findViewById(R.id.bidText);
                 double bidInput = Double.parseDouble(bidText.getText().toString());
@@ -44,11 +47,7 @@ public class BidActivity extends AppCompatActivity {
                 bid.setAmount(bidInput);
                 bid.setOwner(user.getUsername());
                 bid.setDate(new Date());
-                Log.d("parenttask", bid.getParentTask());
                 Double actualamount = bid.getAmount();
-                String great = actualamount.toString();
-                Log.d("amount",great);
-                Log.d("user", bid.getOwner());
                 db.addBid(bid);
                 task.setStatus("Bidded");
                 finish();

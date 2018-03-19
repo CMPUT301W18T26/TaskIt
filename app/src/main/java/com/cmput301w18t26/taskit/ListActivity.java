@@ -21,6 +21,12 @@ import java.util.concurrent.TimeUnit;
  * Created by kevingordon on 2018-02-26.
  */
 
+/**
+ * sets the homepage view once the user logs in, contains method to refresh the page when the page
+ * is swiped down.
+ * Contains methods to filter different types of lists depending on the intent passed in
+ * contains method to handle clicking on item in list
+ */
 public class ListActivity extends AppCompatActivity {
 
     protected static final String TYPE = "type";

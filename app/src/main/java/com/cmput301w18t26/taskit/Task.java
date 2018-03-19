@@ -40,8 +40,8 @@ public class Task {
     // metadata for server/sync
     private String UUID;
     private Date timestamp;
-    public static String[] statuses = {"Bidded","Requested","Accepted","Done"};
-    public static String[] changeableStatuses = {"Requested","Accepted","Done"};
+    public static String[] statuses = {"Bidded","Requested","Assigned","Done"};
+    public static String[] changeableStatuses = {"Requested","Assigned","Done"};
 
     public void setDate(Date date) {
         this.date = date;

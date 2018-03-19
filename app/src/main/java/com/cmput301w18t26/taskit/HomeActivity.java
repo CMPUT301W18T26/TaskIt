@@ -10,6 +10,11 @@ import android.widget.Button;
  * Created by kevingordon on 2018-02-26.
  */
 
+
+/**
+ * contains the buttons for the page after login "homepage", passes a different intent depending on
+ * the button clicked so a different list is displayed in ListActivity
+ */
 public class HomeActivity extends AppCompatActivity {
 
     protected static final String TYPE = "type";

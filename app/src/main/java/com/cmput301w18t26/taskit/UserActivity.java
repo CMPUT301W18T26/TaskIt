@@ -12,6 +12,10 @@ import android.widget.TextView;
  * Created by kevingordon on 2018-02-26.
  */
 
+/**
+ * Creates a new user or modifies user details.
+ * Also allows user to view their profile once registered depending on the intent passed in
+ */
 public class UserActivity extends AppCompatActivity {
 
     private TaskItData db;
@@ -36,6 +40,11 @@ public class UserActivity extends AppCompatActivity {
         setTitle(type);
         db = TaskItData.getInstance();
 
+        /**
+         * Registers a new user, takes in the user inputted information
+         * Allows user to register if the username doesn't already exist in database
+         * Creates new User object
+         */
         if (type.equals("Register")) {
             setContentView(R.layout.registeruser);
             usernameEdit = (EditText) findViewById(R.id.username1);
@@ -75,6 +84,11 @@ public class UserActivity extends AppCompatActivity {
                     setResult(RESULT_OK);
                 }
             });
+
+            /**
+             * Retrieves user details to update, and sets the text displayed to current details
+             * so user can modify them.
+              */
         } else if (type.equals("Update")) {
             setContentView(R.layout.edituser);
             Button actionButton = (Button) findViewById(R.id.confirmuser);

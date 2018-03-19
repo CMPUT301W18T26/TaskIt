@@ -16,6 +16,11 @@ import android.widget.ListView;
  * Created by hains on 3/3/18.
  */
 
+/**
+ * Shows the list of bids for the task clicked on
+ * Creates dialog that allows the user to accept or decline a bid
+ * If the bid is declined, it is deleted from the database
+ */
 public class BidListActivity extends AppCompatActivity {
 
     protected static final String TYPE = "type";

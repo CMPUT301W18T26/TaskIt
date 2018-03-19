@@ -19,6 +19,10 @@ import java.util.concurrent.TimeUnit;
  * Created by kevingordon on 2018-02-26.
  */
 
+/**
+ * Contains methods for creating, editing and deleting tasks.
+ * Also contains methods for view the task bids and to bid
+ */
 public class TaskActivity extends AppCompatActivity {
 
     protected static final String TYPE = "type";
@@ -36,6 +40,10 @@ public class TaskActivity extends AppCompatActivity {
     private Task task;
     private Intent intent;
 
+    /**
+     * sets button usage and intent passing
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +106,7 @@ public class TaskActivity extends AppCompatActivity {
                     finish();
                 }
             });
-
+            //View bids button is clicked, goes to bidlist page.
             Button viewBids = (Button) findViewById(R.id.viewBids);
             final Intent bidList = new Intent(getApplicationContext(),BidListActivity.class);
             viewBids.setOnClickListener(new View.OnClickListener() {
@@ -108,14 +116,13 @@ public class TaskActivity extends AppCompatActivity {
                     Intent intent = new Intent(TaskActivity.this, BidListActivity.class);
                     String UUID = task.getUUID();
                     intent.putExtra("UUID", UUID);
-                    Log.d("view bids","got to bidlist");
                     startActivity(intent);
                     getTaskDetails(task);
                     setResult(RESULT_OK);
 
                 }
             });
-
+            //Bid on task is clicked, goes to bid page
             Button addBidButton = (Button) findViewById(R.id.bidTask);
             final Intent bidActivity = new Intent(getApplicationContext(), BidActivity.class);
             addBidButton.setOnClickListener(new View.OnClickListener(){
@@ -123,7 +130,6 @@ public class TaskActivity extends AppCompatActivity {
                 public void onClick(View v){
                     Intent intent = new Intent(TaskActivity.this, BidActivity.class);
                     String UUID = task.getUUID();
-                    Log.d("added bid","got to added");
                     intent.putExtra("UUID", UUID);
                     startActivity(intent);
                     setResult(RESULT_OK);
@@ -144,6 +150,10 @@ public class TaskActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * When the confirm button is pressed on the new task screen, set the details of the task
+     * and adds it to the database
+     */
     private void setTaskDetails() {
         titleText = (TextView) findViewById(R.id.update_title);
         descriptionText = (TextView) findViewById(R.id.update_description);
@@ -158,6 +168,10 @@ public class TaskActivity extends AppCompatActivity {
         db.addTask(t);
     }
 
+    /**
+     * When a task is clicked on from ListActivity, info about the task is retrieved.
+     * @param task Task clicked on to retrieve details from
+     */
     private void getTaskDetails(Task task) {
 
         titleText = (TextView) findViewById(R.id.tasktitle);
@@ -184,6 +198,11 @@ public class TaskActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * User is the owner of the task, sets the spinner to the task status, and sets the
+     * text to its current text
+     * @param task the current task being edited
+     */
     private void editTaskDetails (final Task task) {
         //setContentView(R.layout.add_modify_task);
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -216,6 +235,13 @@ public class TaskActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * sets the task details to what the user modifies them to be on the confirm button press.
+     * @param task current task being edited
+     * @param title title of the task
+     * @param desc editable description
+     * @param spinner changeable spinner
+     */
     private void modifyDetails (Task task, EditText title,EditText desc, Spinner spinner){
         String newstatus = spinner.getSelectedItem().toString();
         String editedTitle = title.getText().toString();
@@ -227,7 +253,5 @@ public class TaskActivity extends AppCompatActivity {
 
         db.updateTask(task);
         finish();
-        //setContentView(R.layout.viewtask);
-        //getTaskDetails(task);
     }
 }

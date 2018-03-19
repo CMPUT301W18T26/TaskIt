@@ -16,7 +16,10 @@ public class MockBid extends Bid {
         setStatus("BID");
     }
 
-
+    /**
+     *  creates mock bid with only owner
+     * @param owner
+     */
     public MockBid(String owner) {
         setUUID(UUID.randomUUID().toString());
         setDate(new Date());
@@ -25,6 +28,11 @@ public class MockBid extends Bid {
         setStatus("BID");
     }
 
+    /**
+     * creates mock bid w/ owner and parent task
+     * @param owner
+     * @param parent
+     */
     public MockBid(String owner, Task parent) {
         setUUID(UUID.randomUUID().toString());
         setDate(new Date());

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 /**
+ * contains the activity that controls logging in and going to home page, and registering a new user
  * Created by kevingordon on 2018-02-26.
  */
 
@@ -40,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         Button loginButton = (Button) findViewById(R.id.login);
         Button registerButton = (Button) findViewById(R.id.register);
 
-
+        /*checks if user exists, returns invalid and prompts user to register*/
         loginButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
