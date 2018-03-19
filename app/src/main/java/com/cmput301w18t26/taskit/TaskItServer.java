@@ -195,12 +195,10 @@ public class TaskItServer {
 
             UserList users = new UserList();
 
-            // TODO Build the query
-            Log.d("TaskItServer", search_parameters[0]);
+            // Log.d("TaskItServer", search_parameters[0]);
             Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX_TaskItMain).addType(TYPE_USER).build();
 
             try {
-                // TODO get the results of the query
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     List<User> foundUser = result.getSourceAsObjectList(User.class);
