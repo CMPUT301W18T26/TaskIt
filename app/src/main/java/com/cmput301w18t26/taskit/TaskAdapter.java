@@ -17,6 +17,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
     private TaskItData db;
     private final Activity context;
+    private boolean showAssignee;
 
     /**
      * Constructor for subscription adapter
@@ -53,7 +54,12 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         // Replace text with my own
         txtTitle.setText(getItem(position).getTitle());
         txtStatus.setText(getItem(position).getStatus());
-        txtUsername.setText(getItem(position).getOwner());
+        if (showAssignee) {
+            txtUsername.setText(getItem(position).getAssignee());
+        } else {
+            txtUsername.setText(getItem(position).getOwner());
+        }
+
         double lowestBid = db.getLowestBid(getItem(position));
         if (lowestBid != -1) {
             txtBid.setText("Lowest Bid: " + String.valueOf(lowestBid));
@@ -67,4 +73,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         return rowView;
     }
 
+    public void setShowAssignee(boolean showAssignee) {
+        this.showAssignee = showAssignee;
+    }
 }
