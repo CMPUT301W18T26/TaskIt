@@ -17,10 +17,8 @@ public class TaskItFileTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testWipeFileSystem() {
-        Context c = getInstrumentation().getTargetContext().getApplicationContext();
-        // Typically from an activity a call would be more like:
-        //   TaskItData db = TaskItData.getInstance(this);
-        TaskItFile.setContext(c);
-        TaskItFile.deleteAllFromFile();
+         Context c = getInstrumentation().getTargetContext().getApplicationContext();
+         TaskItFile.setContext(c);
+         TaskItFile.deleteAllFromFile();
     }
 }

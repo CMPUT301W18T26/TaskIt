@@ -60,7 +60,6 @@ public class UserProfileTest extends ActivityInstrumentationTestCase2 {
         Button loginButton = (Button) solo.getView(R.id.login);
         Button registerButton = (Button) solo.getView(R.id.register);
 
-
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
         solo.enterText((EditText) solo.getView(R.id.username), myUsername);
@@ -116,6 +115,13 @@ public class UserProfileTest extends ActivityInstrumentationTestCase2 {
         solo.clickOnView(confirmUserButton);
 
         assertTrue(solo.waitForText(name2, 1, 3000));
+
+        try {
+            foo = db.getUserByUsername(myUsername);
+            db.deleteUser(foo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

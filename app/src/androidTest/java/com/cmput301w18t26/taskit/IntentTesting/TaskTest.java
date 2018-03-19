@@ -104,6 +104,12 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         // check that it's gone
 
 
+        // End with cleanup of the mess we made...
+        try {
+            db.deleteUser(foo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

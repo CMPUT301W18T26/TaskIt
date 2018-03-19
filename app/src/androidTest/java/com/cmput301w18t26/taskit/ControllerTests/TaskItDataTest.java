@@ -36,16 +36,17 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         TaskItFile.setContext(c);
         TaskItData db = TaskItData.getInstance();
 
-        User user = new MockUser();
+        String username = "Bob";
+        User u = new MockUser(username);
+        db.setCurrentUser(u);
+        db.addUser(u);
 
-        db.addUser(user);
-
-        String filename = TaskItFile.getUserFilename(user);
+        String filename = TaskItFile.getUserFilename(u);
         File file = new File(filename);
 
         assertTrue(file.exists());
 
-        db.deleteUser(user);
+        db.deleteUser(u);
 
         assertFalse(file.exists());
 
@@ -58,16 +59,19 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         TaskItFile.setContext(c);
         TaskItData db = TaskItData.getInstance();
 
-        Task task = new MockTask();
+        String username = "Bob";
+        User u = new MockUser(username);
+        Task t = new MockTask(u.getOwner());
+        db.setCurrentUser(u);
+        db.addUser(u);
+        db.addTask(t);
 
-        db.addTask(task);
-
-        String filename = TaskItFile.getTaskFilename(task);
+        String filename = TaskItFile.getTaskFilename(t);
         File file = new File(filename);
 
         assertTrue(file.exists());
 
-        db.deleteTask(task);
+        db.deleteTask(t);
 
         assertFalse(file.exists());
 
@@ -80,7 +84,14 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         TaskItFile.setContext(c);
         TaskItData db = TaskItData.getInstance();
 
-        Bid bid = new MockBid();
+        String username = "Bob";
+        User u = new MockUser(username);
+        Task t = new MockTask(u.getOwner());
+        db.setCurrentUser(u);
+        db.addUser(u);
+        db.addTask(t);
+
+        Bid bid = new MockBid(username, t);
 
         db.addBid(bid);
 
@@ -93,48 +104,6 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
 
         assertFalse(file.exists());
 
-    }
-
-    public void testLoadAllFromFile() {
-        Context c = getInstrumentation().getTargetContext().getApplicationContext();
-        // Typically from an activity a call would be more like:
-        //   TaskItData db = TaskItData.getInstance(this);
-        TaskItFile.setContext(c);
-        TaskItData db = TaskItData.getInstance();
-
-        User user = new MockUser();
-        Task task = new MockTask();
-        Bid bid = new MockBid();
-
-        UserList users = db.getUsers();
-        TaskList tasks = db.getTasks();
-        BidList bids = db.getBids();
-
-        assertFalse(users.hasUser(user));
-        assertFalse(tasks.hasTask(task));
-        assertFalse(bids.hasBid(bid));
-
-        db.addUser(user);
-        db.addTask(task);
-        db.addBid(bid);
-
-        assertTrue(users.hasUser(user));
-        assertTrue(tasks.hasTask(task));
-        assertTrue(bids.hasBid(bid));
-
-        users.deleteUser(user);
-        tasks.deleteTask(task);
-        bids.deleteBid(bid);
-
-        assertFalse(users.hasUser(user));
-        assertFalse(tasks.hasTask(task));
-        assertFalse(bids.hasBid(bid));
-
-        db.refresh();
-
-        assertTrue(users.hasUser(user));
-        assertTrue(tasks.hasTask(task));
-        assertTrue(bids.hasBid(bid));
     }
 
 
