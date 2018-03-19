@@ -6,14 +6,40 @@ import java.util.Date;
  * Created by kevingordon on 2018-02-26.
  */
 
+/**
+ * Represents a single bid.
+ * @author UAlberta-Cmput301-Team26 crew
+ * @see BidList
+ */
 public class Bid {
     private Date date;
+    /**
+     * The dollar amount a provider has bid to perform a task
+     */
     private double amount;
+
+    /**
+     * The bid can be accepted.
+     */
     private String status;
+
+    /**
+     * Username of the provider who created the bid.
+     */
     private String owner;
+
+    /**
+     * The UUID of the task this bid was placed on.
+     */
     private String parentTask;
-    // metadata for server/sync
+
+    /**
+     * Metadata for sync. The UUID of this bid.
+     */
     private String UUID;
+    /**
+     * Metadata for sync. The timestamp when bid was created/updated.
+     */
     private Date timestamp;
 
     public void setDate(Date date) {
@@ -52,10 +78,22 @@ public class Bid {
         return owner.equals(s);
     }
 
+    /**
+     * Check if a given user is the owner of this bid.
+     * Compare using unique username.
+     * @param u the user to check for bid ownership.
+     * @return true if given user is the bid owner, false o.w.
+     */
     public boolean isOwner(User u) {
         return owner.equals(u.getUsername());
     }
 
+    /**
+     * Check if a given task is the parent of this bid.
+     * Compare using unique UUID.
+     * @param t the task to check if is parent.
+     * @return true if given task is the parent task, false o.w.
+     */
     public boolean isParentTask(Task t) {
         return parentTask.equals(t.getUUID());
     }

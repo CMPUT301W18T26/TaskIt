@@ -9,9 +9,22 @@ import java.util.Collection;
  * Created by kevingordon on 2018-02-26.
  */
 
+/**
+ * Represents a list of bids.
+ * @author UAlberta-Cmput301-Team26 crew
+ * @see Bid
+ */
 public class TaskList {
+
+    /**
+     * List of tasks.
+     */
     private ArrayList<Task> tasks = new ArrayList<Task>();
 
+    /**
+     * Some services (adapters in particular) need a list type.
+     * @return the bare arraylist of tasks.
+     */
     public ArrayList<Task> getTasks() {return tasks;}
 
     public void addTask(Task task) {
@@ -26,6 +39,11 @@ public class TaskList {
         }
     }
 
+    /**
+     * Find tasks in tasklist using their UUIDs
+     * @param task the task to check for membership
+     * @return index of task if found, -1 o.w.
+     */
     public int getIndex(Task task) {
         for (int i=0; i<tasks.size(); i++) {
             if (getTask(i).getUUID().equals(task.getUUID())) {
@@ -35,6 +53,11 @@ public class TaskList {
         return -1;
     }
 
+    /**
+     * Find tasks in tasklist using their UUIDs
+     * @param uuid the uuid of the task to check for membership
+     * @return index of task if found, -1 o.w.
+     */
     public int getIndex(String uuid) {
         for (int i=0; i<tasks.size(); i++) {
             if (getTask(i).getUUID().equals(uuid)) {

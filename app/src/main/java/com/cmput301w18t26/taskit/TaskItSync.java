@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
+ *
+ * Handles synchronization of filesystem and server
+ *
  * Get the data from the filesystem (local)
  * Get the data from the server (remote)
  *
@@ -25,12 +28,21 @@ import java.util.concurrent.TimeUnit;
  *   - remote, not local > add to local
  *   - both > choose newest > update accordingly
  *
-
+ * @author UAlberta-Cmput301-Team26 crew
+ * @see TaskItFile
+ * @see TaskItData
+ * @see TaskItServer
  */
 public class TaskItSync {
 
+    /**
+     * A current user, for determining sync cases
+     */
     private String currentUser = "";
 
+    /**
+     * We'll need a place to store temporary local and remote data
+     */
     private UserList localUsers;
     private UserList remoteUsers;
 
@@ -40,9 +52,19 @@ public class TaskItSync {
     private BidList localBids;
     private BidList remoteBids;
 
+    /**
+     * We'll need to be able to do filesystem i/o
+     */
     private TaskItFile fs;
+
+    /**
+     * We'll need to be able to do server i/o
+     */
     public TaskItServer server;
 
+    /**
+     * Initialize our sync class
+     */
     public TaskItSync() {
         localUsers = new UserList();
         remoteUsers = new UserList();
@@ -58,6 +80,7 @@ public class TaskItSync {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         this.server = new TaskItServer();
     }
 
@@ -65,7 +88,13 @@ public class TaskItSync {
         currentUser = username;
     }
 
-
+    /**
+     * Synchronize all application data between filesystem and server
+     *
+     * Clear our data buffers.
+     * Load data into buffers.
+     * Call sync methods for specific data types.
+     */
     public void sync() {
         localUsers.clear();
         localTasks.clear();
@@ -85,6 +114,11 @@ public class TaskItSync {
         syncBids();
     }
 
+    /**
+     * Given the data in the local/remote UserLists
+     * adds/Removes objects from the filesystem and server
+     * based on the cases mentioned at the head of this class file.
+     */
     private void syncUsers() {
         User currUser;
         Log.d("TaskItSync", "Looping over local");
@@ -158,6 +192,11 @@ public class TaskItSync {
         }
     }
 
+    /**
+     * Given the data in the local/remote TaskLists
+     * adds/Removes objects from the filesystem and server
+     * based on the cases mentioned at the head of this class file.
+     */
     private void syncTasks() {
         Task currTask;
         Log.d("TaskItSync", "Current user: "+ currentUser);
@@ -224,6 +263,11 @@ public class TaskItSync {
         }
     }
 
+    /**
+     * Given the data in the local/remote BidLists
+     * adds/Removes objects from the filesystem and server
+     * based on the cases mentioned at the head of this class file.
+     */
     private void syncBids() {
         Bid currBid;
         Log.d("TaskItSync", "Current user: "+ currentUser);
