@@ -24,6 +24,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Created by Brady on 2018-03-10.
  */
 
+/**
+ * Activity for starting Google Maps and handling the interactions with it
+ * will likely be refactored into multiple classes in the future so this is View class
+ * and the controller functionality can be separated out
+ */
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final Integer MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
@@ -35,6 +40,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private String GPSLocation;
     private TaskItData db;
 
+    /**
+     * Initialize necessary classes and request a googlemap object
+     * @param savedInstanceState handled by android, never you mind
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = TaskItData.getInstance();
@@ -69,23 +78,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    /**
+     * overrriden callback method for the OnMapReadyCallback. This is called when the
+     * requested googleMap object is ready to use
+     * @param googleMap object through which process interacts with Google Maps
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // set camera to user location
         // TODO: get user location information and input here
         myMap = googleMap;
-        setCurrentLocation();
-        // set pins at all tasks with status requested/bidded within 5 km of userLocation
-        // TaskList nearbyTasks = [retrieve list of tasks within 5 km of userLocation]
-        // for (Task task: nearbyTasks){
-        //      LatLng location = task.getLocation().[convert to LatLng]
-        //      googleMap.addMarker(new MarkerOptions().position(location).title(task.getTitle());
-        // }
-        //
-        // additionally can optionally constraint camera view to within 5 km of user location.
+        requestCurrentLocation();
+
     }
 
-    public void setCurrentLocation() {
+    /**
+     * get the app user's current location
+     */
+    public void requestCurrentLocation() {
 
 
         int FINEPermission = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
@@ -103,22 +113,42 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     * callback method of implemented OnRequestPermissionsResultCallback interface
+     * if permission was granted retry requesting user location, otherwise finish the activity
+     * @param requestCode integer code given to the request to identify the request by
+     * @param permissions list of permissions requested
+     * @param grantResults results of each permission request
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
         if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_LOCATION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                setCurrentLocation();
+                requestCurrentLocation();
             } else {
                 finish();
             }
         }
     }
 
+    /**
+     * initialize the user's view on the map to his/her current location and place markers for all
+     * of the tasks within 5 km
+     * @param location current location of the user
+     */
     public void mapStart(Location location){
         Log.i("MapActivity", "Current location = " + location.toString());
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, FIVE_KM_ZOOM));
         myMap.addMarker(new MarkerOptions().position(latLng).title("Your Location"));
+        // set pins at all tasks with status requested/bidded within 5 km of userLocation
+        // TaskList nearbyTasks = [retrieve list of tasks within 5 km of userLocation]
+        // for (Task task: nearbyTasks){
+        //      LatLng location = task.getLocation().[convert to LatLng]
+        //      googleMap.addMarker(new MarkerOptions().position(location).title(task.getTitle());
+        // }
+        //
+        // additionally can optionally constraint camera view to within 5 km of user location.
 
     }
 }
