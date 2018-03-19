@@ -53,19 +53,6 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         assertEquals(ranks, user.getRanks());
     }
 
-    public void testSetGetTasks() {
-        User user = new User();
-        TaskList tasks = new TaskList();
-        user.setTasks(tasks);
-        assertEquals(tasks, user.getTasks());
-    }
-
-    public void testSetGetBids() {
-        User user = new User();
-        BidList bids = new BidList();
-        user.setBids(bids);
-        assertEquals(bids, user.getBids());
-    }
 
     public void testGetRank() {
         User user = new User();

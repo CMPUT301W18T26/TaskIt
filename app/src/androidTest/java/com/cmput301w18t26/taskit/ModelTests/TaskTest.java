@@ -45,13 +45,6 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         assertEquals(loc, task.getLocation());
     }
 
-    public void testSetGetBids() {
-        Task task = new Task();
-        BidList bids = new BidList();
-        task.setBids(bids);
-        assertEquals(bids, task.getBids());
-    }
-
     public void testSetGetStatus() {
         Task task = new Task();
         String status = "Requested";
