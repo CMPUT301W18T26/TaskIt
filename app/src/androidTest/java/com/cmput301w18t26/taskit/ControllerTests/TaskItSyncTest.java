@@ -39,11 +39,11 @@ public class TaskItSyncTest extends ActivityInstrumentationTestCase2 {
         TaskItFile.setContext(c);
         TaskItFile.deleteAllFromFile();
 
-        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
-        teardownServer.execute();
-
-        TaskItServer.setupServerJob setupServer = new TaskItServer.setupServerJob();
-        setupServer.execute();
+//        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+//        teardownServer.execute();
+//
+//        TaskItServer.setupServerJob setupServer = new TaskItServer.setupServerJob();
+//        setupServer.execute();
 
         try {
             TimeUnit.SECONDS.sleep(2);
@@ -74,11 +74,11 @@ public class TaskItSyncTest extends ActivityInstrumentationTestCase2 {
         TaskItFile.setContext(c);
         TaskItFile.deleteAllFromFile();
 
-        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
-        teardownServer.execute();
+//        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+//        teardownServer.execute();
 
-        TaskItServer.setupServerJob setupServer = new TaskItServer.setupServerJob();
-        setupServer.execute();
+//        TaskItServer.setupServerJob setupServer = new TaskItServer.setupServerJob();
+//        setupServer.execute();
 
         try {
             TimeUnit.SECONDS.sleep(2);
@@ -121,11 +121,11 @@ public class TaskItSyncTest extends ActivityInstrumentationTestCase2 {
         TaskItFile.setContext(c);
         TaskItFile.deleteAllFromFile();
 
-        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
-        teardownServer.execute();
-
-        TaskItServer.setupServerJob setupServer = new TaskItServer.setupServerJob();
-        setupServer.execute();
+//        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+//        teardownServer.execute();
+//
+//        TaskItServer.setupServerJob setupServer = new TaskItServer.setupServerJob();
+//        setupServer.execute();
 
         try {
             TimeUnit.SECONDS.sleep(2);
@@ -178,11 +178,11 @@ public class TaskItSyncTest extends ActivityInstrumentationTestCase2 {
         TaskItFile.setContext(c);
         TaskItFile.deleteAllFromFile();
 
-        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
-        teardownServer.execute();
-
-        TaskItServer.setupServerJob setupServer = new TaskItServer.setupServerJob();
-        setupServer.execute();
+//        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+//        teardownServer.execute();
+//
+//        TaskItServer.setupServerJob setupServer = new TaskItServer.setupServerJob();
+//        setupServer.execute();
 
         try {
             TimeUnit.SECONDS.sleep(2);

@@ -24,4 +24,13 @@ public class MockBid extends Bid {
         setAmount(3.50);
         setStatus("BID");
     }
+
+    public MockBid(String owner, Task parent) {
+        setUUID(UUID.randomUUID().toString());
+        setDate(new Date());
+        setOwner(owner);
+        setAmount(3.50);
+        setStatus("BID");
+        setParentTask(parent);
+    }
 }

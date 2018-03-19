@@ -105,10 +105,12 @@ public class ListActivity extends AppCompatActivity {
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
+        boolean showAssignee = false;
 
         switch (filter) {
             case "myOwnedInProgress":
-                taskList = db.userTasksWithStatus(db.getCurrentUser(), "Accepted");
+                taskList = db.userTasksWithStatus(db.getCurrentUser(), "Assigned");
+                showAssignee = true;
                 break;
             case "myAssigned":
                 taskList = db.userAssignedTasks(db.getCurrentUser());
@@ -128,6 +130,8 @@ public class ListActivity extends AppCompatActivity {
         }
 
         adapter = new TaskAdapter(ListActivity.this, taskList);
+        adapter.setShowAssignee(showAssignee);
+
         listOfTasks.setAdapter(adapter);
         listOfTasks.setOnItemClickListener(new ListClickHandler());
     }

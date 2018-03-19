@@ -1,5 +1,6 @@
 package com.cmput301w18t26.taskit.ControllerTests;
 
+import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
@@ -10,6 +11,8 @@ import com.cmput301w18t26.taskit.MockBid;
 import com.cmput301w18t26.taskit.MockTask;
 import com.cmput301w18t26.taskit.MockUser;
 import com.cmput301w18t26.taskit.Task;
+import com.cmput301w18t26.taskit.TaskItData;
+import com.cmput301w18t26.taskit.TaskItFile;
 import com.cmput301w18t26.taskit.TaskItServer;
 import com.cmput301w18t26.taskit.TaskList;
 import com.cmput301w18t26.taskit.User;
@@ -31,13 +34,13 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testBareAddGetDeleteUser() {
-        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+        // TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
         TaskItServer.addUserJob adduser = new TaskItServer.addUserJob();
         TaskItServer.getUserJob getUser = new TaskItServer.getUserJob();
         TaskItServer.deleteUserJob delUser = new TaskItServer.deleteUserJob();
 
         // Wipe the server
-        teardownServer.execute();
+        // teardownServer.execute();
 
         // Add a user
         User user = new MockUser();
@@ -89,8 +92,8 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
 
     public void testConvenientAddGetDeleteUser() {
         // Wipe the server
-        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
-        teardownServer.execute();
+        // TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+        // teardownServer.execute();
 
 
         TaskItServer server = new TaskItServer();
@@ -125,14 +128,14 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testBareAddGetDeleteTask() {
-        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+        // TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
         TaskItServer.addTaskJob addTask = new TaskItServer.addTaskJob();
         TaskItServer.getTaskJob getTask = new TaskItServer.getTaskJob();
         TaskItServer.getTaskJob getTask2 = new TaskItServer.getTaskJob();
         TaskItServer.deleteTaskJob delTask = new TaskItServer.deleteTaskJob();
 
         // Wipe the server
-        teardownServer.execute();
+        // teardownServer.execute();
 
         // Add a user
         Task task = new MockTask();
@@ -183,8 +186,8 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
 
     public void testConvenientAddGetDeleteTask() {
         // Wipe the server
-        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
-        teardownServer.execute();
+        // TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+        // teardownServer.execute();
 
 
         TaskItServer server = new TaskItServer();
@@ -207,7 +210,7 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
         server.delTask(task);
 
         try {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(2);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -219,14 +222,14 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testBareAddGetDeleteBid() {
-        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+        // TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
         TaskItServer.addBidJob addBid = new TaskItServer.addBidJob();
         TaskItServer.getBidJob getBid = new TaskItServer.getBidJob();
         TaskItServer.getBidJob getBid2 = new TaskItServer.getBidJob();
         TaskItServer.deleteBidJob delBid = new TaskItServer.deleteBidJob();
 
         // Wipe the server
-        teardownServer.execute();
+        // teardownServer.execute();
 
         // Add a user
         Bid bid = new MockBid();
@@ -241,6 +244,12 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
 
         // Retrieve the data from server
         getBid.execute("");
+
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         BidList bids = new BidList();
 
@@ -277,8 +286,8 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
 
     public void testConvenientAddGetDeleteBid() {
         // Wipe the server
-        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
-        teardownServer.execute();
+        // TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+        // teardownServer.execute();
 
 
         TaskItServer server = new TaskItServer();
@@ -314,7 +323,23 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
 
     public void testWipeServer() {
         // Wipe the server
-        TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
-        teardownServer.execute();
+//         TaskItServer.teardownServerJob teardownServer = new TaskItServer.teardownServerJob();
+//         teardownServer.execute();
     }
+
+    public void testCleanupOrphanedBids() {
+        Context c = getInstrumentation().getTargetContext().getApplicationContext();
+        TaskItFile.setContext(c);
+        TaskItData db = TaskItData.getInstance();
+        TaskItServer server = new TaskItServer();
+
+        BidList bl = db.getBids();
+
+        for (Bid b: bl.getBids()) {
+            if (db.getTasks().getIndex(b.getParentTask()) == -1) {
+                server.delBid(b);
+            }
+        }
+    }
+
 }

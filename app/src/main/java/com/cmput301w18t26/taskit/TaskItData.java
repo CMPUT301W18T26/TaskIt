@@ -120,6 +120,8 @@ public class TaskItData {
 
         // Add user to filesystem
         fs.addUserFile(user);
+
+        sync.sync();
     }
 
     public void deleteUser(User user) {
@@ -127,6 +129,8 @@ public class TaskItData {
 
         // Delete from filesystem
         fs.deleteUserFile(user);
+
+        sync.sync();
     }
 
     public void updateUser(User user) {
@@ -135,6 +139,8 @@ public class TaskItData {
 
         // Update by re-adding to the filesystem
         fs.addUserFile(user);
+
+        sync.sync();
     }
 
     // Sometimes you need the raw list.
@@ -155,6 +161,8 @@ public class TaskItData {
 
         // Add the task to filesystem
         fs.addTaskFile(task);
+
+        sync.sync();
     }
 
     public void deleteTask(Task task) {
@@ -169,6 +177,8 @@ public class TaskItData {
 
         // Delete from filesystem
         fs.deleteTaskFile(task);
+
+        sync.sync();
     }
 
     public void updateTask(Task task) {
@@ -177,6 +187,8 @@ public class TaskItData {
 
         // Update by re-adding to the filesystem
         fs.addTaskFile(task);
+
+        sync.sync();
     }
 
     // Sometimes you need the raw list.
@@ -197,6 +209,8 @@ public class TaskItData {
 
         // Add the bid to filesystem
         fs.addBidFile(bid);
+
+        sync.sync();
     }
 
     public void deleteBid(Bid bid) {
@@ -204,6 +218,8 @@ public class TaskItData {
 
         // Delete from filesystem
         fs.deleteBidFile(bid);
+
+        sync.sync();
     }
 
 
@@ -213,6 +229,8 @@ public class TaskItData {
 
         // Update by re-adding to the filesystem
         fs.addBidFile(bid);
+
+        sync.sync();
     }
 
 
