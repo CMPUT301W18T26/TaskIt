@@ -18,6 +18,7 @@ import com.cmput301w18t26.taskit.TaskList;
 import com.cmput301w18t26.taskit.User;
 import com.cmput301w18t26.taskit.UserList;
 
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import io.searchbox.core.DocumentResult;
@@ -332,13 +333,53 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
         TaskItFile.setContext(c);
         TaskItData db = TaskItData.getInstance();
         TaskItServer server = new TaskItServer();
+        db.setCurrentUser(new MockUser("admin"));
+
+        db.sync();
 
         BidList bl = db.getBids();
+        BidList deleteThese = new BidList();
+
+        Log.d("CleanupTest", "bid len "+bl.getBidCount());
 
         for (Bid b: bl.getBids()) {
+            Log.d("CleanupTest", "processing bid "+b.getUUID());
             if (db.getTasks().getIndex(b.getParentTask()) == -1) {
-                server.delBid(b);
+                Log.d("CleanupTest", "deleting bid for " + b.getOwner());
+                deleteThese.addBid(b);
             }
+        }
+        for (Bid b: deleteThese.getBids()) {
+            db.setCurrentUser(new MockUser(b.getOwner()));
+            db.deleteBid(b);
+        }
+    }
+
+    public void testCleanupOrphanedTasks() {
+        Context c = getInstrumentation().getTargetContext().getApplicationContext();
+        TaskItFile.setContext(c);
+        TaskItData db = TaskItData.getInstance();
+        TaskItServer server = new TaskItServer();
+
+        db.setCurrentUser(new MockUser("admin"));
+
+        db.sync();
+
+
+        TaskList tl = db.getTasks();
+        TaskList deleteThese = new TaskList();
+
+        for (Task t: tl.getTasks()) {
+            Log.d("CleanupTest", "processing "+t.getOwner());
+            if (db.getTasks().getIndex(t.getOwner()) == -1) {
+                Log.d("CleanupTest", "deleting task for " + t.getOwner());
+                deleteThese.addTask(t);
+            }
+        }
+
+        for (Task t: deleteThese.getTasks()) {
+            db.setCurrentUser(new MockUser(t.getOwner()));
+            db.deleteTask(t);
         }
     }
 

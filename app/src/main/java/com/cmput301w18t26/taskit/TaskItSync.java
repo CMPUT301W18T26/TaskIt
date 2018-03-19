@@ -160,10 +160,14 @@ public class TaskItSync {
 
     private void syncTasks() {
         Task currTask;
+        Log.d("TaskItSync", "Current user: "+ currentUser);
+        Log.d("TaskItSync", "Syncing tasks");
         for (int i=0;i<localTasks.getTaskCount(); i++) {
             currTask = localTasks.getTask(i);
+            Log.d("TaskItSync", "current task "+currTask.getUUID());
             if (currTask.isOwner(currentUser)) { // Owner's file
                 if (!remoteTasks.hasTask(currTask)) { // Local, not remote
+                    Log.d("TaskItSync", "adding to server");
                     server.addTask(currTask);
                 } else { // In both
                     Task rTask = remoteTasks.getTask(currTask);
@@ -171,15 +175,18 @@ public class TaskItSync {
                     if (rTask.getTimestamp().after(lTask.getTimestamp())) { // remote is current
                         fs.deleteTaskFile(lTask);
                         fs.addTaskFile(rTask);
+                        Log.d("TaskItSync", "update local");
                     } else { // local is current
                         server.delTask(rTask);
                         server.addTask(lTask);
+                        Log.d("TaskItSync", "update remote");
                     }
                     // remove from remote list (so as not to duplicate work)
                     remoteTasks.deleteTask(currTask);
                 }
             } else { // Others file
                 if (!remoteTasks.hasTask(currTask)) { // Local, not remote
+                    Log.d("TaskItSync", "removing from local");
                     fs.deleteTaskFile(currTask);
                 } else { // In both
                     Task rTask = remoteTasks.getTask(currTask);
@@ -187,9 +194,11 @@ public class TaskItSync {
                     if (rTask.getTimestamp().after(lTask.getTimestamp())) { // remote is current
                         fs.deleteTaskFile(lTask);
                         fs.addTaskFile(rTask);
+                        Log.d("TaskItSync", "update local");
                     } else { // local is current
                         server.delTask(rTask);
                         server.addTask(lTask);
+                        Log.d("TaskItSync", "update remote");
                     }
                     // remove from remote list (so as not to duplicate work)
                     remoteTasks.deleteTask(currTask);
@@ -200,13 +209,16 @@ public class TaskItSync {
 
         for (int i=0;i<remoteTasks.getTaskCount(); i++) {
             currTask = remoteTasks.getTask(i);
+            Log.d("TaskItSync", "current task "+currTask.getUUID());
             if (currTask.isOwner(currentUser)) { // Owner's file
                 if (!localTasks.hasTask(currTask)) { // Remote, not local
                     server.delTask(currTask);
+                    Log.d("TaskItSync", "delete from server");
                 }
             } else { // Others file
                 if (!localTasks.hasTask(currTask)) { // Remote, not local
                     fs.addTaskFile(currTask);
+                    Log.d("TaskItSync", "add to local");
                 }
             }
         }
@@ -214,20 +226,26 @@ public class TaskItSync {
 
     private void syncBids() {
         Bid currBid;
+        Log.d("TaskItSync", "Current user: "+ currentUser);
+        Log.d("TaskItSync", "Syncing bids");
         for (int i=0;i<localBids.getBidCount(); i++) {
             currBid = localBids.getBid(i);
+            Log.d("TaskItSync", "current bid "+currBid.getUUID());
             if (currBid.isOwner(currentUser)) { // Owner's file
                 if (!remoteBids.hasBid(currBid)) { // Local, not remote
                     server.addBid(currBid);
+                    Log.d("TaskItSync", "adding bid to server");
                 } else { // In both
                     Bid rBid = remoteBids.getBid(currBid);
                     Bid lBid = localBids.getBid(currBid);
                     if (rBid.getTimestamp().after(lBid.getTimestamp())) { // remote is current
                         fs.deleteBidFile(lBid);
                         fs.addBidFile(rBid);
+                        Log.d("TaskItSync", "update local");
                     } else { // local is current
                         server.delBid(rBid);
                         server.addBid(lBid);
+                        Log.d("TaskItSync", "update remote");
                     }
                     // remove from remote list (so as not to duplicate work)
                     remoteBids.deleteBid(currBid);
@@ -235,15 +253,18 @@ public class TaskItSync {
             } else { // Others file
                 if (!remoteBids.hasBid(currBid)) { // Local, not remote
                     fs.deleteBidFile(currBid);
+                    Log.d("TaskItSync", "deleting bid from local");
                 } else { // In both
                     Bid rBid = remoteBids.getBid(currBid);
                     Bid lBid = localBids.getBid(currBid);
                     if (rBid.getTimestamp().after(lBid.getTimestamp())) { // remote is current
                         fs.deleteBidFile(lBid);
                         fs.addBidFile(rBid);
+                        Log.d("TaskItSync", "update local");
                     } else { // local is current
                         server.delBid(rBid);
                         server.addBid(lBid);
+                        Log.d("TaskItSync", "update server");
                     }
                     // remove from remote list (so as not to duplicate work)
                     remoteBids.deleteBid(currBid);
@@ -254,13 +275,16 @@ public class TaskItSync {
 
         for (int i=0;i<remoteBids.getBidCount(); i++) {
             currBid = remoteBids.getBid(i);
+            Log.d("TaskItSync", "current bid "+currBid.getUUID());
             if (currBid.isOwner(currentUser)) { // Owner's file
                 if (!localBids.hasBid(currBid)) { // Remote, not local
                     server.delBid(currBid);
+                    Log.d("TaskItSync", "deleting bid from server");
                 }
             } else { // Others file
                 if (!localBids.hasBid(currBid)) { // Remote, not local
                     fs.addBidFile(currBid);
+                    Log.d("TaskItSync", "adding bid to local");
                 }
             }
         }
