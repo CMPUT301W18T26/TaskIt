@@ -125,12 +125,7 @@ public class Task {
     }
 
     public boolean isOwner(String s) {
-        try {
-            return this.owner.equals(s);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        return this.owner.equals(s);
     }
 
     public boolean isOwner(User u) {
