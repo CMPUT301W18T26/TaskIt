@@ -120,10 +120,8 @@ public class TaskItSync {
      * based on the cases mentioned at the head of this class file.
      */
     private void syncUsers() {
-        User currUser;
         Log.d("TaskItSync", "Looping over local");
-        for (int i=0;i<localUsers.getUserCount(); i++) {
-            currUser = localUsers.getUser(i);
+        for (User currUser: localUsers.getUsers()) {
             Log.d("TaskItSync", "syncing " + currUser.getUsername());
             if (currUser.isOwner(currentUser)) { // Owner's file
                 Log.d("TaskItSync", "owner's file...");
@@ -173,8 +171,7 @@ public class TaskItSync {
 
         Log.d("TaskItSync", "looping over remote");
         // Anything in both will have been processed by the above
-        for (int i=0;i<remoteUsers.getUserCount(); i++) {
-            currUser = remoteUsers.getUser(i);
+        for (User currUser: remoteUsers.getUsers()) {
             Log.d("TaskItSync", currUser.getUsername());
             if (currUser.isOwner(currentUser)) { // Owner's file
                 Log.d("TaskItSync", "is owner");
@@ -198,11 +195,9 @@ public class TaskItSync {
      * based on the cases mentioned at the head of this class file.
      */
     private void syncTasks() {
-        Task currTask;
         Log.d("TaskItSync", "Current user: "+ currentUser);
         Log.d("TaskItSync", "Syncing tasks");
-        for (int i=0;i<localTasks.getTaskCount(); i++) {
-            currTask = localTasks.getTask(i);
+        for (Task currTask: localTasks.getTasks()) {
             Log.d("TaskItSync", "current task "+currTask.getUUID());
             if (currTask.isOwner(currentUser)) { // Owner's file
                 if (!remoteTasks.hasTask(currTask)) { // Local, not remote
@@ -246,8 +241,7 @@ public class TaskItSync {
 
         }
 
-        for (int i=0;i<remoteTasks.getTaskCount(); i++) {
-            currTask = remoteTasks.getTask(i);
+        for (Task currTask: remoteTasks.getTasks()) {
             Log.d("TaskItSync", "current task "+currTask.getUUID());
             if (currTask.isOwner(currentUser)) { // Owner's file
                 if (!localTasks.hasTask(currTask)) { // Remote, not local

@@ -1,5 +1,7 @@
 package com.cmput301w18t26.taskit;
 
+import android.location.Location;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -113,21 +115,26 @@ public class Task {
     }
 
     public void setOwner(String o) {
-        owner = o;
+        this.owner = o;
     }
 
-    public void setOwner(User u) {owner = u.getOwner();}
+    public void setOwner(User u) {this.owner = u.getOwner();}
 
     public String getOwner() {
-        return owner;
+        return this.owner;
     }
 
     public boolean isOwner(String s) {
-        return owner.equals(s);
+        try {
+            return this.owner.equals(s);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean isOwner(User u) {
-        return owner.equals(u.getOwner());
+        return this.owner.equals(u.getOwner());
     }
 
     public String getUUID() {
@@ -169,5 +176,6 @@ public class Task {
     public boolean isAssignee(User u) {
         return isAssignee(u.getUsername());
     }
+
 
 }
