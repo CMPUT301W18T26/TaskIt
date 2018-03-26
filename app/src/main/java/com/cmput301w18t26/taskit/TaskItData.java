@@ -5,6 +5,7 @@ package com.cmput301w18t26.taskit;
  */
 
 import android.content.Context;
+import android.location.Location;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -278,7 +279,7 @@ public class TaskItData {
     }
 
 
-    public void updateBid(Bid bid) {
+    public void updateBid (Bid bid) {
         // Update metadata
         bid.setTimestamp(new Date());
 
@@ -505,6 +506,31 @@ public class TaskItData {
         // Task t = new Task();
         // t.toString()
         return new TaskList();
+    }
+
+    /**
+     * Find and return all the tasks within 5 km of location parameter
+     * @param location the location to compare task location to
+     * @return TaskList containing all the tasks with locations within 5 km of location
+     */
+    public TaskList tasksWithin5K(Location location) {
+        TaskList filtered = new TaskList();
+        float[] results = new float[1];
+        String str;
+
+        for (Task task: tasks.getTasks()) {
+            str = task.getLocation();
+            if (str.equals("")) {
+                continue;
+            }
+            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+                    Double.parseDouble(str.split(" ")[0]), Double.parseDouble(str.split(" ")[1]), results);
+            //TODO replace "Assigned" and "Bidded" with string constants from Task class
+            if (results[0] < 5000 && (task.getStatus().equals("Assigned") || task.getStatus().equals("Bidded"))) {
+                filtered.addTask(task);
+            }
+        }
+        return filtered;
     }
 
     /**

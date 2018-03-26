@@ -86,6 +86,7 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
 
         assertFalse(solo.waitForText(taskName, 1, 3000));
 
+        //TEST USE-CASE 01.01.01 - Add task to task list
         // Get the add new task button
         Button addTaskButton = (Button) solo.getView(R.id.newtask);
         solo.clickOnView(addTaskButton);
@@ -104,6 +105,8 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         // check that it's there
         solo.waitForText("An example task!");
         solo.clickOnText(testtitle);
+
+        //TEST USE-CASE 01.03.01 - Edit task details
         // modify it
         Button editTaskButton = (Button) solo.getView(R.id.edittask);
         solo.clickOnView(editTaskButton);
@@ -116,6 +119,8 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         // check that it changed
         Button confirmedit = (Button) solo.getView(R.id.confirmedit);
         solo.clickOnView(confirmedit);
+
+        //TEST USE-CASE 01.04.01 - Delete task
         // delete it
         Button deletetask = (Button) solo.getView(R.id.deletetask);
         solo.clickOnView(deletetask);

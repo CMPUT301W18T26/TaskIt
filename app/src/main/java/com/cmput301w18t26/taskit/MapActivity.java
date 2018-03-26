@@ -142,13 +142,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, FIVE_KM_ZOOM));
         myMap.addMarker(new MarkerOptions().position(latLng).title("Your Location"));
         // set pins at all tasks with status requested/bidded within 5 km of userLocation
-        // TaskList nearbyTasks = [retrieve list of tasks within 5 km of userLocation]
-        // for (Task task: nearbyTasks){
-        //      LatLng location = task.getLocation().[convert to LatLng]
-        //      googleMap.addMarker(new MarkerOptions().position(location).title(task.getTitle());
-        // }
-        //
-        // additionally can optionally constraint camera view to within 5 km of user location.
-
+        TaskList nearbyTasks = db.tasksWithin5K(location);
+        for (Task task: nearbyTasks.getTasks()) {
+            LatLng loc = new LatLng(Double.parseDouble(task.getLocation().split(" ")[0]),
+                     Double.parseDouble(task.getLocation().split(" ")[1]));
+            myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle() + ":\n" + task.getDescription()));
+        }
     }
 }
