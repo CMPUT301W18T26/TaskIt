@@ -163,11 +163,15 @@ public class Task {
     }
 
     public boolean isAssignee(String s) {
-        return this.assignee!=null && this.assignee.equals(s);
+        return hasAssignee() && this.assignee.equals(s);
     }
 
     public boolean isAssignee(User u) {
         return isAssignee(u.getUsername());
+    }
+
+    public boolean hasAssignee() {
+        return this.assignee!=null;
     }
 
 }

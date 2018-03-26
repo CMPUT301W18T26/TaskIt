@@ -21,7 +21,7 @@ public class Bid {
     /**
      * The bid can be accepted.
      */
-    private String status;
+    private String status = "Pending";
 
     /**
      * Username of the provider who created the bid.

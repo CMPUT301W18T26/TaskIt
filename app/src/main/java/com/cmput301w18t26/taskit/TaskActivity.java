@@ -184,7 +184,7 @@ public class TaskActivity extends AppCompatActivity {
 
         titleText.setText(task.getTitle());
         descriptionText.setText(task.getDescription());
-        statusText.setText(task.getStatus());
+        statusText.setText(db.getTaskStatus(task));
         locationText.setText(task.getLocation());
         ownerText.setText(task.getOwner());
         double lowestBid = db.getLowestBid(task);
@@ -206,7 +206,7 @@ public class TaskActivity extends AppCompatActivity {
     private void editTaskDetails (final Task task) {
         //setContentView(R.layout.add_modify_task);
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        String status = task.getStatus();
+        String status = db.getTaskStatus(task);
 
         // Sets the dropdown menu, puts default position as the current task status
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,

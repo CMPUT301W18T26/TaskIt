@@ -355,6 +355,36 @@ public class TaskItServerTest extends ActivityInstrumentationTestCase2 {
         }
     }
 
+    public void testCleanupBids() {
+        Context c = getInstrumentation().getTargetContext().getApplicationContext();
+        TaskItFile.setContext(c);
+        TaskItData db = TaskItData.getInstance();
+        TaskItServer server = new TaskItServer();
+        db.setCurrentUser(new MockUser("admin"));
+
+        db.sync();
+
+        BidList bl = db.getBids();
+        BidList deleteThese = new BidList();
+
+        Log.d("CleanupTest", "bid len "+bl.getBidCount());
+
+        for (Bid b: bl.getBids()) {
+            deleteThese.addBid(b);
+        }
+
+        for (Bid b: deleteThese.getBids()) {
+            db.setCurrentUser(new MockUser(b.getOwner()));
+            db.deleteBid(b);
+        }
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void testCleanupOrphanedTasks() {
         Context c = getInstrumentation().getTargetContext().getApplicationContext();
         TaskItFile.setContext(c);
