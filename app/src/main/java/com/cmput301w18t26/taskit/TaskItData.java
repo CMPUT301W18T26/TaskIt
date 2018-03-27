@@ -156,6 +156,19 @@ public class TaskItData {
     }
 
     public void deleteUser(User user) {
+        // Cascade delete all bids for this task
+        TaskList deleteThese = new TaskList();
+
+        for (Task t: tasks.getTasks()) {
+            if (t.isOwner(currentUser)) {
+                deleteThese.addTask(t);
+            }
+        }
+
+        for (Task t: deleteThese.getTasks()) {
+            deleteTask(t);
+        }
+
         users.deleteUser(user);
 
         // Delete from filesystem
@@ -198,11 +211,22 @@ public class TaskItData {
 
     public void deleteTask(Task task) {
         // Cascade delete all bids for this task
+        BidList deleteThese = new BidList();
+
+        User currUser = getCurrentUser();
+
         for (Bid b: bids.getBids()) {
             if (b.isParentTask(task)) {
-                deleteBid(b);
+                deleteThese.addBid(b);
             }
         }
+
+        for (Bid b: deleteThese.getBids()) {
+            setCurrentUser(getUserByUsername(b.getOwner()));
+            deleteBid(b);
+        }
+
+        setCurrentUser(currUser);
 
         tasks.deleteTask(task);
 
@@ -210,6 +234,7 @@ public class TaskItData {
         fs.deleteTaskFile(task);
 
         sync.sync();
+
     }
 
     public void updateTask(Task task) {
@@ -328,7 +353,7 @@ public class TaskItData {
     public TaskList tasksWithStatus(String status){
         TaskList filtered = new TaskList();
         for (Task t: tasks.getTasks()) {
-            if (status.equals(t.getStatus())) {
+            if (status.equals(getTaskStatus(t))) {
                 filtered.addTask(t);
             }
         }
@@ -346,7 +371,7 @@ public class TaskItData {
     public TaskList userTasksWithStatus(User user, String status){
         TaskList filtered = new TaskList();
         for (Task t: tasks.getTasks()) {
-            if (t.isOwner(user) && status.equals(t.getStatus())) {
+            if (t.isOwner(user) && status.equals(getTaskStatus(t))) {
                 filtered.addTask(t);
             }
         }
@@ -362,7 +387,7 @@ public class TaskItData {
     public TaskList userAssignedTasks(User user){
         TaskList filtered = new TaskList();
         for (Task t: tasks.getTasks()) {
-            if (t.isAssignee(user)) {
+            if (t.isAssignee(user) && !t.getStatus().equals("Done")) {
                 filtered.addTask(t);
             }
         }
@@ -442,6 +467,26 @@ public class TaskItData {
         return count;
     }
 
+
+    public String getTaskStatus(Task t) {
+        String status;
+        status = "Requested";
+        if (t.getStatus().equals("Done")) {
+            status = "Done";
+        } else if (t.hasAssignee()) {
+            status = "Assigned";
+        } else {
+            for (Bid b : bids.getBids()) {
+                if (b.isParentTask(t)) {
+                    status = "Bidded";
+                    break;
+                }
+            }
+        }
+        return status;
+    }
+
+
     /**
      * In progress
      */
@@ -470,18 +515,18 @@ public class TaskItData {
      */
     public TaskList tasksWithin5K(Location location) {
         TaskList filtered = new TaskList();
-        float[] results = new float[1];
-        String str;
+        float distance;
+        Location taskLocation;
 
         for (Task task: tasks.getTasks()) {
-            str = task.getLocation();
-            if (str.equals("") || str == null) {
+            if (!task.hasLocation()) {
                 continue;
             }
-            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
-                    Double.parseDouble(str.split(" ")[0]), Double.parseDouble(str.split(" ")[1]), results);
+            distance = location.distanceTo(task.getLocation());
+//            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+//                    taskLocation.getLatitude(), taskLocation.getLongitude(), results);
             //TODO replace "Assigned" and "Bidded" with string constants from Task class
-            if (results[0] < 5000 && (task.getStatus().equals("Assigned") || task.getStatus().equals("Bidded"))) {
+            if (distance < 5000) {
                 filtered.addTask(task);
             }
         }

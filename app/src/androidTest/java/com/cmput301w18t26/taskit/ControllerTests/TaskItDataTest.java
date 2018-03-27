@@ -30,31 +30,49 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
         super(HomeActivity.class);
     }
 
+    /**
+     * Test user add / delete.
+     * We expect the filesystem to be updated with the user.
+     */
     public void testAddDeleteUser() {
         Context c = getInstrumentation().getTargetContext().getApplicationContext();
         // Typically from an activity a call would be more like:
         //   TaskItData db = TaskItData.getInstance(this);
         TaskItFile.setContext(c);
         TaskItData db = TaskItData.getInstance();
+        db.sync();
 
         String username = "Bob";
         User u1 = new MockUser(username);
         User u2 = new MockUser(username);
         db.setCurrentUser(u2);
+
+        String filename;
+        File file;
+
+        while (db.userExists(username)) {
+            db.deleteUser(db.getUserByUsername(username));
+        }
+
+        // Begin test
+        assertFalse(db.userExists(username));
         db.addUser(u1);
 
-        String filename = TaskItFile.getUserFilename(u1);
-        File file = new File(filename);
+        assertTrue(db.userExists(username));
+        filename = TaskItFile.getUserFilename(db.getUserByUsername(username));
+        file = new File(filename);
+        assertTrue(file.exists());
 
+        // Give the server some time.
         try {
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(3);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         assertTrue(file.exists());
 
-        db.deleteUser(u1);
+        db.deleteUser(db.getUserByUsername(username));
 
         assertFalse(file.exists());
 

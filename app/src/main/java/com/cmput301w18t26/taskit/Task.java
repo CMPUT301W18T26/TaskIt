@@ -30,7 +30,7 @@ public class Task {
     /**
      * Location of this task.
      */
-    private String location;
+    private Location location;
     // private image[] photos;
 
     /**
@@ -90,11 +90,11 @@ public class Task {
         this.description = description;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
 
@@ -165,12 +165,26 @@ public class Task {
     }
 
     public boolean isAssignee(String s) {
-        return this.assignee!=null && this.assignee.equals(s);
+        return hasAssignee() && this.assignee.equals(s);
     }
 
     public boolean isAssignee(User u) {
         return isAssignee(u.getUsername());
     }
 
+    public boolean hasAssignee() {
+        return this.assignee!=null;
+    }
 
+    public String locationString() {
+        String s = "";
+        s += "Lat: " + Double.toString(location.getLatitude());
+        s += ", ";
+        s += "Lon: " + Double.toString(location.getLongitude());
+        return s;
+    }
+
+    public boolean hasLocation() {
+        return location!=null;
+    }
 }

@@ -53,7 +53,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
         // Replace text with my own
         txtTitle.setText(getItem(position).getTitle());
-        txtStatus.setText(getItem(position).getStatus());
+        txtStatus.setText(db.getTaskStatus(getItem(position)));
         if (showAssignee) {
             txtUsername.setText(getItem(position).getAssignee());
         } else {

@@ -4,6 +4,7 @@ package com.cmput301w18t26.taskit;
  * Created by kevingordon on 2018-03-06.
  */
 
+import android.net.ConnectivityManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -82,6 +83,7 @@ public class TaskItSync {
         }
 
         this.server = new TaskItServer();
+
     }
 
     public void setCurrentUser(String username) {
@@ -96,22 +98,32 @@ public class TaskItSync {
      * Call sync methods for specific data types.
      */
     public void sync() {
-        localUsers.clear();
-        localTasks.clear();
-        localBids.clear();
-        remoteUsers.clear();
-        remoteTasks.clear();
-        remoteBids.clear();
+        try {
+            if (server.isNetworkConnected()) {
+                Log.d("TaskItSync", "server connected");
+                localUsers.clear();
+                localTasks.clear();
+                localBids.clear();
+                remoteUsers.clear();
+                remoteTasks.clear();
+                remoteBids.clear();
 
-        fs.loadAllFromFile(localUsers, localTasks, localBids);
-        server.loadAllFromServer(remoteUsers, remoteTasks, remoteBids);
+                fs.loadAllFromFile(localUsers, localTasks, localBids);
+                server.loadAllFromServer(remoteUsers, remoteTasks, remoteBids);
 
-        Log.d("TaskItSync", "Current user: "+ currentUser);
-        Log.d("TaskItSync", "syncing... fs count: "+String.valueOf(localUsers.getUserCount()));
-        Log.d("TaskItSync", "syncing... svr count: "+String.valueOf(remoteUsers.getUserCount()));
-        syncUsers();
-        syncTasks();
-        syncBids();
+                Log.d("TaskItSync", "Current user: " + currentUser);
+                Log.d("TaskItSync", "syncing... fs count: " + String.valueOf(localUsers.getUserCount()));
+                Log.d("TaskItSync", "syncing... svr count: " + String.valueOf(remoteUsers.getUserCount()));
+                syncUsers();
+                syncTasks();
+                syncBids();
+            } else {
+                Log.d("TaskItSync", "server not connected");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

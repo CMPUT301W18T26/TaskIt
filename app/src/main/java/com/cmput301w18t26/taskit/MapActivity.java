@@ -185,6 +185,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
      * initialize the user's view on the map to his/her current location and place markers for all
      * of the tasks within 5 km
      */
+
     public void mapStart(){
         Log.i("MapActivity", "Current location = " + currentLocation.toString());
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -195,12 +196,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //        myMap.addMarker(new MarkerOptions().position(latLng).title("Your Location"));
         // set pins at all tasks with status requested/bidded within 5 km of userLocation
         TaskList nearbyTasks = db.tasksWithin5K(currentLocation);
-        for (Task task: nearbyTasks.getTasks()) {
-            if ( ! task.getLocation().equals("") && task.getLocation() != null) {
-                LatLng loc = new LatLng(Double.parseDouble(task.getLocation().split(" ")[0]),
-                        Double.parseDouble(task.getLocation().split(" ")[1]));
-                myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle() + ":\n" + task.getDescription()));
-            }
-        }
+//        for (Task task: nearbyTasks.getTasks()) {
+//            if ( ! task.getLocation().equals("") && task.getLocation() != null) {
+//                LatLng loc = new LatLng(Double.parseDouble(task.getLocation().split(" ")[0]),
+//                        Double.parseDouble(task.getLocation().split(" ")[1]));
+//                myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle() + ":\n" + task.getDescription()));
+//            }
+//        }
     }
 }
