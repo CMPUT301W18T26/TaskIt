@@ -138,14 +138,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
      */
     public void mapStart(Location location){
         Log.i("MapActivity", "Current location = " + location.toString());
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, FIVE_KM_ZOOM));
-        myMap.addMarker(new MarkerOptions().position(latLng).title("Your Location"));
+        LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, FIVE_KM_ZOOM));
+        myMap.addMarker(new MarkerOptions().position(userLatLng).title("Your Location"));
         // set pins at all tasks with status requested/bidded within 5 km of userLocation
         TaskList nearbyTasks = db.tasksWithin5K(location);
+        Location taskLocation;
         for (Task task: nearbyTasks.getTasks()) {
-            LatLng loc = new LatLng(Double.parseDouble(task.getLocation().split(" ")[0]),
-                     Double.parseDouble(task.getLocation().split(" ")[1]));
+            taskLocation = task.getLocation();
+            LatLng loc = new LatLng(taskLocation.getLatitude(), taskLocation.getLongitude());
             myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle() + ":\n" + task.getDescription()));
         }
     }

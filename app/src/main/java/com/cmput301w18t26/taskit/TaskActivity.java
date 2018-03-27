@@ -162,7 +162,6 @@ public class TaskActivity extends AppCompatActivity {
         t.setTitle(titleText.getText().toString());
         t.setDescription(descriptionText.getText().toString());
         t.setDate(new Date());
-        t.setLocation("Unknown");
         t.setStatus("Requested");
         t.setOwner(db.getCurrentUser().getOwner());
         db.addTask(t);
@@ -185,7 +184,11 @@ public class TaskActivity extends AppCompatActivity {
         titleText.setText(task.getTitle());
         descriptionText.setText(task.getDescription());
         statusText.setText(db.getTaskStatus(task));
-        locationText.setText(task.getLocation());
+        if (task.hasLocation()) {
+            locationText.setText(task.locationString());
+        } else {
+            locationText.setText("Uknown");
+        }
         ownerText.setText(task.getOwner());
         double lowestBid = db.getLowestBid(task);
         if (lowestBid == -1) {

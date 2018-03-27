@@ -1,5 +1,7 @@
 package com.cmput301w18t26.taskit;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,6 +15,7 @@ import com.searchly.jestdroid.JestDroidClient;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +47,8 @@ import io.searchbox.indices.mapping.PutMapping;
  */
 public class TaskItServer {
 
+    private static TaskItServer single_instance = null;
+
     /**
      * We use the jestdroid client
      */
@@ -60,6 +65,7 @@ public class TaskItServer {
     private static String TYPE_USER = "user";
     private static String TYPE_TASK = "task";
     private static String TYPE_BID = "bid";
+
 
     /**
      * Setup the server.
@@ -569,6 +575,10 @@ public class TaskItServer {
         TaskItServer.setupServerJob setup = new TaskItServer.setupServerJob();
         setup.execute();
     }
-
+    public boolean isNetworkConnected() throws InterruptedException, IOException {
+        // String command = "ping -c 1 google.com";
+        String command = "timeout 0.2 ping -c 1 cmput301.softwareprocess.es";
+        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+    }
 
 }

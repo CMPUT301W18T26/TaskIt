@@ -515,18 +515,18 @@ public class TaskItData {
      */
     public TaskList tasksWithin5K(Location location) {
         TaskList filtered = new TaskList();
-        float[] results = new float[1];
-        String str;
+        float distance;
+        Location taskLocation;
 
         for (Task task: tasks.getTasks()) {
-            str = task.getLocation();
-            if (str.equals("")) {
+            if (!task.hasLocation()) {
                 continue;
             }
-            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
-                    Double.parseDouble(str.split(" ")[0]), Double.parseDouble(str.split(" ")[1]), results);
+            distance = location.distanceTo(task.getLocation());
+//            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+//                    taskLocation.getLatitude(), taskLocation.getLongitude(), results);
             //TODO replace "Assigned" and "Bidded" with string constants from Task class
-            if (results[0] < 5000 && (task.getStatus().equals("Assigned") || task.getStatus().equals("Bidded"))) {
+            if (distance < 5000) {
                 filtered.addTask(task);
             }
         }

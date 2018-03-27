@@ -12,7 +12,6 @@ public class MockTask extends Task {
         setDate(new Date());
         setUser("AliceBob");
         setDescription("A very lovely mock task");
-        setLocation("Quad");
         setStatus("Requested");
         setTitle("Super great Task right here!");
     }
@@ -22,7 +21,6 @@ public class MockTask extends Task {
         setDate(new Date());
         setUser(owner);
         setDescription("A very lovely mock task");
-        setLocation("Edmonton");
         setStatus("Requested");
         setOwner(owner);
     }
@@ -32,7 +30,6 @@ public class MockTask extends Task {
         setDate(new Date());
         setUser(owner);
         setDescription("A very lovely mock task");
-        setLocation("Edmonton");
         setStatus("Requested");
         setTitle(title);
         setOwner(owner);
