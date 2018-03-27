@@ -475,7 +475,7 @@ public class TaskItData {
 
         for (Task task: tasks.getTasks()) {
             str = task.getLocation();
-            if (str.equals("")) {
+            if (str.equals("") || str == null) {
                 continue;
             }
             Location.distanceBetween(location.getLatitude(), location.getLongitude(),

@@ -33,12 +33,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private final Integer MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
     private LocationManager locationManager;
-    private LocationListener locationListener;
+    private LocationListener networkListener;
+    private LocationListener GPSListener;
     private MapFragment mapFragment;
     private final float FIVE_KM_ZOOM = 11;
     private GoogleMap myMap;
-    private String GPSLocation;
+    private String networkProvider;
+    private String GPSProvider;
     private TaskItData db;
+    private Location currentLocation;
 
     /**
      * Initialize necessary classes and request a googlemap object
@@ -46,15 +49,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db = TaskItData.getInstance();
         setContentView(R.layout.map);
+        db = TaskItData.getInstance();
+        currentLocation = null;
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        GPSLocation = LocationManager.GPS_PROVIDER;
-        locationListener = new LocationListener() {
+        GPSProvider = LocationManager.GPS_PROVIDER;
+        networkProvider = LocationManager.NETWORK_PROVIDER;
+        networkListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                locationManager.removeUpdates(locationListener);
-                mapStart(location);
+                locationManager.removeUpdates(networkListener);
+                currentLocation = location;
+                mapStart();
 
             }
 
@@ -73,6 +79,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             }
         };
+//        GPSListener = new LocationListener() {
+//            @Override
+//            public void onLocationChanged(Location location) {
+//                locationManager.removeUpdates(networkListener);
+//                locationManager.removeUpdates(GPSListener);
+//                currentLocation = location;
+//                mapStart();
+//
+//            }
+//
+//            @Override
+//            public void onStatusChanged(String s, int i, Bundle bundle) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderEnabled(String s) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderDisabled(String s) {
+//
+//            }
+//        };
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -107,8 +138,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
 
         } else {
-
-            locationManager.requestLocationUpdates(GPSLocation, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(networkProvider, 0, 0, networkListener);
+//            locationManager.requestLocationUpdates(GPSProvider, 0, 0, GPSListener);
+//            int timeout = 3;
+//            while (true) {
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                if (currentLocation != null || timeout <= 1) {
+//                    break;
+//                }
+//                timeout--;
+//            }
+//            if (currentLocation == null) {
+//                //TODO display some sort of error
+//                finish();
+//            }
+//            locationManager.removeUpdates(networkListener);
+//            locationManager.removeUpdates(GPSListener);
+//            mapStart();
 
         }
     }
@@ -134,19 +184,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     /**
      * initialize the user's view on the map to his/her current location and place markers for all
      * of the tasks within 5 km
-     * @param location current location of the user
      */
-    public void mapStart(Location location){
-        Log.i("MapActivity", "Current location = " + location.toString());
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+    public void mapStart(){
+        Log.i("MapActivity", "Current location = " + currentLocation.toString());
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            myMap.setMyLocationEnabled(true);
+        }
+        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, FIVE_KM_ZOOM));
-        myMap.addMarker(new MarkerOptions().position(latLng).title("Your Location"));
+//        myMap.addMarker(new MarkerOptions().position(latLng).title("Your Location"));
         // set pins at all tasks with status requested/bidded within 5 km of userLocation
-        TaskList nearbyTasks = db.tasksWithin5K(location);
+        TaskList nearbyTasks = db.tasksWithin5K(currentLocation);
         for (Task task: nearbyTasks.getTasks()) {
-            LatLng loc = new LatLng(Double.parseDouble(task.getLocation().split(" ")[0]),
-                     Double.parseDouble(task.getLocation().split(" ")[1]));
-            myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle() + ":\n" + task.getDescription()));
+            if ( ! task.getLocation().equals("") && task.getLocation() != null) {
+                LatLng loc = new LatLng(Double.parseDouble(task.getLocation().split(" ")[0]),
+                        Double.parseDouble(task.getLocation().split(" ")[1]));
+                myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle() + ":\n" + task.getDescription()));
+            }
         }
     }
 }
