@@ -16,7 +16,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -33,12 +32,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private final Integer MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
     private LocationManager locationManager;
-    private LocationListener locationListener;
+    private LocationListener networkListener;
     private MapFragment mapFragment;
     private final float FIVE_KM_ZOOM = 11;
     private GoogleMap myMap;
-    private String GPSLocation;
+    private String networkProvider;
+    private String GPSProvider;
     private TaskItData db;
+    private Location currentLocation;
 
     /**
      * Initialize necessary classes and request a googlemap object
@@ -49,12 +50,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         db = TaskItData.getInstance();
         setContentView(R.layout.map);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        GPSLocation = LocationManager.GPS_PROVIDER;
-        locationListener = new LocationListener() {
+        GPSProvider = LocationManager.GPS_PROVIDER;
+        networkProvider = LocationManager.NETWORK_PROVIDER;
+        networkListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                locationManager.removeUpdates(locationListener);
-                mapStart(location);
+                Log.d("MapActivity", "Got onLocationChanged...");
+                locationManager.removeUpdates(networkListener);
+                currentLocation = location;
+                mapStart();
 
             }
 
@@ -108,7 +112,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         } else {
 
-            locationManager.requestLocationUpdates(GPSLocation, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(GPSProvider, 0, 0, networkListener);
+            // KG: Brady's code from commit, but it breaks location updates for me...?
+            // locationManager.requestLocationUpdates(networkProvider, 0, 0, networkListener);
 
         }
     }
@@ -134,15 +140,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     /**
      * initialize the user's view on the map to his/her current location and place markers for all
      * of the tasks within 5 km
-     * @param location current location of the user
      */
-    public void mapStart(Location location){
-        Log.i("MapActivity", "Current location = " + location.toString());
-        LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+    public void mapStart(){
+        Log.i("MapActivity", "Current location = " + currentLocation.toString());
+        LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, FIVE_KM_ZOOM));
-        myMap.addMarker(new MarkerOptions().position(userLatLng).title("Your Location"));
+//        myMap.addMarker(new MarkerOptions().position(userLatLng).title("Your Location"));
         // set pins at all tasks with status requested/bidded within 5 km of userLocation
-        TaskList nearbyTasks = db.tasksWithin5K(location);
+        TaskList nearbyTasks = db.tasksWithin5K(currentLocation);
         Location taskLocation;
         for (Task task: nearbyTasks.getTasks()) {
             taskLocation = task.getLocation();
