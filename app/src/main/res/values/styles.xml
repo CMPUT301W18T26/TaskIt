@@ -14,9 +14,6 @@
 
     </style>
 
-    <style name="ThemeIndigo" parent="buttonStyle">
-        <item name="android:buttonStyle">@style/Button</item>
-    </style>
 
     <style name="Button" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/gradient2</item>
