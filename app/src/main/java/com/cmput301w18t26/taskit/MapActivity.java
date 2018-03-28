@@ -16,7 +16,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -34,7 +33,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private final Integer MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
     private LocationManager locationManager;
     private LocationListener networkListener;
-    private LocationListener GPSListener;
+
     private MapFragment mapFragment;
     private final float FIVE_KM_ZOOM = 11;
     private GoogleMap myMap;
@@ -138,27 +137,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
 
         } else {
-            locationManager.requestLocationUpdates(networkProvider, 0, 0, networkListener);
-//            locationManager.requestLocationUpdates(GPSProvider, 0, 0, GPSListener);
-//            int timeout = 3;
-//            while (true) {
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                if (currentLocation != null || timeout <= 1) {
-//                    break;
-//                }
-//                timeout--;
-//            }
-//            if (currentLocation == null) {
-//                //TODO display some sort of error
-//                finish();
-//            }
-//            locationManager.removeUpdates(networkListener);
-//            locationManager.removeUpdates(GPSListener);
-//            mapStart();
+
+
+            locationManager.requestLocationUpdates(GPSProvider, 0, 0, networkListener);
+            // KG: Brady's code from commit, but it breaks location updates for me...?
+            // locationManager.requestLocationUpdates(networkProvider, 0, 0, networkListener);
+
 
         }
     }
@@ -188,20 +172,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void mapStart(){
         Log.i("MapActivity", "Current location = " + currentLocation.toString());
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            myMap.setMyLocationEnabled(true);
-        }
-        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, FIVE_KM_ZOOM));
-//        myMap.addMarker(new MarkerOptions().position(latLng).title("Your Location"));
+        LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, FIVE_KM_ZOOM));
+        // myMap.addMarker(new MarkerOptions().position(userLatLng).title("Your Location"));
         // set pins at all tasks with status requested/bidded within 5 km of userLocation
         TaskList nearbyTasks = db.tasksWithin5K(currentLocation);
-//        for (Task task: nearbyTasks.getTasks()) {
-//            if ( ! task.getLocation().equals("") && task.getLocation() != null) {
-//                LatLng loc = new LatLng(Double.parseDouble(task.getLocation().split(" ")[0]),
-//                        Double.parseDouble(task.getLocation().split(" ")[1]));
-//                myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle() + ":\n" + task.getDescription()));
-//            }
-//        }
+        Location taskLocation;
+        for (Task task: nearbyTasks.getTasks()) {
+            taskLocation = task.getLocation();
+            LatLng loc = new LatLng(taskLocation.getLatitude(), taskLocation.getLongitude());
+            myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle() + ":\n" + task.getDescription()));
+        }
     }
 }
