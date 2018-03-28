@@ -128,7 +128,7 @@
         android:id="@+id/imageButton5"
         android:layout_width="0dp"
         android:layout_height="78dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="52dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginStart="32dp"

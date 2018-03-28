@@ -24,6 +24,7 @@
 
     <Button
         android:id="@+id/register"
+        style="@style/Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="84dp"
@@ -45,6 +46,7 @@
 
     <Button
         android:id="@+id/login"
+        style="@style/Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="152dp"
