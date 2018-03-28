@@ -8,6 +8,7 @@
 
     <Button
         android:id="@+id/bidTask"
+        style="@style/Button"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginBottom="8dp"
@@ -21,6 +22,7 @@
 
     <Button
         android:id="@+id/viewBids"
+        style="@style/Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
@@ -34,6 +36,7 @@
 
     <Button
         android:id="@+id/edittask"
+        style="@style/Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -47,6 +50,7 @@
 
     <Button
         android:id="@+id/deletetask"
+        style="@style/Button"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
