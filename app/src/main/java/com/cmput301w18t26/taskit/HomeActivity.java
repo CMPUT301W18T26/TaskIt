@@ -23,9 +23,9 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home);
+        setContentView(R.layout.homev2);
         setTitle("Home");
-
+        /*
         Button inProgressButton = (Button) findViewById(R.id.inprogresstasks);
         Button assignedTasksButton = (Button) findViewById(R.id.assignedtasks);
         Button biddedTasksButton = (Button) findViewById(R.id.biddedtasks);
@@ -115,6 +115,7 @@ public class HomeActivity extends AppCompatActivity {
                 setResult(RESULT_OK);
             }
         });
+        */
     }
 
 }
