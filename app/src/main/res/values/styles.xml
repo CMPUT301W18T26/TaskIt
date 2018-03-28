@@ -7,16 +7,16 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">#FFd46d4f</item>
         <item name="android:navigationBarColor" tools:targetApi="21">#ff43c4b5</item>
-        <item name="android:colorBackground">@drawable/gradient</item>
+        <item name="android:windowBackground">@drawable/gradient</item>
         <item name="android:fontFamily">@font/quicksand_regular</item>
-        <item name="colorButtonNormal">@drawable/gradient2</item>
-        <item name="android:colorButtonNormal">@drawable/gradient2</item>
+        <!--<item name="colorButtonNormal">@drawable/gradient2</item>-->
+        <!--<item name="android:colorButtonNormal">@drawable/gradient2</item>-->
 
     </style>
 
 
     <style name="Button" parent="@android:style/Widget.Button">
-        <item name="android:background">@drawable/gradient2</item>
+        <!--<item name="android:background">@drawable/gradient2</item>-->
         <item name="android:textColor">#ffffff</item>
     </style>
 
