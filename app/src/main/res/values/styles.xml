@@ -18,6 +18,23 @@
     <style name="Button" parent="@android:style/Widget.Button">
         <!--<item name="android:background">@drawable/gradient2</item>-->
         <item name="android:textColor">#ffffff</item>
+        <corners
+            android:bottomLeftRadius="12.0dp"
+            android:bottomRightRadius="12.0dp"
+            android:radius="12.0dp"
+            android:topLeftRadius="12.0dp"
+            android:topRightRadius="12.0dp" />
+    </style>
+
+    <style name="Button2" parent="@android:style/Widget.ImageButton">
+        <!--<item name="android:background">@drawable/gradient2</item>-->
+        <item name="android:textColor">#ffffff</item>
+        <corners
+            android:bottomLeftRadius="12.0dp"
+            android:bottomRightRadius="12.0dp"
+            android:radius="12.0dp"
+            android:topLeftRadius="12.0dp"
+            android:topRightRadius="12.0dp" />
     </style>
 
 </resources>
