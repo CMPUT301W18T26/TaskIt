@@ -5,7 +5,6 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#ff43c4b5</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">#00000000</item>
         <item name="android:navigationBarColor" tools:targetApi="21">#ff36a5c4</item>
         <item name="android:windowBackground">@drawable/gradient</item>
         <item name="android:fontFamily">@font/quicksand_regular</item>
