@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent registerIntent = new Intent(getApplicationContext(),UserActivity.class);
                 registerIntent.putExtra(TYPE, "Register");
                 startActivity(registerIntent);
+                invalidUsername.setVisibility(View.GONE);
                 setResult(RESULT_OK);
             }
         });
