@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * Created by hains on 3/3/18.
@@ -31,6 +32,7 @@ public class BidListActivity extends AppCompatActivity {
     private Task taskselected = new Task();
     private BidListAdapter adapter;
     private TaskItData db;
+    private TextView nobids;
     TaskList tasks;
 
     private ListView bidlist;
@@ -40,6 +42,7 @@ public class BidListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bidlist);
         bidlistview = (ListView) findViewById(R.id.bidlist);
+        nobids = (TextView) findViewById(R.id.nobidstext);
         db = TaskItData.getInstance();
         Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
@@ -49,10 +52,15 @@ public class BidListActivity extends AppCompatActivity {
 
         setTitle("Bids");
 
+
+        //Checks if there are any bids for this task
+        if (db.getTaskBidCount(task) == 0 ){
+            nobids.setVisibility(View.VISIBLE);
+        }
+
         adapter = new BidListAdapter(BidListActivity.this, bidList);
 
         bidlistview.setAdapter(adapter);
-        //bidlistview.setOnItemClickListener(new ListClickHandler());
 
         bidlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
