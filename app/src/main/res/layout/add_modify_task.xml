@@ -17,12 +17,12 @@
         android:layout_weight="1"
         android:text="Confirm"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/cancelmodify"
         app:layout_constraintHorizontal_bias="0.739"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/cancelmodify"
         style="@style/Button"
         android:layout_width="0dp"
         android:layout_height="48dp"

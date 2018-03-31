@@ -223,7 +223,6 @@ public class TaskActivity extends AppCompatActivity {
         editTitleText = (EditText) findViewById(R.id.editTitle);
         editDescText = (EditText) findViewById(R.id.editDescription);
 
-
         editTitleText.setText(task.getTitle(),TextView.BufferType.EDITABLE);
         editDescText.setText(task.getDescription(),TextView.BufferType.EDITABLE);
 
@@ -236,6 +235,13 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
 
+        Button cancelEdits = (Button) findViewById(R.id.cancelmodify);
+        cancelEdits.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v){
+                finish();
+            }
+        });
     }
 
     /**

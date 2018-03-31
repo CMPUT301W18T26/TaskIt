@@ -60,12 +60,12 @@
         android:layout_weight="1"
         android:ems="10"
         android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/cancelmodify"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/cancelmodify"
         style="@style/Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
