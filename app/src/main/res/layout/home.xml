@@ -62,7 +62,7 @@
         android:id="@+id/profile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="52dp"
+        android:layout_marginBottom="16dp"
         android:text="My Profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
