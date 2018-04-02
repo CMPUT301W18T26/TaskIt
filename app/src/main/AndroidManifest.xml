@@ -34,6 +34,8 @@
         </activity>
         <activity android:name=".MapActivity">
         </activity>
+        <activity android:name=".ReviewDescriptionActivity">
+        </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDTQmsOdm_SD7aRwaT7CJ6wcTAmS9tPjWo"/>
