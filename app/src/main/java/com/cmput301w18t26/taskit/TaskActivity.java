@@ -240,10 +240,14 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onRestart(){
         super.onRestart();
+        final Button markCompleteButton = (Button) findViewById(R.id.markcomplete);
         intent = getIntent();
             if (db.taskExists(intent.getStringExtra("UUID"))) {
                 task = db.getTask(intent.getStringExtra("UUID"));
                 getTaskDetails(task);
+                if (!"Assigned".equals(task.getStatus())) {
+                    markCompleteButton.setVisibility(View.GONE);
+                }else {markCompleteButton.setVisibility(View.VISIBLE);}
             }
 
     }
