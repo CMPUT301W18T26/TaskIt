@@ -1,5 +1,6 @@
 package com.cmput301w18t26.taskit;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -53,6 +54,35 @@ public class User {
      * Used for sync. Timestamp user created/edited
      */
     private Date timestamp;
+
+    private ArrayList<Float> ratings = new ArrayList<>();
+
+    private ArrayList<String> ratingDescriptions = new ArrayList<>();
+
+    public ArrayList<String> getRatingDescriptions() {
+        return ratingDescriptions;
+    }
+
+    public void addRatingDescription(String ratingDescription) {
+        ratingDescriptions.add(ratingDescription);
+    }
+
+    public float getRatingsAverage() {
+        float sum = 0;
+        if(!ratings.isEmpty()) {
+            for (Float rating : ratings) {
+                sum += rating;
+            }
+            return sum / ratings.size();
+        }
+        return sum;
+    }
+
+    public void addRating(float rating) {
+        ratings.add(rating);
+    }
+
+    public ArrayList<Float> getRatings() { return ratings; }
 
     public void setName(String name) {
         this.name = name;

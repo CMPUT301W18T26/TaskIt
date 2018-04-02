@@ -1,5 +1,6 @@
 package com.cmput301w18t26.taskit;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -85,6 +87,7 @@ public class TaskActivity extends AppCompatActivity {
             });
         } else {
             setContentView(R.layout.viewtask);
+            final Button markCompleteButton = (Button) findViewById(R.id.markcomplete);
             Button bid = (Button) findViewById(R.id.bidTask);
             Button deleteTaskButton = (Button) findViewById(R.id.deletetask);
             Button editTaskButton = (Button) findViewById(R.id.edittask);
@@ -93,17 +96,21 @@ public class TaskActivity extends AppCompatActivity {
             task = db.getTask(intent.getStringExtra("UUID"));
             getTaskDetails(task);
             User curruser = db.getCurrentUser();
+            if (!"Assigned".equals(task.getStatus())) {
+                markCompleteButton.setVisibility(View.GONE);
+            }
 
             if (task.isOwner(curruser)){
                 bid.setVisibility(View.GONE);
             } else {
                 deleteTaskButton.setVisibility(View.GONE);
                 editTaskButton.setVisibility(View.GONE);
+                markCompleteButton.setVisibility(View.GONE);
             }
 
             locationview.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view){
+                public void onClick(View view) {
                     if (task.hasLocation()) {
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                         intent.putExtra("calltype", "viewTaskLocation");
@@ -111,6 +118,39 @@ public class TaskActivity extends AppCompatActivity {
                         startActivity(intent);
                         setResult(RESULT_OK);
                     }
+                }
+            });
+
+            markCompleteButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v){
+                    View promptview = getLayoutInflater().inflate(R.layout.rating_prompt,null);
+                    AlertDialog.Builder ratingprompt = new AlertDialog.Builder(TaskActivity.this);
+
+                    ratingprompt.setView(promptview);
+                    final AlertDialog dialog = ratingprompt.create();
+                    dialog.show();
+                    Button submitRating = (Button) promptview.findViewById(R.id.submit);
+                    final RatingBar ratingBar = (RatingBar) promptview.findViewById(R.id.rating);;
+                    final EditText userReview = (EditText) promptview.findViewById(R.id.description);
+
+                    final User assignee = db.getUserByUsername(task.getAssignee());
+
+                    submitRating.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            assignee.addRating(ratingBar.getRating());
+                            String userReviewText = userReview.getText().toString();
+                            if(userReviewText != null && !userReviewText.isEmpty()) {
+                                assignee.addRatingDescription(userReviewText);
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+
+                    task.setStatus("Done");
+                    markCompleteButton.setVisibility(View.GONE);
+                    getTaskDetails(task);
                 }
             });
 
@@ -131,9 +171,32 @@ public class TaskActivity extends AppCompatActivity {
             deleteTaskButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v){
-                    db.deleteTask(task);
+                    View promptview = getLayoutInflater().inflate(R.layout.final_prompt,null);
+                    AlertDialog.Builder bidprompt = new AlertDialog.Builder(TaskActivity.this);
+                    Button yesButton = (Button) promptview.findViewById(R.id.yes);
+                    Button noButton = (Button) promptview.findViewById(R.id.no);
+                    TextView question = (TextView) promptview.findViewById(R.id.question);
+
+                    bidprompt.setView(promptview);
+                    question.setText("Are you sure you wish to delete this task?");
+                    final AlertDialog dialog = bidprompt.create();
+                    dialog.show();
+
+                    yesButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            db.deleteTask(task);
+                            finish();
+                        }
+                    });
+
+                    noButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
                     Log.d("delete","got to bidlist");
-                    finish();
                 }
             });
 
@@ -261,7 +324,31 @@ public class TaskActivity extends AppCompatActivity {
         confirmEdits.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v){
-                modifyDetails (task,editTitleText,editDescText,spinner);
+                View promptview = getLayoutInflater().inflate(R.layout.final_prompt,null);
+                AlertDialog.Builder bidprompt = new AlertDialog.Builder(TaskActivity.this);
+                Button yesButton = (Button) promptview.findViewById(R.id.yes);
+                Button noButton = (Button) promptview.findViewById(R.id.no);
+                TextView question = (TextView) promptview.findViewById(R.id.question);
+
+                bidprompt.setView(promptview);
+                question.setText("Are you sure you wish to edit this task?");
+                final AlertDialog dialog = bidprompt.create();
+                dialog.show();
+
+                yesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        modifyDetails (task,editTitleText,editDescText,spinner);
+                        finish();
+                    }
+                });
+
+                noButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
 

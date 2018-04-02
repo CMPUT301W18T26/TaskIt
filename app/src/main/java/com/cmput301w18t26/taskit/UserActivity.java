@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 /**
@@ -129,7 +131,23 @@ public class UserActivity extends AppCompatActivity {
             nameText = (TextView) findViewById(R.id.update_name);
             emailText = (TextView) findViewById(R.id.update_email);
             phoneText = (TextView) findViewById(R.id.update_phone);
+            RatingBar userRating = (RatingBar) findViewById(R.id.userrating);
+            TextView reviewCount = (TextView) findViewById(R.id.reviewcount);
 
+            reviewCount.setText(Integer.toString(db.getCurrentUser().getRatings().size()));
+            userRating.setRating(db.getCurrentUser().getRatingsAverage());
+
+            userRating.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        Intent reviewDescriptionIntent = new Intent(getApplicationContext(), ReviewDescriptionActivity.class);
+                        startActivity(reviewDescriptionIntent);
+                        setResult(RESULT_OK);
+                    }
+                    return true;
+                }
+            });
 
             if (type.equals("My Profile")) {
                 usernameText.setText(db.getCurrentUser().getUsername());
