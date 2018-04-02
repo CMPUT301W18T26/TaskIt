@@ -8,7 +8,7 @@
 
     <!-- https://en.wikipedia.org/wiki/File:Search_Noun_project_15028.svg -->
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/searchicon2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -21,8 +21,8 @@
         android:elevation="0dp"
         android:padding="56dp"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton4"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintBottom_toTopOf="@+id/mytasks2"
+        app:layout_constraintEnd_toStartOf="@+id/mapicon2"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,7 +30,7 @@
 
     <!-- https://commons.wikimedia.org/wiki/File:Map_pin_icon.svg -->
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/mapicon2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
@@ -43,15 +43,15 @@
         android:elevation="0dp"
         android:padding="60dp"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton3"
+        app:layout_constraintBottom_toTopOf="@+id/newtask2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintStart_toEndOf="@+id/searchicon2"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/mapicon" />
 
     <!--https://pixabay.com/en/plus-sign-icon-button-green-304947/ -->
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/newtask2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -67,10 +67,10 @@
         android:paddingRight="60dp"
         android:paddingTop="10dp"
         android:scaleType="fitEnd"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton5"
+        app:layout_constraintBottom_toTopOf="@+id/myprofile2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton4"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton"
+        app:layout_constraintStart_toEndOf="@+id/mytasks2"
+        app:layout_constraintTop_toBottomOf="@+id/searchicon2"
         app:srcCompat="@drawable/plus" />
 
     <TextView
@@ -85,13 +85,13 @@
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton3"
-        app:layout_constraintEnd_toEndOf="@+id/imageButton3"
-        app:layout_constraintStart_toStartOf="@+id/imageButton3" />
+        app:layout_constraintBottom_toBottomOf="@+id/newtask2"
+        app:layout_constraintEnd_toEndOf="@+id/newtask2"
+        app:layout_constraintStart_toStartOf="@+id/newtask2" />
 
     <!--https://commons.wikimedia.org/wiki/File:Toicon-icon-stone-copy.svg -->
     <ImageButton
-        android:id="@+id/imageButton4"
+        android:id="@+id/mytasks2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
@@ -107,11 +107,11 @@
         android:paddingRight="58dp"
         android:paddingTop="10dp"
         android:scaleType="fitEnd"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton5"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton3"
+        app:layout_constraintBottom_toTopOf="@+id/myprofile2"
+        app:layout_constraintEnd_toStartOf="@+id/newtask2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton"
+        app:layout_constraintTop_toBottomOf="@+id/searchicon2"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/clipboard" />
 
@@ -126,14 +126,14 @@
         android:textColor="@android:color/white"
         android:textSize="24sp"
 
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton4"
-        app:layout_constraintEnd_toEndOf="@+id/imageButton4"
+        app:layout_constraintBottom_toBottomOf="@+id/mytasks2"
+        app:layout_constraintEnd_toEndOf="@+id/mytasks2"
         app:layout_constraintHorizontal_bias="0.894"
-        app:layout_constraintStart_toStartOf="@+id/imageButton4" />
+        app:layout_constraintStart_toStartOf="@+id/mytasks2" />
 
     <!--https://commons.wikimedia.org/wiki/File:User_font_awesome.svg -->
     <ImageButton
-        android:id="@+id/imageButton5"
+        android:id="@+id/myprofile2"
         android:layout_width="0dp"
         android:layout_height="131dp"
         android:layout_marginBottom="16dp"
@@ -153,7 +153,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton3"
+        app:layout_constraintTop_toBottomOf="@+id/newtask2"
         app:srcCompat="@drawable/contacticon" />
 
     <TextView
@@ -168,11 +168,11 @@
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton5"
-        app:layout_constraintEnd_toEndOf="@+id/imageButton5"
+        app:layout_constraintBottom_toBottomOf="@+id/myprofile2"
+        app:layout_constraintEnd_toEndOf="@+id/myprofile2"
         app:layout_constraintHorizontal_bias="0.704"
-        app:layout_constraintStart_toStartOf="@+id/imageButton5"
-        app:layout_constraintTop_toTopOf="@+id/imageButton5"
+        app:layout_constraintStart_toStartOf="@+id/myprofile2"
+        app:layout_constraintTop_toTopOf="@+id/myprofile2"
         app:layout_constraintVertical_bias="0.35" />
 
 

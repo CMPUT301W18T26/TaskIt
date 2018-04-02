@@ -516,10 +516,11 @@ public class TaskItData {
     public TaskList tasksWithin5K(Location location) {
         TaskList filtered = new TaskList();
         float distance;
-        Location taskLocation;
 
         for (Task task: tasks.getTasks()) {
-            if (!task.hasLocation()) {
+            if (!task.hasLocation()
+                    || task.getStatus().equals("Assigned")
+                    || task.getStatus().equals("Done")) {
                 continue;
             }
             distance = location.distanceTo(task.getLocation());
@@ -555,6 +556,13 @@ public class TaskItData {
         }
     }
 
+    public boolean taskExists(String uuid) {
+        if (tasks.getIndex(uuid) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     /**
      * Get a task with the given UUID
      * @param uuid the uuid of the task to retrieve
