@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -24,10 +25,18 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home);
+        setContentView(R.layout.homev2);
 
         setTitle(Html.fromHtml("<font color=#ffffff>" + "Home" + "</font>"));
 
+
+        ImageButton mapButton = (ImageButton) findViewById(R.id.mapicon2);
+        ImageButton searchTasksButton = (ImageButton) findViewById(R.id.searchicon2);
+        ImageButton profileButton = (ImageButton) findViewById(R.id.myprofile2);
+        ImageButton newTaskButton = (ImageButton) findViewById(R.id.newtask2);
+        ImageButton myTasksButton = (ImageButton) findViewById(R.id.mytasks2);
+
+/*
         Button inProgressButton = (Button) findViewById(R.id.inprogresstasks);
         Button assignedTasksButton = (Button) findViewById(R.id.assignedtasks);
         Button biddedTasksButton = (Button) findViewById(R.id.biddedtasks);
@@ -35,12 +44,21 @@ public class HomeActivity extends AppCompatActivity {
         Button allRequestedButton = (Button) findViewById(R.id.allrequestedtasks);
         Button searchTasksButton = (Button) findViewById(R.id.searchtasks);
         Button profileButton = (Button) findViewById(R.id.profile);
-        Button mapButton = (Button) findViewById(R.id.mapbutton);
+        Button mapButton = (Button) findViewById(R.id.mapbutton);*/
 
         final Intent taskList = new Intent(getApplicationContext(),ListActivity.class);
 
+        newTaskButton.setOnClickListener(new View.OnClickListener() {
 
-        inProgressButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent newTaskIntent = new Intent(getApplicationContext(),TaskActivity.class);
+                newTaskIntent.putExtra(TYPE, "New Task");
+                startActivity(newTaskIntent);
+                setResult(RESULT_OK);
+            }
+        });
+
+/*        inProgressButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "My Tasks");
@@ -78,9 +96,9 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(taskList);
                 setResult(RESULT_OK);
             }
-        });
+        });*/
 
-        allRequestedButton.setOnClickListener(new View.OnClickListener() {
+        myTasksButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
                 taskList.putExtra(TYPE, "Requested Tasks");
