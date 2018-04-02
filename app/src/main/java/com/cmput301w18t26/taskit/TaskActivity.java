@@ -146,6 +146,7 @@ public class TaskActivity extends AppCompatActivity {
                                 assignee.addRatingDescription(userReviewText);
                             }
                             dialog.dismiss();
+                            db.updateUser(assignee);
                         }
                     });
 
