@@ -1,6 +1,7 @@
 package com.cmput301w18t26.taskit;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
  */
 
 public class BidListAdapter extends ArrayAdapter<Bid> {
+    protected static final String TYPE = "type";
     private final Activity context;
 
     /**
@@ -39,12 +41,21 @@ public class BidListAdapter extends ArrayAdapter<Bid> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.list_single, null, true);
-        TextView txtName = (TextView) rowView.findViewById(R.id.txt_title);
+        final TextView txtName = (TextView) rowView.findViewById(R.id.txt_title);
         TextView txtDate = (TextView) rowView.findViewById(R.id.mybid);
         TextView txtCharge= (TextView) rowView.findViewById(R.id.txt_username);
 
         // Replace text with my own
         txtName.setText(getItem(position).getOwner());
+        txtName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent profileIntent = new Intent(context, UserActivity.class);
+                profileIntent.putExtra(TYPE, "Other User");
+                profileIntent.putExtra("User", txtName.getText().toString());
+                context.startActivity(profileIntent);
+            }
+        });
         txtDate.setText(getItem(position).getDate().toString()); // TODO choose better fields to display
         txtCharge.setText(String.format("%.2f", (getItem(position).getAmount())));
 
