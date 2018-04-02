@@ -518,10 +518,9 @@ public class TaskItData {
         float distance;
 
         for (Task task: tasks.getTasks()) {
-            if (!task.hasLocation()){
-//                    || task.isOwner(currentUser)
-//                    || !(task.getStatus().equals("Assigned")
-//                        || task.getStatus().equals("Bidded"))) {
+            if (!task.hasLocation()
+                    || task.getStatus().equals("Assigned")
+                    || task.getStatus().equals("Done")) {
                 continue;
             }
             distance = location.distanceTo(task.getLocation());
