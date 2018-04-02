@@ -91,6 +91,18 @@ public class TaskActivity extends AppCompatActivity {
                 markCompleteButton.setVisibility(View.GONE);
             }
 
+            /// WORKING HERE
+            ownerText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent profileIntent = new Intent(getApplicationContext(), UserActivity.class);
+                    profileIntent.putExtra(TYPE, "Other User");
+                    profileIntent.putExtra("User", task.getOwner());
+                    startActivity(profileIntent);
+                    setResult(RESULT_OK);
+                }
+            });
+
             markCompleteButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v){
@@ -264,6 +276,8 @@ public class TaskActivity extends AppCompatActivity {
         }
 
         dateText.setText(task.getDateString());
+
+
 
     }
 
