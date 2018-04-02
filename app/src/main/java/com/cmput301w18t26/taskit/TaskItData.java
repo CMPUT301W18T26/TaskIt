@@ -557,6 +557,13 @@ public class TaskItData {
         }
     }
 
+    public boolean taskExists(String uuid) {
+        if (tasks.getIndex(uuid) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     /**
      * Get a task with the given UUID
      * @param uuid the uuid of the task to retrieve

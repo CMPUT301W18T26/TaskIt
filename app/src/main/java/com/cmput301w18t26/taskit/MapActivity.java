@@ -65,7 +65,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         networkListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                currentLocation = location;
+                if (currentLocation == null) {
+                    currentLocation = location;
+                }
                 mapStart();
             }
 
@@ -88,7 +90,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onLocationChanged(Location location) {
                 currentLocation = location;
-
+                mapStart();
             }
 
             @Override
@@ -145,9 +147,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } else {
 
 
-            locationManager.requestSingleUpdate(GPSProvider, networkListener, null);
+            locationManager.requestSingleUpdate(GPSProvider, GPSListener, null);
             // KG: Brady's code from commit, but it breaks location updates for me...?
-//             locationManager.requestLocationUpdates(networkProvider, 0, 0, networkListener);
+            locationManager.requestSingleUpdate(networkProvider, networkListener, null);
             myMap.setMyLocationEnabled(true);
 
 

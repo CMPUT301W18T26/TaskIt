@@ -67,6 +67,7 @@ public class TaskActivity extends AppCompatActivity {
             Button createTaskButton = (Button) findViewById(R.id.createtask);
 
             task = new Task();
+//            db.addTask(task);
 
             addLocationButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -238,9 +239,11 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onRestart(){
         super.onRestart();
-//        intent = getIntent();
-//        task = db.getTask(intent.getStringExtra("UUID"));
-//        getTaskDetails(task);
+        intent = getIntent();
+            if (db.taskExists(intent.getStringExtra("UUID"))) {
+                task = db.getTask(intent.getStringExtra("UUID"));
+                getTaskDetails(task);
+            }
 
     }
 
