@@ -79,13 +79,13 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
         double lowestBid = db.getLowestBid(getItem(position));
         if (lowestBid != -1) {
-            txtBid.setText("Lowest Bid: " + String.valueOf(lowestBid));
+            txtBid.setText("Lowest Bid: " + String.format("%.2f", lowestBid));
         } else {
             txtBid.setText("Lowest Bid: None");
         }
         double lowestBidForUser = db.getLowestBidForUser(getItem(position), db.getCurrentUser());
         if (lowestBidForUser != Double.POSITIVE_INFINITY) {
-            txtMyBid.setText("My Bid: " + String.valueOf(lowestBidForUser));
+            txtMyBid.setText("My Bid: " + String.format("%.2f", lowestBidForUser));
         }
         return rowView;
     }
