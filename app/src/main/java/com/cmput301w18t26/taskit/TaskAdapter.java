@@ -5,6 +5,7 @@ package com.cmput301w18t26.taskit;
  */
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+
 public class TaskAdapter extends ArrayAdapter<Task> {
 
+    protected static final String TYPE = "type";
     private TaskItData db;
     private final Activity context;
     private boolean showAssignee;
@@ -47,9 +51,11 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         View rowView= inflater.inflate(R.layout.list_single, null, true);
         TextView txtTitle = (TextView) rowView.findViewById(R.id.txt_title);
         TextView txtStatus = (TextView) rowView.findViewById(R.id.txt_status);
-        TextView txtUsername= (TextView) rowView.findViewById(R.id.txt_username);
+        final TextView txtUsername= (TextView) rowView.findViewById(R.id.txt_username);
         TextView txtBid= (TextView) rowView.findViewById(R.id.bid);
         TextView txtMyBid= (TextView) rowView.findViewById(R.id.mybid);
+
+
 
         // Replace text with my own
         txtTitle.setText(getItem(position).getTitle());
@@ -58,7 +64,18 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             txtUsername.setText(getItem(position).getAssignee());
         } else {
             txtUsername.setText(getItem(position).getOwner());
+            txtUsername.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent profileIntent = new Intent(context, UserActivity.class);
+                    profileIntent.putExtra(TYPE, "Other User");
+                    profileIntent.putExtra("User", txtUsername.getText().toString());
+                    context.startActivity(profileIntent);
+                }
+            });
         }
+
+
 
         double lowestBid = db.getLowestBid(getItem(position));
         if (lowestBid != -1) {
