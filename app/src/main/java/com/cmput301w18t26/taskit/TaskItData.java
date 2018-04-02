@@ -516,10 +516,12 @@ public class TaskItData {
     public TaskList tasksWithin5K(Location location) {
         TaskList filtered = new TaskList();
         float distance;
-        Location taskLocation;
 
         for (Task task: tasks.getTasks()) {
-            if (!task.hasLocation()) {
+            if (!task.hasLocation()){
+//                    || task.isOwner(currentUser)
+//                    || !(task.getStatus().equals("Assigned")
+//                        || task.getStatus().equals("Bidded"))) {
                 continue;
             }
             distance = location.distanceTo(task.getLocation());

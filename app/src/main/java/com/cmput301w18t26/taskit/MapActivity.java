@@ -2,6 +2,7 @@ package com.cmput301w18t26.taskit;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,12 +12,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
@@ -33,6 +36,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private final Integer MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
     private LocationManager locationManager;
     private LocationListener networkListener;
+    private LocationListener GPSListener;
 
     private MapFragment mapFragment;
     private final float FIVE_KM_ZOOM = 11;
@@ -41,6 +45,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private String GPSProvider;
     private TaskItData db;
     private Location currentLocation;
+    private String callType;
+    private Intent callIntent;
 
     /**
      * Initialize necessary classes and request a googlemap object
@@ -49,6 +55,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map);
+        callIntent = getIntent();
+        callType = callIntent.getStringExtra("calltype");
         db = TaskItData.getInstance();
         currentLocation = null;
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -57,9 +65,29 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         networkListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                locationManager.removeUpdates(networkListener);
                 currentLocation = location;
                 mapStart();
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+        GPSListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                currentLocation = location;
 
             }
 
@@ -78,31 +106,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             }
         };
-//        GPSListener = new LocationListener() {
-//            @Override
-//            public void onLocationChanged(Location location) {
-//                locationManager.removeUpdates(networkListener);
-//                locationManager.removeUpdates(GPSListener);
-//                currentLocation = location;
-//                mapStart();
-//
-//            }
-//
-//            @Override
-//            public void onStatusChanged(String s, int i, Bundle bundle) {
-//
-//            }
-//
-//            @Override
-//            public void onProviderEnabled(String s) {
-//
-//            }
-//
-//            @Override
-//            public void onProviderDisabled(String s) {
-//
-//            }
-//        };
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -118,8 +121,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // set camera to user location
         // TODO: get user location information and input here
         myMap = googleMap;
-        requestCurrentLocation();
-
+        if (callType.equals("viewTaskLocation")) {
+            viewOneTask();
+        } else {
+            requestCurrentLocation();
+        }
     }
 
     /**
@@ -139,9 +145,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } else {
 
 
-            locationManager.requestLocationUpdates(GPSProvider, 0, 0, networkListener);
+            locationManager.requestSingleUpdate(GPSProvider, networkListener, null);
             // KG: Brady's code from commit, but it breaks location updates for me...?
-            // locationManager.requestLocationUpdates(networkProvider, 0, 0, networkListener);
+//             locationManager.requestLocationUpdates(networkProvider, 0, 0, networkListener);
+            myMap.setMyLocationEnabled(true);
 
 
         }
@@ -174,14 +181,56 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Log.i("MapActivity", "Current location = " + currentLocation.toString());
         LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, FIVE_KM_ZOOM));
+        if (callType.equals("viewTasks")) {
+            viewTasks();
+        } else if (callType.equals("chooseLocation")) {
+            chooseLocation();
+        }
         // myMap.addMarker(new MarkerOptions().position(userLatLng).title("Your Location"));
         // set pins at all tasks with status requested/bidded within 5 km of userLocation
-        TaskList nearbyTasks = db.tasksWithin5K(currentLocation);
+    }
+
+    public void viewTasks() {
         Location taskLocation;
+        TaskList nearbyTasks = db.tasksWithin5K(currentLocation);
         for (Task task: nearbyTasks.getTasks()) {
             taskLocation = task.getLocation();
             LatLng loc = new LatLng(taskLocation.getLatitude(), taskLocation.getLongitude());
-            myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle() + ":\n" + task.getDescription()));
+            Marker marker = myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle()).snippet(task.getDescription()));
+            marker.setTag(task);
+            myMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    Task task = (Task) marker.getTag();
+                    Intent intent = new Intent(MapActivity.this, TaskActivity.class);
+                    String UUID = task.getUUID();
+                    intent.putExtra("UUID", UUID);
+                    intent.putExtra(ListActivity.TYPE, "Existing Task");
+                    startActivity(intent);
+                }
+            });
         }
+    }
+
+    public void chooseLocation() {
+        myMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener(){
+            @Override
+            public void onMapLongClick(LatLng point){
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("latitude",point.latitude);
+                returnIntent.putExtra("longitude",point.longitude);
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+        });
+    }
+
+    public void viewOneTask(){
+        Task task = db.getTask(callIntent.getStringExtra("UUID"));
+        Location taskLocation = task.getLocation();
+        LatLng loc = new LatLng(taskLocation.getLatitude(), taskLocation.getLongitude());
+        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, FIVE_KM_ZOOM));
+
+        myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle()).snippet(task.getDescription()));
     }
 }

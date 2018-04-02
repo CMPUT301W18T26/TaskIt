@@ -113,6 +113,7 @@ public class HomeActivity extends AppCompatActivity {
         mapButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                intent.putExtra("calltype", "viewTasks");
                 startActivity(intent);
                 setResult(RESULT_OK);
             }
