@@ -68,7 +68,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <Button
-        android:id="@+id/cancelmodify"
+        android:id="@+id/add_location"
         style="@style/Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

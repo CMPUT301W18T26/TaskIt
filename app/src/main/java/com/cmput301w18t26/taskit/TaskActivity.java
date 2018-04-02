@@ -2,6 +2,7 @@ package com.cmput301w18t26.taskit;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class TaskActivity extends AppCompatActivity {
 
     protected static final String TYPE = "type";
+    protected static final Integer FOR_RETURN_LOCATION = 1;
 
     private TextView titleText;
     private TextView dateText;
@@ -61,7 +63,22 @@ public class TaskActivity extends AppCompatActivity {
         }
         else if (type.equals("New Task")) {
             setContentView(R.layout.edittask);
+            Button addLocationButton = (Button) findViewById(R.id.add_location);
             Button createTaskButton = (Button) findViewById(R.id.createtask);
+
+            task = new Task();
+//            db.addTask(task);
+
+            addLocationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                    intent.putExtra("calltype", "chooseLocation");
+                    startActivityForResult(intent,FOR_RETURN_LOCATION);
+                    setResult(RESULT_OK);
+                }
+            });
+
             createTaskButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
@@ -75,6 +92,7 @@ public class TaskActivity extends AppCompatActivity {
             Button bid = (Button) findViewById(R.id.bidTask);
             Button deleteTaskButton = (Button) findViewById(R.id.deletetask);
             Button editTaskButton = (Button) findViewById(R.id.edittask);
+            TextView locationview = (TextView) findViewById(R.id.tasklocation);
 
             task = db.getTask(intent.getStringExtra("UUID"));
             getTaskDetails(task);
@@ -90,6 +108,19 @@ public class TaskActivity extends AppCompatActivity {
                 editTaskButton.setVisibility(View.GONE);
                 markCompleteButton.setVisibility(View.GONE);
             }
+
+            locationview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (task.hasLocation()) {
+                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                        intent.putExtra("calltype", "viewTaskLocation");
+                        intent.putExtra("UUID", task.getUUID());
+                        startActivity(intent);
+                        setResult(RESULT_OK);
+                    }
+                }
+            });
 
             markCompleteButton.setOnClickListener(new View.OnClickListener() {
 
@@ -122,8 +153,6 @@ public class TaskActivity extends AppCompatActivity {
                     task.setStatus("Done");
                     markCompleteButton.setVisibility(View.GONE);
                     getTaskDetails(task);
-
-
                 }
             });
 
@@ -172,6 +201,7 @@ public class TaskActivity extends AppCompatActivity {
                     Log.d("delete","got to bidlist");
                 }
             });
+
             //View bids button is clicked, goes to bidlist page.
             Button viewBids = (Button) findViewById(R.id.viewBids);
             final Intent bidList = new Intent(getApplicationContext(),BidListActivity.class);
@@ -211,8 +241,10 @@ public class TaskActivity extends AppCompatActivity {
     protected void onRestart(){
         super.onRestart();
         intent = getIntent();
-        task = db.getTask(intent.getStringExtra("UUID"));
-        getTaskDetails(task);
+            if (db.taskExists(intent.getStringExtra("UUID"))) {
+                task = db.getTask(intent.getStringExtra("UUID"));
+                getTaskDetails(task);
+            }
 
     }
 
@@ -224,13 +256,12 @@ public class TaskActivity extends AppCompatActivity {
         titleText = (TextView) findViewById(R.id.update_title);
         descriptionText = (TextView) findViewById(R.id.update_description);
 
-        Task t = new Task();
-        t.setTitle(titleText.getText().toString());
-        t.setDescription(descriptionText.getText().toString());
-        t.setDate(new Date());
-        t.setStatus("Requested");
-        t.setOwner(db.getCurrentUser().getOwner());
-        db.addTask(t);
+        task.setTitle(titleText.getText().toString());
+        task.setDescription(descriptionText.getText().toString());
+        task.setDate(new Date());
+        task.setStatus("Requested");
+        task.setOwner(db.getCurrentUser().getOwner());
+        db.addTask(task);
     }
 
     /**
@@ -352,5 +383,17 @@ public class TaskActivity extends AppCompatActivity {
 
         db.updateTask(task);
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FOR_RETURN_LOCATION) {
+            if (resultCode == RESULT_OK) {
+                Location location = new Location("");
+                location.setLatitude(data.getDoubleExtra("latitude",0));
+                location.setLongitude(data.getDoubleExtra("longitude",0));
+                task.setLocation(location);
+            }
+        }
     }
 }
