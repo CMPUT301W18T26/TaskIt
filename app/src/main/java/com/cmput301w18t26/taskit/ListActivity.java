@@ -37,13 +37,16 @@ import java.util.concurrent.TimeUnit;
 public class ListActivity extends AppCompatActivity {
 
     protected static final String TYPE = "type";
-
+    protected static String[] changeableStatuses2 = {"My Tasks","I've bidded","I've been assigned","I've done"};
     private ListView listOfTasks;
+    private ListView listOfTasks2;
     private TaskList taskList = new TaskList();
     private Task task1 = new Task();
     private TaskAdapter adapter;
     private TaskItData db;
     private String filter;
+    ArrayAdapter<String> adapter2;
+    Spinner spinner;
     SwipeRefreshLayout swiperefresh;
     TaskList tasks;
     TabHost host;
@@ -55,8 +58,9 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listtask);
         listOfTasks = (ListView) findViewById(R.id.listOfTasks);
+        listOfTasks2 = (ListView) findViewById(R.id.listOfTasks2);
         SearchView searchView = (SearchView) findViewById(R.id.searchView);
-        final Spinner spinner = (Spinner) findViewById(R.id.viewtaskspinner);
+        spinner = (Spinner) findViewById(R.id.viewtaskspinner);
         TabWidget tabwidget = (TabWidget) findViewById(android.R.id.tabs);
         host = (TabHost)findViewById(R.id.tab_host);
         db = TaskItData.getInstance();
@@ -92,6 +96,8 @@ public class ListActivity extends AppCompatActivity {
         // Sets the dropdown menu, puts default position as the current task status
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, Task.changeableStatuses);
+
+        adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, changeableStatuses2);
 
         spinner.setAdapter(adapter);
 
@@ -139,6 +145,24 @@ public class ListActivity extends AppCompatActivity {
         spec.setIndicator("My Tasks");
         host.addTab(spec);
 
+        host.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
+            @Override
+            public void onTabChanged(String tabId) {
+                int selectedTab = host.getCurrentTab();
+                if (selectedTab == 0){
+                    Log.d("a","First Tab");
+                    spinner.setAdapter(adapter);
+                    spinner.setSelection(0);
+                }
+                if (selectedTab == 1){
+                    Log.d("a","Second Tab");
+                    spinner.setAdapter(adapter2);
+                    spinner.setSelection(0);
+
+                }
+            }
+        });
+
     }
 
     @Override
@@ -173,7 +197,9 @@ public class ListActivity extends AppCompatActivity {
         adapter.setShowAssignee(showAssignee);
 
         listOfTasks.setAdapter(adapter);
+        listOfTasks2.setAdapter(adapter);
         listOfTasks.setOnItemClickListener(new ListClickHandler());
+        listOfTasks2.setOnItemClickListener(new ListClickHandler());
     }
 
     public class ListClickHandler implements OnItemClickListener{
