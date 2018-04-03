@@ -148,13 +148,18 @@ public class UserActivity extends AppCompatActivity {
                     return true;
                 }
             });
-
             if (type.equals("My Profile")) {
                 usernameText.setText(db.getCurrentUser().getUsername());
                 nameText.setText(db.getCurrentUser().getName());
                 emailText.setText(db.getCurrentUser().getEmail());
                 phoneText.setText(String.valueOf(db.getCurrentUser().getPhone()));
-            } else {
+            } else if (type.equals("Other User")) {
+                String userString = intent.getStringExtra("User");
+                User user = db.getUserByUsername(userString);
+                usernameText.setText(user.getName());
+                nameText.setText(user.getName());
+                emailText.setText(user.getEmail());
+                phoneText.setText(String.valueOf(user.getPhone()));
                 editButton.setVisibility(View.GONE);
             }
 
