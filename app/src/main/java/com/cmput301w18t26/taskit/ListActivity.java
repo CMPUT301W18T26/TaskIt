@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SearchView;
@@ -108,19 +109,18 @@ public class ListActivity extends AppCompatActivity {
          * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
          * performs a swipe-to-refresh gesture.
          */
-        swiperefresh = findViewById(R.id.swiperefresh);
-        swiperefresh.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        Log.i("ListActivity", "onRefresh called from SwipeRefreshLayout");
 
-                        // This method performs the actual data-refresh operation.
-                        // The method calls setRefreshing(false) when it's finished.
-                        listRefresh();
-                    }
-                }
-        );
+        ImageButton refreshbutton = (ImageButton) findViewById(R.id.refreshimage);
+        refreshbutton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                Log.i("ListActivity", "onRefresh called from SwipeRefreshLayout");
+
+                // This method performs the actual data-refresh operation.
+                // The method calls setRefreshing(false) when it's finished.
+                listRefresh();
+            }
+        });
 
 
     }
@@ -128,7 +128,7 @@ public class ListActivity extends AppCompatActivity {
     private void listRefresh() {
         db.sync();
         Log.i("ListActivity", "Sync complete");
-        swiperefresh.setRefreshing(false);
+        //swiperefresh.setRefreshing(false);
         adapter.notifyDataSetChanged();
     }
 
