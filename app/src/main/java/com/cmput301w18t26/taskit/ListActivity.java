@@ -1,15 +1,22 @@
 package com.cmput301w18t26.taskit;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.SearchView;
+import android.widget.Spinner;
+import android.widget.TabHost;
+import android.widget.TabWidget;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -39,6 +46,7 @@ public class ListActivity extends AppCompatActivity {
     private String filter;
     SwipeRefreshLayout swiperefresh;
     TaskList tasks;
+    TabHost host;
 
     private ListView bidlist;
 
@@ -47,27 +55,18 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listtask);
         listOfTasks = (ListView) findViewById(R.id.listOfTasks);
+        SearchView searchView = (SearchView) findViewById(R.id.searchView);
+        final Spinner spinner = (Spinner) findViewById(R.id.viewtaskspinner);
+        TabWidget tabwidget = (TabWidget) findViewById(android.R.id.tabs);
+        host = (TabHost)findViewById(R.id.tab_host);
         db = TaskItData.getInstance();
         Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
         filter = intent.getStringExtra(HomeActivity.FILTER);
         setTitle(type);
 
-        Button newTaskButton = (Button) findViewById(R.id.newtask);
-        if (!type.equals("Requested Tasks")) {
-            newTaskButton.setVisibility(View.GONE);
-        } else {
-            //code that apply's to requested task list
-        }
-        newTaskButton.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View v) {
-                Intent newTaskIntent = new Intent(getApplicationContext(),TaskActivity.class);
-                newTaskIntent.putExtra(TYPE, "New Task");
-                startActivity(newTaskIntent);
-                setResult(RESULT_OK);
-            }
-        });
+        //https://stackoverflow.com/questions/11622539/how-do-i-use-tabhost-for-android
 
 
         //bidlist = (ListView) findViewById(R.id.tasklist);
@@ -77,6 +76,26 @@ public class ListActivity extends AppCompatActivity {
             //public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
             //}
         //});
+
+
+        //Setting up spinner
+        if(!filter.equals("allTasks")){
+            searchView.setVisibility(View.GONE);
+            setupTabs();
+        }else{
+            spinner.setVisibility(View.GONE);
+            tabwidget.setVisibility(View.GONE);
+            listOfTasks.setVisibility(View.VISIBLE);
+        }
+
+
+        // Sets the dropdown menu, puts default position as the current task status
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, Task.changeableStatuses);
+
+        spinner.setAdapter(adapter);
+
+        //http://www.viralandroid.com/2015/09/simple-android-tabhost-and-tabwidget-example.html
 
 
         /*
@@ -105,6 +124,21 @@ public class ListActivity extends AppCompatActivity {
         Log.i("ListActivity", "Sync complete");
         swiperefresh.setRefreshing(false);
         adapter.notifyDataSetChanged();
+    }
+
+    private void setupTabs(){
+        host.setup();
+
+        TabHost.TabSpec spec = host.newTabSpec("My Requests");
+        spec.setContent(R.id.tab1);
+        spec.setIndicator("My Requests");
+        host.addTab(spec);
+
+        spec = host.newTabSpec("My Tasks");
+        spec.setContent(R.id.tab2);
+        spec.setIndicator("My Tasks");
+        host.addTab(spec);
+
     }
 
     @Override
