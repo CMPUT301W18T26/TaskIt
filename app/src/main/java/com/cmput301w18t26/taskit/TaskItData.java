@@ -250,7 +250,9 @@ public class TaskItData {
     // Sometimes you need the raw list.
     // would be nice to have it immutable for consistency...
     public TaskList getTasks() {
-        return tasks;
+        TaskList t = new TaskList();
+        t.addAll(tasks);
+        return t;
     }
 
     /**
@@ -491,21 +493,23 @@ public class TaskItData {
      * In progress
      */
     public TaskList keywordSearch(String keywords){
-        // break keywords into words
+        TaskList filtered = new TaskList();
 
+        // break keywords into words
+        String[] kws = keywords.split(" ");
+        String taskString;
         // For each task in tasks
-        //   TODO: task string representation
-        //   lookInHere = task.toString();
-        //
-        //   for each keyword:
-        //      look for the keyword in lookInHere
-        //      if found:
-        //        add it to a new list
-        //      else:
-        //        continue
-        // Task t = new Task();
-        // t.toString()
-        return new TaskList();
+        for (Task t: tasks.getTasks()) {
+            taskString = t.toString();
+            for (String s: kws) {
+                if (taskString.toLowerCase().indexOf(s.toLowerCase()) != -1 &&
+                    !filtered.hasTask(t)) {
+                    filtered.addTask(t);
+                }
+            }
+        }
+
+        return filtered;
     }
 
     /**

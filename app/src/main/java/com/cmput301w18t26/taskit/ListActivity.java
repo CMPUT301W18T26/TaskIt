@@ -102,7 +102,7 @@ public class ListActivity extends AppCompatActivity {
 
         spinner.setAdapter(adapter);
 
-        //http://www.viralandroid.com/2015/09/simple-android-tabhost-and-tabwidget-example.html
+        // Todo: cite http://www.viralandroid.com/2015/09/simple-android-tabhost-and-tabwidget-example.html
 
 
         /*
@@ -122,6 +122,39 @@ public class ListActivity extends AppCompatActivity {
             }
         });
 
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                updateArrayAdapter(db.getTasks());
+                return false;
+            }
+        });
+        
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("ListActivity", "Query1: " + query);
+                if (query.length()==0) {
+                    Log.d("ListActivity", "It's empty, so I'll get all tasks!");
+                    updateArrayAdapter(db.getTasks());
+                } else {
+                    updateArrayAdapter(db.keywordSearch(query));
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("ListActivity", "Query2: " + newText);
+                if (newText.length()==0) {
+                    Log.d("ListActivity", "It's empty, so I'll get all tasks!");
+                    updateArrayAdapter(db.getTasks());
+                } else {
+                    updateArrayAdapter(db.keywordSearch(newText));
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -129,6 +162,14 @@ public class ListActivity extends AppCompatActivity {
         db.sync();
         Log.i("ListActivity", "Sync complete");
         //swiperefresh.setRefreshing(false);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void updateArrayAdapter(TaskList t) {
+        Log.d("ListActivity", "updateArrayAdapter called with "+Integer.toString(t.getTaskCount())+" tasks...");
+
+        adapter.clear();
+        adapter.addAll(t.getTasks());
         adapter.notifyDataSetChanged();
     }
 

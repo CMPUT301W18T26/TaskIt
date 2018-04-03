@@ -187,4 +187,15 @@ public class Task {
     public boolean hasLocation() {
         return location!=null;
     }
+
+    public String toString() {
+        String s = "";
+
+        s += title;
+        s += owner;
+        s += date.toString();
+        s += description;
+
+        return s;
+    }
 }
