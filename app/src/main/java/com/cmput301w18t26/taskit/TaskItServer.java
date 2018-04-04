@@ -578,7 +578,15 @@ public class TaskItServer {
     public boolean isNetworkConnected() throws InterruptedException, IOException {
         // String command = "ping -c 1 google.com";
         String command = "timeout 0.2 ping -c 1 cmput301.softwareprocess.es";
-        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+        long startTime = System.nanoTime();
+        boolean result = (Runtime.getRuntime().exec (command).waitFor() == 0);
+        long endTime = System.nanoTime();
+
+        long duration = (endTime - startTime);
+        Log.d("TaskItServer", "Server ping time "+Long.toString(duration/1000000)+" ms");
+
+
+        return result;
     }
 
 }
