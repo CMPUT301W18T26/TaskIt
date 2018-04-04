@@ -156,7 +156,7 @@ public class UserActivity extends AppCompatActivity {
             } else if (type.equals("Other User")) {
                 String userString = intent.getStringExtra("User");
                 User user = db.getUserByUsername(userString);
-                usernameText.setText(user.getName());
+                usernameText.setText(user.getUsername());
                 nameText.setText(user.getName());
                 emailText.setText(user.getEmail());
                 phoneText.setText(String.valueOf(user.getPhone()));
