@@ -275,6 +275,7 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void getFreshTaskList() {
+        Log.d("ListActivity","FreshTasjList with filters: "+filter+", "+dropDownFilter);
         switch (filter) {
             case "myOwnedTasks":
                 switch (dropDownFilter) {
@@ -291,15 +292,15 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
                         showAssignee = true;
                         break;
                     case "Done":
-                        taskList = db.userTasksWithStatus(db.getCurrentUser(), "Assigned");
+                        taskList = db.userTasksWithStatus(db.getCurrentUser(), "Done");
                         showAssignee = true;
                         break;
                     case "My Tasks":
-                        taskList = db.tasksWithUserBids(db.getCurrentUser());
+                        taskList = db.tasksWithUserBids(db.getCurrentUser(), false);
                         showAssignee = false;
                         break;
                     case "I've bidded on":
-                        taskList = db.tasksWithUserBids(db.getCurrentUser());
+                        taskList = db.tasksWithUserBids(db.getCurrentUser(), true);
                         showAssignee = false;
                         break;
                     case "I've been assigned":

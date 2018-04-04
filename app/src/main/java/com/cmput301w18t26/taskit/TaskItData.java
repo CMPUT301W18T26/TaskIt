@@ -415,14 +415,19 @@ public class TaskItData {
      * Tasks that a given user has bidded on
      *
      * @param user user that has bidded on tasks
+     * @param strictlyBidded whether the task filters out assigned/done tasks
      * @return list of tasks that the given user has bid on
      */
-    public TaskList tasksWithUserBids(User user){
+    public TaskList tasksWithUserBids(User user, boolean strictlyBidded){
         TaskList filtered = new TaskList();
         Task t;
         for (Bid b: bids.getBids()) {
             if (b.isOwner(user)) {
                 t = tasks.getTask(b.getParentTask());
+                if (strictlyBidded
+                    && (t.getStatus().equals("Assigned") || t.getStatus().equals("Done"))) {
+                    continue;
+                }
                 if (!filtered.hasTask(t)) {
                     filtered.addTask(t);
                 }
