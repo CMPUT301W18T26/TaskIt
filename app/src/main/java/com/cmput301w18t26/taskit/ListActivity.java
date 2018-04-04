@@ -48,7 +48,8 @@ public class ListActivity extends AppCompatActivity {
     private String filter;
     boolean showAssignee = false;
     String query = "";
-    ArrayAdapter<String> adapter2;
+    ArrayAdapter<String> dropdownAdapter1;
+    ArrayAdapter<String> dropdownAdapter2;
     Spinner spinner;
     SwipeRefreshLayout swiperefresh;
     SwipeRefreshLayout swiperefresh2;
@@ -99,12 +100,13 @@ public class ListActivity extends AppCompatActivity {
 
 
         // Sets the dropdown menu, puts default position as the current task status
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        dropdownAdapter1 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, Task.changeableStatuses);
 
-        adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, changeableStatuses2);
+        dropdownAdapter2 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, changeableStatuses2);
 
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(dropdownAdapter1);
 
         // Todo: cite http://www.viralandroid.com/2015/09/simple-android-tabhost-and-tabwidget-example.html
 
@@ -213,18 +215,22 @@ public class ListActivity extends AppCompatActivity {
             public void onTabChanged(String tabId) {
                 int selectedTab = host.getCurrentTab();
                 if (selectedTab == 0){
-                    Log.d("a","First Tab");
-                    spinner.setAdapter(adapter);
+                    Log.d("ListActivity","First Tab");
+                    spinner.setAdapter(dropdownAdapter1);
                     spinner.setSelection(0);
                 }
                 if (selectedTab == 1){
-                    Log.d("a","Second Tab");
-                    spinner.setAdapter(adapter2);
+                    Log.d("ListActivity","Second Tab");
+                    spinner.setAdapter(dropdownAdapter2);
                     spinner.setSelection(0);
 
                 }
             }
         });
+
+    }
+
+    private void setupDropdowns() {
 
     }
 
