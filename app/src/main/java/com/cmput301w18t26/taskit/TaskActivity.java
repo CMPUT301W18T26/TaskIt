@@ -41,6 +41,8 @@ public class TaskActivity extends AppCompatActivity {
     private TaskItData db;
     private Task task;
     private Intent intent;
+    Button markCompleteButton;
+    private User curruser;
 
     /**
      * sets button usage and intent passing
@@ -86,7 +88,7 @@ public class TaskActivity extends AppCompatActivity {
             });
         } else {
             setContentView(R.layout.viewtask);
-            final Button markCompleteButton = (Button) findViewById(R.id.markcomplete);
+            markCompleteButton = (Button) findViewById(R.id.markcomplete);
             Button bid = (Button) findViewById(R.id.bidTask);
             Button deleteTaskButton = (Button) findViewById(R.id.deletetask);
             Button editTaskButton = (Button) findViewById(R.id.edittask);
@@ -94,8 +96,8 @@ public class TaskActivity extends AppCompatActivity {
 
             task = db.getTask(intent.getStringExtra("UUID"));
             getTaskDetails(task);
-            User curruser = db.getCurrentUser();
-            if (!"Assigned".equals(task.getStatus())) {
+            curruser = db.getCurrentUser();
+            if (!"Assigned".equals(task.getStatus()) || !task.isOwner(curruser)) {
                 markCompleteButton.setVisibility(View.GONE);
             }
 
@@ -255,7 +257,7 @@ public class TaskActivity extends AppCompatActivity {
             if (db.taskExists(intent.getStringExtra("UUID"))) {
                 task = db.getTask(intent.getStringExtra("UUID"));
                 getTaskDetails(task);
-                if (!"Assigned".equals(task.getStatus())) {
+                if (!"Assigned".equals(task.getStatus()) || !task.isOwner(curruser)) {
                     markCompleteButton.setVisibility(View.GONE);
                 }else {markCompleteButton.setVisibility(View.VISIBLE);}
             }
@@ -359,6 +361,7 @@ public class TaskActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         modifyDetails (task,editTitleText,editDescText,spinner);
                         finish();
+                        markCompleteButton.setVisibility(View.GONE);
                     }
                 });
 
