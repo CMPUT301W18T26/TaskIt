@@ -19,7 +19,7 @@
         android:background="@drawable/gradient2"
         android:cropToPadding="true"
         android:elevation="0dp"
-        android:padding="56dp"
+        android:padding="60dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/mytasks2"
         app:layout_constraintEnd_toStartOf="@+id/mapicon2"

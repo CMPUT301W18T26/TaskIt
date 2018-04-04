@@ -263,7 +263,7 @@
     <Button
         android:id="@+id/markcomplete"
         style="@style/Button"
-        android:layout_width="378dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:layout_marginEnd="16dp"

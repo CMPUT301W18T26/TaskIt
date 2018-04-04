@@ -300,7 +300,7 @@ public class TaskActivity extends AppCompatActivity {
         if (task.hasLocation()) {
             locationText.setText(task.locationString());
         } else {
-            locationText.setText("Uknown");
+            locationText.setText("Unknown");
         }
         ownerText.setText(task.getOwner());
         double lowestBid = db.getLowestBid(task);
@@ -322,7 +322,6 @@ public class TaskActivity extends AppCompatActivity {
      * @param task the current task being edited
      */
     private void editTaskDetails (final Task task) {
-        //setContentView(R.layout.add_modify_task);
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         String status = db.getTaskStatus(task);
 
