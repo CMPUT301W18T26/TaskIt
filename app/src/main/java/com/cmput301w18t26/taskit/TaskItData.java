@@ -395,6 +395,21 @@ public class TaskItData {
         }
         return filtered;
     }
+    /**
+     * Tasks that have been assigned to given user.
+     *
+     * @param user user to whom the tasks have been assigned
+     * @return list of tasks where the given user is the assignee
+     */
+    public TaskList userDoneTasks(User user){
+        TaskList filtered = new TaskList();
+        for (Task t: tasks.getTasks()) {
+            if (t.isAssignee(user) && t.getStatus().equals("Done")) {
+                filtered.addTask(t);
+            }
+        }
+        return filtered;
+    }
 
     /**
      * Tasks that a given user has bidded on

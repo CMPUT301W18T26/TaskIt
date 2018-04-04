@@ -64,7 +64,7 @@ public class Task {
     private Date timestamp;
 
     public static String[] statuses = {"Bidded","Requested","Assigned","Done"};
-    public static String[] changeableStatuses = {"My Requests","I have bids","I've assigned","It's done"};
+    public static String[] changeableStatuses = {"My Requests", "with bids" , "I've assigned", "Done"};
 
     public void setDate(Date date) {
         this.date = date;

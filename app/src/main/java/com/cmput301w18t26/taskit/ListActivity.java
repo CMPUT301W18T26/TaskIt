@@ -35,10 +35,10 @@ import java.util.concurrent.TimeUnit;
  * Contains methods to filter different types of lists depending on the intent passed in
  * contains method to handle clicking on item in list
  */
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     protected static final String TYPE = "type";
-    protected static String[] changeableStatuses2 = {"My Tasks","I've bidded","I've been assigned","I've done"};
+    protected static String[] changeableStatuses2 = {"My Tasks","I've bidded on","I've been assigned","I've done"};
     private ListView listOfTasks;
     private ListView listOfTasks2;
     private TaskList taskList = new TaskList();
@@ -46,6 +46,7 @@ public class ListActivity extends AppCompatActivity {
     private TaskAdapter adapter;
     private TaskItData db;
     private String filter;
+    private String dropDownFilter;
     boolean showAssignee = false;
     String query = "";
     ArrayAdapter<String> dropdownAdapter1;
@@ -89,10 +90,12 @@ public class ListActivity extends AppCompatActivity {
 
 
         //Setting up spinner
-        if(!filter.equals("allTasks")){
+        if(filter.equals("myOwnedTasks")){
             searchView.setVisibility(View.GONE);
             setupTabs();
-        }else{
+            setupDropdowns();
+        }
+        if(filter.equals("allTasks")){
             spinner.setVisibility(View.GONE);
             tabwidget.setVisibility(View.GONE);
             listOfTasks.setVisibility(View.VISIBLE);
@@ -107,6 +110,8 @@ public class ListActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item, changeableStatuses2);
 
         spinner.setAdapter(dropdownAdapter1);
+        spinner.setSelection(0);
+        dropDownFilter = spinner.getItemAtPosition(0).toString();
 
         // Todo: cite http://www.viralandroid.com/2015/09/simple-android-tabhost-and-tabwidget-example.html
 
@@ -193,8 +198,10 @@ public class ListActivity extends AppCompatActivity {
 
     private void updateArrayAdapter() {
         adapter.clear();
+        adapter.setShowAssignee(showAssignee);
         adapter.addAll(taskList.getTasks());
         adapter.notifyDataSetChanged();
+
     }
 
     private void setupTabs(){
@@ -218,12 +225,13 @@ public class ListActivity extends AppCompatActivity {
                     Log.d("ListActivity","First Tab");
                     spinner.setAdapter(dropdownAdapter1);
                     spinner.setSelection(0);
+                    dropDownFilter = spinner.getItemAtPosition(0).toString();
                 }
                 if (selectedTab == 1){
                     Log.d("ListActivity","Second Tab");
                     spinner.setAdapter(dropdownAdapter2);
                     spinner.setSelection(0);
-
+                    dropDownFilter = spinner.getItemAtPosition(0).toString();
                 }
             }
         });
@@ -232,7 +240,24 @@ public class ListActivity extends AppCompatActivity {
 
     private void setupDropdowns() {
 
+        spinner.setOnItemSelectedListener(this);
+
     }
+
+    // for spinner aka dropdowns
+    public void onItemSelected(AdapterView<?> parent, View view,
+                                   int pos, long id) {
+            // An item was selected. You can retrieve the selected item using
+            // parent.getItemAtPosition(pos)
+        dropDownFilter = parent.getItemAtPosition(pos).toString();
+        getFreshTaskList();
+        updateArrayAdapter();
+    }
+    // for spinner aka dropdowns
+    public void onNothingSelected(AdapterView<?> parent) {
+            // Another interface callback
+    }
+
 
     @Override
     protected void onStart() {
@@ -251,21 +276,41 @@ public class ListActivity extends AppCompatActivity {
 
     public void getFreshTaskList() {
         switch (filter) {
-            case "myOwnedInProgress":
-                taskList = db.userTasksWithStatus(db.getCurrentUser(), "Assigned");
-                showAssignee = true;
-                break;
-            case "myAssigned":
-                taskList = db.userAssignedTasks(db.getCurrentUser());
-                break;
-            case "tasksWithMyBids":
-                taskList = db.tasksWithUserBids(db.getCurrentUser());
-                break;
-            case "myTasksWithBids":
-                taskList = db.userTasksWithStatus(db.getCurrentUser(), "Bidded");
-                break;
             case "myOwnedTasks":
-                taskList = db.userTasks(db.getCurrentUser());
+                switch (dropDownFilter) {
+                    case "My Requests":
+                        taskList = db.userTasks(db.getCurrentUser());
+                        showAssignee = false;
+                        break;
+                    case "with bids":
+                        taskList = db.userTasksWithStatus(db.getCurrentUser(), "Bidded");
+                        showAssignee = false;
+                        break;
+                    case "I've assigned":
+                        taskList = db.userTasksWithStatus(db.getCurrentUser(), "Assigned");
+                        showAssignee = true;
+                        break;
+                    case "Done":
+                        taskList = db.userTasksWithStatus(db.getCurrentUser(), "Assigned");
+                        showAssignee = true;
+                        break;
+                    case "My Tasks":
+                        taskList = db.tasksWithUserBids(db.getCurrentUser());
+                        showAssignee = false;
+                        break;
+                    case "I've bidded on":
+                        taskList = db.tasksWithUserBids(db.getCurrentUser());
+                        showAssignee = false;
+                        break;
+                    case "I've been assigned":
+                        taskList = db.userAssignedTasks(db.getCurrentUser());
+                        showAssignee = false;
+                        break;
+                    case "I've done":
+                        taskList = db.userDoneTasks(db.getCurrentUser());
+                        showAssignee = false;
+                        break;
+                }
                 break;
             case "allTasks":
                 taskList = db.keywordSearch(query);
