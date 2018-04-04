@@ -72,19 +72,24 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     app:layout_constraintTop_toBottomOf="@+id/viewtaskspinner">
-
-                    <ListView
-                        android:id="@+id/listOfTasks"
+                    <android.support.v4.widget.SwipeRefreshLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/swiperefresh"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/viewtaskspinner"
-                        app:layout_constraintVertical_bias="0.0" />
+                        android:layout_height="match_parent">
+                        <ListView
+                            android:id="@+id/listOfTasks"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/viewtaskspinner"
+                            app:layout_constraintVertical_bias="0.0" />
+                    </android.support.v4.widget.SwipeRefreshLayout>
 
 
                 </LinearLayout>
@@ -95,19 +100,25 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     app:layout_constraintTop_toBottomOf="@+id/viewtaskspinner">
-
-                    <ListView
-                        android:id="@+id/listOfTasks2"
+                    <android.support.v4.widget.SwipeRefreshLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/swiperefresh2"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/viewtaskspinner"
-                        app:layout_constraintVertical_bias="0.0" />
+                        android:layout_height="match_parent">
+                        <ListView
+                            android:id="@+id/listOfTasks2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/viewtaskspinner"
+                            app:layout_constraintVertical_bias="0.0" />
+                    </android.support.v4.widget.SwipeRefreshLayout>
+
 
                 </LinearLayout>
 

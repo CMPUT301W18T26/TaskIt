@@ -46,9 +46,13 @@ public class ListActivity extends AppCompatActivity {
     private TaskAdapter adapter;
     private TaskItData db;
     private String filter;
+    boolean showAssignee = false;
+    String query = "";
     ArrayAdapter<String> adapter2;
     Spinner spinner;
     SwipeRefreshLayout swiperefresh;
+    SwipeRefreshLayout swiperefresh2;
+
     TaskList tasks;
     TabHost host;
 
@@ -71,7 +75,7 @@ public class ListActivity extends AppCompatActivity {
         setTitle(type);
 
 
-        //https://stackoverflow.com/questions/11622539/how-do-i-use-tabhost-for-android
+        // Todo: cite https://stackoverflow.com/questions/11622539/how-do-i-use-tabhost-for-android
 
 
         //bidlist = (ListView) findViewById(R.id.tasklist);
@@ -109,6 +113,33 @@ public class ListActivity extends AppCompatActivity {
          * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
          * performs a swipe-to-refresh gesture.
          */
+        swiperefresh = findViewById(R.id.swiperefresh);
+        swiperefresh.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i("ListActivity", "onRefresh1 called from SwipeRefreshLayout");
+
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        listRefresh();
+                    }
+                }
+        );
+        swiperefresh2 = findViewById(R.id.swiperefresh2);
+        swiperefresh2.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i("ListActivity", "onRefresh2 called from SwipeRefreshLayout");
+
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        listRefresh();
+                    }
+                }
+        );
+
 
         ImageButton refreshbutton = (ImageButton) findViewById(R.id.refreshimage);
         refreshbutton.setOnClickListener(new View.OnClickListener() {
@@ -125,34 +156,24 @@ public class ListActivity extends AppCompatActivity {
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                updateArrayAdapter(db.getTasks());
+                getFreshTaskList();
+                updateArrayAdapter();
                 return false;
             }
         });
-        
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                Log.d("ListActivity", "Query1: " + query);
-                if (query.length()==0) {
-                    Log.d("ListActivity", "It's empty, so I'll get all tasks!");
-                    updateArrayAdapter(db.getTasks());
-                } else {
-                    updateArrayAdapter(db.keywordSearch(query));
-                }
+            public boolean onQueryTextSubmit(String queryText) {
+                Log.d("ListActivity", "You submitted this search...");
                 return true;
             }
-
             @Override
-            public boolean onQueryTextChange(String newText) {
-                Log.d("ListActivity", "Query2: " + newText);
-                if (newText.length()==0) {
-                    Log.d("ListActivity", "It's empty, so I'll get all tasks!");
-                    updateArrayAdapter(db.getTasks());
-                } else {
-                    updateArrayAdapter(db.keywordSearch(newText));
-                }
-                return false;
+            public boolean onQueryTextChange(String queryText) {
+                query = queryText;
+                getFreshTaskList();
+                updateArrayAdapter();
+                return true;
             }
         });
 
@@ -160,16 +181,17 @@ public class ListActivity extends AppCompatActivity {
 
     private void listRefresh() {
         db.sync();
+        getFreshTaskList();
+        updateArrayAdapter();
         Log.i("ListActivity", "Sync complete");
-        //swiperefresh.setRefreshing(false);
+        swiperefresh.setRefreshing(false);
+        swiperefresh2.setRefreshing(false);
         adapter.notifyDataSetChanged();
     }
 
-    private void updateArrayAdapter(TaskList t) {
-        Log.d("ListActivity", "updateArrayAdapter called with "+Integer.toString(t.getTaskCount())+" tasks...");
-
+    private void updateArrayAdapter() {
         adapter.clear();
-        adapter.addAll(t.getTasks());
+        adapter.addAll(taskList.getTasks());
         adapter.notifyDataSetChanged();
     }
 
@@ -210,8 +232,18 @@ public class ListActivity extends AppCompatActivity {
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
-        boolean showAssignee = false;
+        getFreshTaskList();
 
+        adapter = new TaskAdapter(ListActivity.this, taskList);
+        adapter.setShowAssignee(showAssignee);
+
+        listOfTasks.setAdapter(adapter);
+        listOfTasks2.setAdapter(adapter);
+        listOfTasks.setOnItemClickListener(new ListClickHandler());
+        listOfTasks2.setOnItemClickListener(new ListClickHandler());
+    }
+
+    public void getFreshTaskList() {
         switch (filter) {
             case "myOwnedInProgress":
                 taskList = db.userTasksWithStatus(db.getCurrentUser(), "Assigned");
@@ -230,17 +262,9 @@ public class ListActivity extends AppCompatActivity {
                 taskList = db.userTasks(db.getCurrentUser());
                 break;
             case "allTasks":
-                taskList = db.getTasks();
+                taskList = db.keywordSearch(query);
                 break;
         }
-
-        adapter = new TaskAdapter(ListActivity.this, taskList);
-        adapter.setShowAssignee(showAssignee);
-
-        listOfTasks.setAdapter(adapter);
-        listOfTasks2.setAdapter(adapter);
-        listOfTasks.setOnItemClickListener(new ListClickHandler());
-        listOfTasks2.setOnItemClickListener(new ListClickHandler());
     }
 
     public class ListClickHandler implements OnItemClickListener{

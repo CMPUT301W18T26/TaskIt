@@ -493,6 +493,9 @@ public class TaskItData {
      * In progress
      */
     public TaskList keywordSearch(String keywords){
+        if (keywords.length()==0) {
+            return getTasks();
+        }
         TaskList filtered = new TaskList();
 
         // break keywords into words
