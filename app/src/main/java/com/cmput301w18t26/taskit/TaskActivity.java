@@ -15,8 +15,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Date;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -57,12 +55,12 @@ public class TaskActivity extends AppCompatActivity {
         if (type.equals("Edit")){
             task = db.getTask(intent.getStringExtra("UUID"));
             Log.d("contentview","should be modify now");
-            setContentView(R.layout.add_modify_task);
+            setContentView(R.layout.modify_task);
             editTaskDetails(task);
             setResult(RESULT_OK);
         }
         else if (type.equals("New Task")) {
-            setContentView(R.layout.edittask);
+            setContentView(R.layout.newtask);
             Button addLocationButton = (Button) findViewById(R.id.add_location);
             Button createTaskButton = (Button) findViewById(R.id.createtask);
 
