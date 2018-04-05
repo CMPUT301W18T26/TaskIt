@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -21,11 +22,13 @@ public class HomeActivity extends AppCompatActivity {
 
     protected static final String TYPE = "type";
     protected static final String FILTER = "filter";
+    private TaskItData db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homev2);
+        db = TaskItData.getInstance();
 
         setTitle(Html.fromHtml("<font color=#ffffff>" + "Home" + "</font>"));
 
@@ -136,6 +139,22 @@ public class HomeActivity extends AppCompatActivity {
                 setResult(RESULT_OK);
             }
         });
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        long numNotifications = db.getNotificationCount();
+        TextView notifications = findViewById(R.id.notifications);
+        if (numNotifications==0) {
+            notifications.setVisibility(View.GONE);
+        } else {
+            notifications.setVisibility(View.VISIBLE);
+            notifications.setText(Long.toString(numNotifications));
+        }
+
 
     }
 

@@ -53,6 +53,8 @@ public class TaskItSync {
     private BidList localBids;
     private BidList remoteBids;
 
+    public long newBids = 0;
+
     /**
      * We'll need to be able to do filesystem i/o
      */
@@ -334,10 +336,18 @@ public class TaskItSync {
             } else { // Others file
                 if (!localBids.hasBid(currBid)) { // Remote, not local
                     fs.addBidFile(currBid);
+                    newBids += 1;
                     Log.d("TaskItSync", "adding bid to local");
                 }
             }
         }
+    }
+
+    public long getNewBids() {
+        return newBids;
+    }
+    public void setNewBids(long n) {
+        newBids = n;
     }
 
 

@@ -606,12 +606,15 @@ public class TaskItData {
      * Finally, load the newly synced filesystem data into memory.
      */
     public void sync() {
-        // Todo: wrap these in a sort of timeout for offline functionality
         sync.sync();
         users.clear();
         tasks.clear();
         bids.clear();
         fs.loadAllFromFile(users, tasks, bids);
+    }
+
+    public long getNotificationCount() {
+        return sync.getNewBids();
     }
 
 }
