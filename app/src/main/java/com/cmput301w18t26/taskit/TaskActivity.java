@@ -17,6 +17,7 @@ import android.widget.TextView;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -31,6 +32,15 @@ public class TaskActivity extends AppCompatActivity {
     protected static final String TYPE = "type";
     protected static final Integer FOR_RETURN_LOCATION = 1;
 
+    private TaskItData db;
+    private Task task;
+    private Intent intent;
+
+    private User curruser;
+    private String intentState;
+    private String intentTaskUUID;
+
+    // UI Elements
     private TextView titleText;
     private TextView dateText;
     private TextView statusText;
@@ -40,11 +50,19 @@ public class TaskActivity extends AppCompatActivity {
     private EditText editTitleText;
     private TextView lowbidText;
     private EditText editDescText;
-    private TaskItData db;
-    private Task task;
-    private Intent intent;
-    Button markCompleteButton;
-    private User curruser;
+
+    private Button markCompleteButton;
+    private Button bidButton;
+    private Button deleteTaskButton;
+    private Button editTaskButton;
+    private TextView locationview;
+    private Button createTaskButton;
+    private Button addLocationButton;
+    private Button viewBids;
+    private Button addBidButton;
+    private Button confirmEdits;
+    private Spinner spinner;
+    private Button cancelEdits;
 
     /**
      * sets button usage and intent passing
@@ -54,201 +72,19 @@ public class TaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         intent = getIntent();
-        String type = intent.getStringExtra(HomeActivity.TYPE);
+        intentState = intent.getStringExtra(HomeActivity.TYPE);
+        intentTaskUUID = intent.getStringExtra("UUID");
+
         db = TaskItData.getInstance();
-        if (type.equals("Edit")){
-            task = db.getTask(intent.getStringExtra("UUID"));
-            Log.d("contentview","should be modify now");
-            setContentView(R.layout.modify_task);
-            editTaskDetails(task);
-            setResult(RESULT_OK);
-        }
-        else if (type.equals("New Task")) {
-            setContentView(R.layout.newtask);
-            Button addLocationButton = (Button) findViewById(R.id.add_location);
-            Button createTaskButton = (Button) findViewById(R.id.createtask);
+        curruser = db.getCurrentUser();
 
-            task = new Task();
-//            db.addTask(task);
+        setupView();
+        setupUIElements();
+        setupListeners();
+        getFreshData();
+        refreshView();
 
-            addLocationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                    intent.putExtra("calltype", "chooseLocation");
-                    startActivityForResult(intent,FOR_RETURN_LOCATION);
-                    setResult(RESULT_OK);
-                }
-            });
-
-            createTaskButton.setOnClickListener(new View.OnClickListener() {
-
-                public void onClick(View v) {
-                    setTaskDetails();
-                    finish();
-                }
-            });
-        } else {
-            setContentView(R.layout.viewtask);
-            markCompleteButton = (Button) findViewById(R.id.markcomplete);
-            Button bid = (Button) findViewById(R.id.bidTask);
-            Button deleteTaskButton = (Button) findViewById(R.id.deletetask);
-            Button editTaskButton = (Button) findViewById(R.id.edittask);
-            TextView locationview = (TextView) findViewById(R.id.tasklocation);
-
-            task = db.getTask(intent.getStringExtra("UUID"));
-            getTaskDetails(task);
-            curruser = db.getCurrentUser();
-            if (!"Assigned".equals(db.getTaskStatus(task)) || !task.isOwner(curruser)) {
-                markCompleteButton.setVisibility(View.GONE);
-            }
-
-            if (task.isOwner(curruser)){
-                bid.setVisibility(View.GONE);
-            } else {
-                deleteTaskButton.setVisibility(View.GONE);
-                editTaskButton.setVisibility(View.GONE);
-                markCompleteButton.setVisibility(View.GONE);
-            }
-
-            ownerText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent profileIntent = new Intent(getApplicationContext(), UserActivity.class);
-                    profileIntent.putExtra(TYPE, "Other User");
-                    profileIntent.putExtra("User", task.getOwner());
-                    startActivity(profileIntent);
-                    setResult(RESULT_OK);
-                }
-            });
-
-            locationview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (task.hasLocation()) {
-                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                        intent.putExtra("calltype", "viewTaskLocation");
-                        intent.putExtra("UUID", task.getUUID());
-                        startActivity(intent);
-                        setResult(RESULT_OK);
-                    }
-
-                }
-            });
-
-            markCompleteButton.setOnClickListener(new View.OnClickListener() {
-
-                public void onClick(View v){
-                    View promptview = getLayoutInflater().inflate(R.layout.rating_prompt,null);
-                    AlertDialog.Builder ratingprompt = new AlertDialog.Builder(TaskActivity.this);
-
-                    ratingprompt.setView(promptview);
-                    final AlertDialog dialog = ratingprompt.create();
-                    dialog.show();
-                    Button submitRating = (Button) promptview.findViewById(R.id.submit);
-                    final RatingBar ratingBar = (RatingBar) promptview.findViewById(R.id.rating);;
-                    final EditText userReview = (EditText) promptview.findViewById(R.id.description);
-
-                    final User assignee = db.getUserByUsername(task.getAssignee());
-
-                    submitRating.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            assignee.addRating(ratingBar.getRating());
-                            String userReviewText = userReview.getText().toString();
-                            if(userReviewText != null && !userReviewText.isEmpty()) {
-                                assignee.addRatingDescription(userReviewText);
-                            }
-                            dialog.dismiss();
-                            db.updateUser(assignee);
-                        }
-                    });
-
-                    task.setStatus("Done");
-                    markCompleteButton.setVisibility(View.GONE);
-                    getTaskDetails(task);
-                }
-            });
-
-            editTaskButton.setOnClickListener(new View.OnClickListener() {
-
-                public void onClick(View v){
-                    Intent editIntent = new Intent(getApplicationContext(), TaskActivity.class);
-                    String UUID = task.getUUID();
-                    editIntent.putExtra(TYPE, "Edit");
-                    editIntent.putExtra("UUID", UUID);
-                    startActivity(editIntent);
-                    setResult(RESULT_OK);
-
-
-                }
-            });
-
-            deleteTaskButton.setOnClickListener(new View.OnClickListener() {
-
-                public void onClick(View v){
-                    View promptview = getLayoutInflater().inflate(R.layout.final_prompt,null);
-                    AlertDialog.Builder bidprompt = new AlertDialog.Builder(TaskActivity.this);
-                    Button yesButton = (Button) promptview.findViewById(R.id.yes);
-                    Button noButton = (Button) promptview.findViewById(R.id.no);
-                    TextView question = (TextView) promptview.findViewById(R.id.question);
-
-                    bidprompt.setView(promptview);
-                    question.setText("Are you sure you wish to delete this task?");
-                    final AlertDialog dialog = bidprompt.create();
-                    dialog.show();
-
-                    yesButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            db.deleteTask(task);
-                            finish();
-                        }
-                    });
-
-                    noButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
-                    Log.d("delete","got to bidlist");
-                }
-            });
-
-            //View bids button is clicked, goes to bidlist page.
-            Button viewBids = (Button) findViewById(R.id.viewBids);
-            final Intent bidList = new Intent(getApplicationContext(),BidListActivity.class);
-            viewBids.setOnClickListener(new View.OnClickListener() {
-
-                public void onClick(View v){
-                    Task task = db.getTask(intent.getStringExtra("UUID"));
-                    Intent intent = new Intent(TaskActivity.this, BidListActivity.class);
-                    String UUID = task.getUUID();
-                    intent.putExtra("UUID", UUID);
-                    startActivity(intent);
-                    getTaskDetails(task);
-                    setResult(RESULT_OK);
-
-                }
-            });
-            //Bid on task is clicked, goes to bid page
-            Button addBidButton = (Button) findViewById(R.id.bidTask);
-            final Intent bidActivity = new Intent(getApplicationContext(), BidActivity.class);
-            addBidButton.setOnClickListener(new View.OnClickListener(){
-
-                public void onClick(View v){
-                    Intent intent = new Intent(TaskActivity.this, BidActivity.class);
-                    String UUID = task.getUUID();
-                    intent.putExtra("UUID", UUID);
-                    startActivity(intent);
-                    setResult(RESULT_OK);
-                }
-
-            });
-
-        }
-        setTitle(type);
+        setTitle(intentState);
     }
 
     @Override
@@ -257,8 +93,7 @@ public class TaskActivity extends AppCompatActivity {
         final Button markCompleteButton = (Button) findViewById(R.id.markcomplete);
         intent = getIntent();
             if (db.taskExists(intent.getStringExtra("UUID"))) {
-                task = db.getTask(intent.getStringExtra("UUID"));
-                getTaskDetails(task);
+                getTaskDetails();
                 if (!"Assigned".equals(db.getTaskStatus(task)) || !task.isOwner(curruser)) {
                     markCompleteButton.setVisibility(View.GONE);
                 }else {markCompleteButton.setVisibility(View.VISIBLE);}
@@ -284,9 +119,8 @@ public class TaskActivity extends AppCompatActivity {
 
     /**
      * When a task is clicked on from ListActivity, info about the task is retrieved.
-     * @param task Task clicked on to retrieve details from
      */
-    private void getTaskDetails(Task task) {
+    private void getTaskDetails() {
 
         titleText = (TextView) findViewById(R.id.tasktitle);
         descriptionText = (TextView) findViewById(R.id.taskdescription);
@@ -313,22 +147,17 @@ public class TaskActivity extends AppCompatActivity {
         }
 
         dateText.setText(task.getDateString());
-
-
-
     }
 
     /**
      * User is the owner of the task, sets the spinner to the task status, and sets the
      * text to its current text
-     * @param task the current task being edited
      */
-    private void editTaskDetails (final Task task) {
-        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
+    private void editTaskDetails () {
         String status = db.getTaskStatus(task);
 
         // Sets the dropdown menu, puts default position as the current task status
-        String[] dropdownItems = {"Change Task Status", Task.STATUS_REQUESTED, Task.STATUS_DONE};
+        String[] dropdownItems = {"Change Task Status", Task.STATUS_REQUESTED};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
@@ -337,59 +166,15 @@ public class TaskActivity extends AppCompatActivity {
 
         spinner.setAdapter(adapter);
         spinner.setSelection(0);
-        if (status==Task.STATUS_BIDDED) {
+        if (status.equals(Task.STATUS_BIDDED) || status.equals(Task.STATUS_ASSIGNED)) {
             spinner.setVisibility(View.VISIBLE);
         } else {
             spinner.setVisibility(View.GONE);
         }
 
-        editTitleText = (EditText) findViewById(R.id.editTitle);
-        editDescText = (EditText) findViewById(R.id.editDescription);
-
         editTitleText.setText(task.getTitle(),TextView.BufferType.EDITABLE);
         editDescText.setText(task.getDescription(),TextView.BufferType.EDITABLE);
 
-
-        Button confirmEdits = (Button) findViewById(R.id.confirmedit);
-        confirmEdits.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v){
-                View promptview = getLayoutInflater().inflate(R.layout.final_prompt,null);
-                AlertDialog.Builder bidprompt = new AlertDialog.Builder(TaskActivity.this);
-                Button yesButton = (Button) promptview.findViewById(R.id.yes);
-                Button noButton = (Button) promptview.findViewById(R.id.no);
-                TextView question = (TextView) promptview.findViewById(R.id.question);
-
-                bidprompt.setView(promptview);
-                question.setText("Are you sure you wish to edit this task?");
-                final AlertDialog dialog = bidprompt.create();
-                dialog.show();
-
-                yesButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        modifyDetails (task,editTitleText,editDescText,spinner);
-                        finish();
-//                        markCompleteButton.setVisibility(View.GONE);
-                    }
-                });
-
-                noButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-            }
-        });
-
-        Button cancelEdits = (Button) findViewById(R.id.cancelmodify);
-        cancelEdits.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v){
-                finish();
-            }
-        });
     }
 
     /**
@@ -431,6 +216,293 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        
+        Log.d("TaskActivity", "Resuming...");
+        db.resetNotificationCount();
+        db.sync();
+        getFreshData();
+        refreshView();
     }
+
+    private void setupView() {
+        if (intentState.equals("Edit")) {
+            setContentView(R.layout.modify_task);
+        } else if (intentState.equals("New Task")) {
+            setContentView(R.layout.newtask);
+        } else { // View task
+            setContentView(R.layout.viewtask);
+        }
+    }
+
+    private void setupUIElements() {
+        addLocationButton = (Button) findViewById(R.id.add_location);
+        createTaskButton = (Button) findViewById(R.id.createtask);
+        markCompleteButton = (Button) findViewById(R.id.markcomplete);
+        bidButton = (Button) findViewById(R.id.bidTask);
+        deleteTaskButton = (Button) findViewById(R.id.deletetask);
+        editTaskButton = (Button) findViewById(R.id.edittask);
+        locationview = (TextView) findViewById(R.id.tasklocation);
+        addBidButton = (Button) findViewById(R.id.bidTask);
+        viewBids = (Button) findViewById(R.id.viewBids);
+        editTitleText = (EditText) findViewById(R.id.editTitle);
+        editDescText = (EditText) findViewById(R.id.editDescription);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        confirmEdits = (Button) findViewById(R.id.confirmedit);
+        cancelEdits = (Button) findViewById(R.id.cancelmodify);
+
+    }
+
+    private void setupListeners() {
+        if (addLocationButton != null) {
+            Log.d("TaskActivity","addLocationButton found, creating listener");
+            addLocationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                    intent.putExtra("calltype", "chooseLocation");
+                    startActivityForResult(intent, FOR_RETURN_LOCATION);
+                    setResult(RESULT_OK);
+                }
+            });
+        }
+
+        if (createTaskButton != null) {
+            Log.d("TaskActivity","createTaskButton found, creating listener");
+            createTaskButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    setTaskDetails();
+                    finish();
+                }
+            });
+        }
+
+        if (ownerText != null) {
+            Log.d("TaskActivity","ownerText found, creating listener");
+            ownerText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent profileIntent = new Intent(getApplicationContext(), UserActivity.class);
+                    profileIntent.putExtra(TYPE, "Other User");
+                    profileIntent.putExtra("User", task.getOwner());
+                    startActivity(profileIntent);
+                    setResult(RESULT_OK);
+                }
+            });
+        }
+
+        if (locationview != null) {
+            Log.d("TaskActivity","locationview found, creating listener");
+            locationview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (task.hasLocation()) {
+                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                        intent.putExtra("calltype", "viewTaskLocation");
+                        intent.putExtra("UUID", task.getUUID());
+                        startActivity(intent);
+                        setResult(RESULT_OK);
+                    }
+
+                }
+            });
+        }
+
+        if (markCompleteButton != null) {
+            Log.d("TaskActivity","markCompleteButton found, creating listener");
+            markCompleteButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    View promptview = getLayoutInflater().inflate(R.layout.rating_prompt, null);
+                    AlertDialog.Builder ratingprompt = new AlertDialog.Builder(TaskActivity.this);
+
+                    ratingprompt.setView(promptview);
+                    final AlertDialog dialog = ratingprompt.create();
+                    dialog.show();
+                    Button submitRating = (Button) promptview.findViewById(R.id.submit);
+                    final RatingBar ratingBar = (RatingBar) promptview.findViewById(R.id.rating);
+                    ;
+                    final EditText userReview = (EditText) promptview.findViewById(R.id.description);
+
+                    final User assignee = db.getUserByUsername(task.getAssignee());
+
+                    submitRating.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            assignee.addRating(ratingBar.getRating());
+                            String userReviewText = userReview.getText().toString();
+                            if (userReviewText != null && !userReviewText.isEmpty()) {
+                                assignee.addRatingDescription(userReviewText);
+                            }
+                            dialog.dismiss();
+                            db.updateUser(assignee);
+                        }
+                    });
+
+                    task.setStatus("Done");
+                    markCompleteButton.setVisibility(View.GONE);
+                    getTaskDetails();
+                }
+            });
+        }
+        if (editTaskButton != null) {
+            Log.d("TaskActivity","editTaskButton found, creating listener");
+            editTaskButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    Intent editIntent = new Intent(getApplicationContext(), TaskActivity.class);
+                    String UUID = task.getUUID();
+                    editIntent.putExtra(TYPE, "Edit");
+                    editIntent.putExtra("UUID", UUID);
+                    startActivity(editIntent);
+                    setResult(RESULT_OK);
+
+
+                }
+            });
+        }
+        if (deleteTaskButton != null) {
+            Log.d("TaskActivity","deleteTaskButton found, creating listener");
+            deleteTaskButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    View promptview = getLayoutInflater().inflate(R.layout.final_prompt, null);
+                    AlertDialog.Builder bidprompt = new AlertDialog.Builder(TaskActivity.this);
+                    Button yesButton = (Button) promptview.findViewById(R.id.yes);
+                    Button noButton = (Button) promptview.findViewById(R.id.no);
+                    TextView question = (TextView) promptview.findViewById(R.id.question);
+
+                    bidprompt.setView(promptview);
+                    question.setText("Are you sure you wish to delete this task?");
+                    final AlertDialog dialog = bidprompt.create();
+                    dialog.show();
+
+                    yesButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            db.deleteTask(task);
+                            finish();
+                        }
+                    });
+
+                    noButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    Log.d("delete", "got to bidlist");
+                }
+            });
+        }
+
+        if (viewBids != null) {
+            Log.d("TaskActivity","viewBids found, creating listener");
+            viewBids.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    Task task = db.getTask(intent.getStringExtra("UUID"));
+                    Intent intent = new Intent(TaskActivity.this, BidListActivity.class);
+                    String UUID = task.getUUID();
+                    intent.putExtra("UUID", UUID);
+                    startActivity(intent);
+                    getTaskDetails();
+                    setResult(RESULT_OK);
+
+                }
+            });
+        }
+
+        if (addBidButton != null) {
+            Log.d("TaskActivity","addBidButton found, creating listener");
+            addBidButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    Intent intent = new Intent(TaskActivity.this, BidActivity.class);
+                    String UUID = task.getUUID();
+                    intent.putExtra("UUID", UUID);
+                    startActivity(intent);
+                    setResult(RESULT_OK);
+                }
+
+            });
+        }
+        if (confirmEdits != null) {
+            Log.d("TaskActivity", "confirmEdits found, creating listener");
+            confirmEdits.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    View promptview = getLayoutInflater().inflate(R.layout.final_prompt, null);
+                    AlertDialog.Builder bidprompt = new AlertDialog.Builder(TaskActivity.this);
+                    Button yesButton = (Button) promptview.findViewById(R.id.yes);
+                    Button noButton = (Button) promptview.findViewById(R.id.no);
+                    TextView question = (TextView) promptview.findViewById(R.id.question);
+
+                    bidprompt.setView(promptview);
+                    question.setText("Are you sure you wish to edit this task?");
+                    final AlertDialog dialog = bidprompt.create();
+                    dialog.show();
+
+                    yesButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            modifyDetails(task, editTitleText, editDescText, spinner);
+                            finish();
+                            //                        markCompleteButton.setVisibility(View.GONE);
+                        }
+                    });
+
+                    noButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+            });
+
+            if (cancelEdits != null) {
+                Log.d("TaskActivity", "cancelEdits found, creating listener");
+                cancelEdits.setOnClickListener(new View.OnClickListener() {
+
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+            }
+        }
+    }
+
+    private void getFreshData() {
+        if (intentState.equals("Edit")) {
+            task = db.getTask(intentTaskUUID);
+        } else if (intentState.equals("New Task")) {
+            task = new Task();
+        } else {
+            task = db.getTask(intentTaskUUID);
+        }
+    }
+
+    private void refreshView() {
+        if (intentState.equals("Edit")) {
+            editTaskDetails();
+        } else if (intentState.equals("New Task")) {
+
+        } else { // View task
+            getTaskDetails();
+
+            if (!db.getTaskStatus(task).equals(Task.STATUS_ASSIGNED)
+                    || !task.isOwner(curruser)) {
+                markCompleteButton.setVisibility(View.GONE);
+            }
+
+            if (task.isOwner(curruser)){
+                bidButton.setVisibility(View.GONE);
+            } else {
+                deleteTaskButton.setVisibility(View.GONE);
+                editTaskButton.setVisibility(View.GONE);
+                markCompleteButton.setVisibility(View.GONE);
+            }
+        }
+    }
+
 }
