@@ -283,6 +283,21 @@ public class TaskItSync {
         for (int i=0;i<localBids.getBidCount(); i++) {
             currBid = localBids.getBid(i);
             Log.d("TaskItSync", "current bid "+currBid.getUUID());
+
+            Task parentTask = null;
+            if (localTasks.hasTask(currBid.getParentTask())) {
+                parentTask = localTasks.getTask(currBid.getParentTask());
+            }
+            boolean valid = parentTask!=null &&
+                    (currBid.getTimestamp().after(parentTask.getTimestamp()) ||
+                     currBid.isOwner(parentTask.getAssignee()));
+            if (!valid) {
+                Log.d("TaskItSync", "Bid invalid, deleting...");
+                fs.deleteBidFile(currBid);
+                server.delBid(currBid);
+                continue;
+            }
+
             if (currBid.isOwner(currentUser)) { // Owner's file
                 if (!remoteBids.hasBid(currBid)) { // Local, not remote
                     server.addBid(currBid);
@@ -328,6 +343,21 @@ public class TaskItSync {
         for (int i=0;i<remoteBids.getBidCount(); i++) {
             currBid = remoteBids.getBid(i);
             Log.d("TaskItSync", "current bid "+currBid.getUUID());
+
+            Task parentTask = null;
+            if (localTasks.hasTask(currBid.getParentTask())) {
+                parentTask = localTasks.getTask(currBid.getParentTask());
+            }
+            boolean valid = parentTask!=null &&
+                    (currBid.getTimestamp().after(parentTask.getTimestamp()) ||
+                            currBid.isOwner(parentTask.getAssignee()));
+            if (!valid) {
+                Log.d("TaskItSync", "Bid invalid, deleting...");
+                fs.deleteBidFile(currBid);
+                server.delBid(currBid);
+                continue;
+            }
+
             if (currBid.isOwner(currentUser)) { // Owner's file
                 if (!localBids.hasBid(currBid)) { // Remote, not local
                     server.delBid(currBid);

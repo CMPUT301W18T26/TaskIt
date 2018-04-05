@@ -14,6 +14,8 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.Date;
 
 /**
@@ -97,7 +99,7 @@ public class TaskActivity extends AppCompatActivity {
             task = db.getTask(intent.getStringExtra("UUID"));
             getTaskDetails(task);
             curruser = db.getCurrentUser();
-            if (!"Assigned".equals(task.getStatus()) || !task.isOwner(curruser)) {
+            if (!"Assigned".equals(db.getTaskStatus(task)) || !task.isOwner(curruser)) {
                 markCompleteButton.setVisibility(View.GONE);
             }
 
@@ -257,7 +259,7 @@ public class TaskActivity extends AppCompatActivity {
             if (db.taskExists(intent.getStringExtra("UUID"))) {
                 task = db.getTask(intent.getStringExtra("UUID"));
                 getTaskDetails(task);
-                if (!"Assigned".equals(task.getStatus()) || !task.isOwner(curruser)) {
+                if (!"Assigned".equals(db.getTaskStatus(task)) || !task.isOwner(curruser)) {
                     markCompleteButton.setVisibility(View.GONE);
                 }else {markCompleteButton.setVisibility(View.VISIBLE);}
             }
@@ -326,13 +328,20 @@ public class TaskActivity extends AppCompatActivity {
         String status = db.getTaskStatus(task);
 
         // Sets the dropdown menu, puts default position as the current task status
+        String[] dropdownItems = {"Change Task Status", Task.STATUS_REQUESTED, Task.STATUS_DONE};
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_dropdown_item, Task.changeableStatuses);
+                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        int spinnerpos = adapter.getPosition(status);
+
         spinner.setAdapter(adapter);
-        spinner.setSelection(spinnerpos);
+        spinner.setSelection(0);
+        if (status==Task.STATUS_BIDDED) {
+            spinner.setVisibility(View.VISIBLE);
+        } else {
+            spinner.setVisibility(View.GONE);
+        }
 
         editTitleText = (EditText) findViewById(R.id.editTitle);
         editDescText = (EditText) findViewById(R.id.editDescription);
@@ -361,7 +370,7 @@ public class TaskActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         modifyDetails (task,editTitleText,editDescText,spinner);
                         finish();
-                        markCompleteButton.setVisibility(View.GONE);
+//                        markCompleteButton.setVisibility(View.GONE);
                     }
                 });
 
@@ -399,6 +408,10 @@ public class TaskActivity extends AppCompatActivity {
         task.setDescription(editedDesc);
         task.setStatus(newstatus);
 
+        if (newstatus.equals(Task.STATUS_REQUESTED)) {
+            task.deleteAssignee();
+        }
+
         db.updateTask(task);
         finish();
     }
@@ -413,5 +426,11 @@ public class TaskActivity extends AppCompatActivity {
                 task.setLocation(location);
             }
         }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        
     }
 }

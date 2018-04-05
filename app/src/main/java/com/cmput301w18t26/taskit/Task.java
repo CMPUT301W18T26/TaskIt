@@ -63,7 +63,11 @@ public class Task {
      */
     private Date timestamp;
 
-    public static String[] statuses = {"Bidded","Requested","Assigned","Done"};
+    public static String STATUS_REQUESTED = "Requested";
+    public static String STATUS_BIDDED = "Bidded";
+    public static String STATUS_ASSIGNED = "Assigned";
+    public static String STATUS_DONE = "Done";
+
     public static String[] changeableStatuses = {"My Requests", "with bids" , "I've assigned", "Done"};
 
     public void setDate(Date date) {
@@ -163,6 +167,8 @@ public class Task {
     public void setAssignee(User assignee) {
         this.assignee = assignee.getUsername();
     }
+
+    public void deleteAssignee() {assignee=null;}
 
     public boolean isAssignee(String s) {
         return hasAssignee() && this.assignee.equals(s);

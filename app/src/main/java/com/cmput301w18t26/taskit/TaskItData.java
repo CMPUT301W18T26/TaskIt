@@ -492,15 +492,15 @@ public class TaskItData {
 
     public String getTaskStatus(Task t) {
         String status;
-        status = "Requested";
-        if (t.getStatus().equals("Done")) {
-            status = "Done";
+        status = Task.STATUS_REQUESTED;
+        if (t.getStatus().equals(Task.STATUS_DONE)) {
+            status = Task.STATUS_DONE;
         } else if (t.hasAssignee()) {
-            status = "Assigned";
+            status = Task.STATUS_ASSIGNED;
         } else {
             for (Bid b : bids.getBids()) {
                 if (b.isParentTask(t)) {
-                    status = "Bidded";
+                    status = Task.STATUS_BIDDED;
                     break;
                 }
             }
@@ -615,6 +615,10 @@ public class TaskItData {
 
     public long getNotificationCount() {
         return sync.getNewBids();
+    }
+
+    public void resetNotificationCount() {
+        sync.setNewBids(0);
     }
 
 }

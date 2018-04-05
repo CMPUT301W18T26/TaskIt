@@ -202,7 +202,6 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         adapter.setShowAssignee(showAssignee);
         adapter.addAll(taskList.getTasks());
         adapter.notifyDataSetChanged();
-
     }
 
     private void setupTabs(){
@@ -275,6 +274,12 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         listOfTasks2.setOnItemClickListener(new ListClickHandler());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getFreshTaskList();
+        updateArrayAdapter();
+    }
     public void getFreshTaskList() {
         Log.d("ListActivity","FreshTasjList with filters: "+filter+", "+dropDownFilter);
         switch (filter) {

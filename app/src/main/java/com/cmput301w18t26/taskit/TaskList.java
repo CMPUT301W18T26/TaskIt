@@ -39,6 +39,14 @@ public class TaskList {
         }
     }
 
+    public boolean hasTask(String UUID) {
+        if (getIndex(UUID) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Find tasks in tasklist using their UUIDs
      * @param task the task to check for membership

@@ -104,6 +104,7 @@ public class HomeActivity extends AppCompatActivity {
         myTasksButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
+                db.resetNotificationCount();
                 taskList.putExtra(TYPE, "Requested Tasks");
                 taskList.putExtra(FILTER, "myOwnedTasks");
                 startActivity(taskList);

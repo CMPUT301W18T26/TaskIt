@@ -587,6 +587,7 @@ public class TaskItServer {
                 activeNetwork.isConnectedOrConnecting();
 
         /**
+         * todo: delete this if not needed
         // String command = "ping -c 1 google.com";
         String command = "timeout 0.2 ping -c 1 cmput301.softwareprocess.es";
 
