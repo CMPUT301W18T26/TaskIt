@@ -3,7 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp">
 
     <TextView
         android:id="@+id/question"
@@ -13,6 +17,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:text="Would you like to accept or decline this bid?"
+        android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 
@@ -21,9 +26,10 @@
         style="@style/Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/question"
-        android:layout_below="@+id/question"
-        android:layout_marginStart="38dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="86dp"
         android:text="Accept" />
 
     <Button
@@ -31,8 +37,8 @@
         style="@style/Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/question"
-        android:layout_below="@+id/question"
-        android:layout_marginEnd="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/acceptbid"
+        android:layout_marginEnd="40dp"
         android:text="Decline" />
 </RelativeLayout>

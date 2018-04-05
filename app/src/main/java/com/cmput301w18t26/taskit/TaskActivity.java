@@ -15,8 +15,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Date;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -43,6 +41,8 @@ public class TaskActivity extends AppCompatActivity {
     private TaskItData db;
     private Task task;
     private Intent intent;
+    Button markCompleteButton;
+    private User curruser;
 
     /**
      * sets button usage and intent passing
@@ -57,12 +57,12 @@ public class TaskActivity extends AppCompatActivity {
         if (type.equals("Edit")){
             task = db.getTask(intent.getStringExtra("UUID"));
             Log.d("contentview","should be modify now");
-            setContentView(R.layout.add_modify_task);
+            setContentView(R.layout.modify_task);
             editTaskDetails(task);
             setResult(RESULT_OK);
         }
         else if (type.equals("New Task")) {
-            setContentView(R.layout.edittask);
+            setContentView(R.layout.newtask);
             Button addLocationButton = (Button) findViewById(R.id.add_location);
             Button createTaskButton = (Button) findViewById(R.id.createtask);
 
@@ -88,7 +88,7 @@ public class TaskActivity extends AppCompatActivity {
             });
         } else {
             setContentView(R.layout.viewtask);
-            final Button markCompleteButton = (Button) findViewById(R.id.markcomplete);
+            markCompleteButton = (Button) findViewById(R.id.markcomplete);
             Button bid = (Button) findViewById(R.id.bidTask);
             Button deleteTaskButton = (Button) findViewById(R.id.deletetask);
             Button editTaskButton = (Button) findViewById(R.id.edittask);
@@ -96,8 +96,8 @@ public class TaskActivity extends AppCompatActivity {
 
             task = db.getTask(intent.getStringExtra("UUID"));
             getTaskDetails(task);
-            User curruser = db.getCurrentUser();
-            if (!"Assigned".equals(task.getStatus())) {
+            curruser = db.getCurrentUser();
+            if (!"Assigned".equals(task.getStatus()) || !task.isOwner(curruser)) {
                 markCompleteButton.setVisibility(View.GONE);
             }
 
@@ -257,7 +257,7 @@ public class TaskActivity extends AppCompatActivity {
             if (db.taskExists(intent.getStringExtra("UUID"))) {
                 task = db.getTask(intent.getStringExtra("UUID"));
                 getTaskDetails(task);
-                if (!"Assigned".equals(task.getStatus())) {
+                if (!"Assigned".equals(task.getStatus()) || !task.isOwner(curruser)) {
                     markCompleteButton.setVisibility(View.GONE);
                 }else {markCompleteButton.setVisibility(View.VISIBLE);}
             }
@@ -361,6 +361,7 @@ public class TaskActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         modifyDetails (task,editTitleText,editDescText,spinner);
                         finish();
+                        markCompleteButton.setVisibility(View.GONE);
                     }
                 });
 
