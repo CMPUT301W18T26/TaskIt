@@ -70,6 +70,9 @@ public class TaskItFile {
         context = c;
     }
 
+    public Context getContext() {
+        return context;
+    }
     /**
      * Create singleton if not already created.
      * @return singleton instance of this class

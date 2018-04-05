@@ -101,7 +101,7 @@ public class TaskItSync {
      */
     public void sync() {
         try {
-            if (server.isNetworkConnected()) {
+            if (server.isNetworkConnected(fs.getContext())) {
                 Log.d("TaskItSync", "server connected");
                 localUsers.clear();
                 localTasks.clear();

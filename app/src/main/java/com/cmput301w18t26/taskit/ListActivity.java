@@ -98,7 +98,8 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         if(filter.equals("allTasks")){
             spinner.setVisibility(View.GONE);
             tabwidget.setVisibility(View.GONE);
-            listOfTasks.setVisibility(View.VISIBLE);
+            listOfTasks.setVisibility(View.GONE);
+            listOfTasks2.setVisibility(View.VISIBLE);
         }
 
 

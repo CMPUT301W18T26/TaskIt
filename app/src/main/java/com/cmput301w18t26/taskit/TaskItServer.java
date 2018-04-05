@@ -2,6 +2,7 @@ package com.cmput301w18t26.taskit;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -575,17 +576,24 @@ public class TaskItServer {
         TaskItServer.setupServerJob setup = new TaskItServer.setupServerJob();
         setup.execute();
     }
-    public boolean isNetworkConnected() throws InterruptedException, IOException {
+    public static boolean isNetworkConnected(Context c) throws InterruptedException, IOException {
+        long startTime = System.nanoTime();
+
+        ConnectivityManager cm =
+                (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean result = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        /**
         // String command = "ping -c 1 google.com";
         String command = "timeout 0.2 ping -c 1 cmput301.softwareprocess.es";
-        long startTime = System.nanoTime();
+
         boolean result = (Runtime.getRuntime().exec (command).waitFor() == 0);
-        long endTime = System.nanoTime();
-
-        long duration = (endTime - startTime);
+        **/
+        long duration = (System.nanoTime() - startTime);
         Log.d("TaskItServer", "Server ping time "+Long.toString(duration/1000000)+" ms");
-
-
         return result;
     }
 
