@@ -77,12 +77,12 @@
         android:layout_marginStart="16dp"
         android:layout_weight="1"
         android:text="@string/add_location"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/add_photos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/add_photos"
         style="@style/Button"
         android:layout_width="match_parent"
         android:layout_height="49dp"

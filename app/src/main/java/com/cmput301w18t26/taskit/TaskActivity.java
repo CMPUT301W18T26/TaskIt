@@ -1,9 +1,18 @@
 package com.cmput301w18t26.taskit;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +25,9 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -27,10 +39,13 @@ import java.util.concurrent.TimeUnit;
  * Contains methods for creating, editing and deleting tasks.
  * Also contains methods for view the task bids and to bid
  */
-public class TaskActivity extends AppCompatActivity {
+public class TaskActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     protected static final String TYPE = "type";
     protected static final Integer FOR_RETURN_LOCATION = 1;
+    protected static final Integer FOR_RETURN_CAMERA_PHOTOS = 2;
+    protected static final Integer FOR_RETURN_GALLERY_PHOTOS = 3;
+    protected static final Integer MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 4;
 
     private TaskItData db;
     private Task task;
@@ -63,6 +78,7 @@ public class TaskActivity extends AppCompatActivity {
     private Button confirmEdits;
     private Spinner spinner;
     private Button cancelEdits;
+    private Button addPhotos;
 
     /**
      * sets button usage and intent passing
@@ -201,14 +217,47 @@ public class TaskActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Retrieve data from Activity called by startActivityForResult
+     * @param requestCode code provided on call to startActivityForResult
+     * @param resultCode  result provided by called activity
+     * @param data intent containing result data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FOR_RETURN_LOCATION) {
-            if (resultCode == RESULT_OK) {
+        if (requestCode == FOR_RETURN_LOCATION && resultCode == RESULT_OK) {
                 Location location = new Location("");
                 location.setLatitude(data.getDoubleExtra("latitude",0));
                 location.setLongitude(data.getDoubleExtra("longitude",0));
                 task.setLocation(location);
+        } else if (requestCode == FOR_RETURN_CAMERA_PHOTOS && resultCode == RESULT_OK) {
+            if (data != null) {
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                Log.i("Bitmap size", Integer.toString(imageBitmap.getByteCount()));
+            }
+        } else if (requestCode == FOR_RETURN_GALLERY_PHOTOS && resultCode == RESULT_OK) {
+            if (data != null) {
+                ArrayList<Uri> mArrayUri;
+                ArrayList<Bitmap> mBitmapsSelected;
+                // TODO credit https://guides.codepath.com/android/Accessing-the-Camera-and-Stored-Media
+                if (data.getClipData() != null) {
+                    ClipData mClipData = data.getClipData();
+                    mArrayUri = new ArrayList<>();
+                    mBitmapsSelected = new ArrayList<>();
+                    for (int i = 0; i < mClipData.getItemCount(); i++) {
+                        ClipData.Item item = mClipData.getItemAt(i);
+                        Uri uri = item.getUri();
+                        mArrayUri.add(uri);
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                            mBitmapsSelected.add(bitmap);
+                            Log.i("Bitmap size",Integer.toString(bitmap.getByteCount()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            mArrayUri.remove(uri);
+                        }
+                    }
+                }
             }
         }
     }
@@ -223,6 +272,9 @@ public class TaskActivity extends AppCompatActivity {
         refreshView();
     }
 
+    /**
+     * depending on the state of the Activity, provide different views
+     */
     private void setupView() {
         if (intentState.equals("Edit")) {
             setContentView(R.layout.modify_task);
@@ -233,6 +285,9 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * define UI elements with Views
+     */
     private void setupUIElements() {
         addLocationButton = (Button) findViewById(R.id.add_location);
         createTaskButton = (Button) findViewById(R.id.createtask);
@@ -248,9 +303,13 @@ public class TaskActivity extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.spinner);
         confirmEdits = (Button) findViewById(R.id.confirmedit);
         cancelEdits = (Button) findViewById(R.id.cancelmodify);
+        addPhotos = (Button) findViewById(R.id.add_photos);
 
     }
 
+    /**
+     * provide instances of OnClickListeners for all of the UI elements
+     */
     private void setupListeners() {
         if (addLocationButton != null) {
             Log.d("TaskActivity","addLocationButton found, creating listener");
@@ -470,8 +529,23 @@ public class TaskActivity extends AppCompatActivity {
                 });
             }
         }
+
+        if (addPhotos != null) {
+            Log.d("TaskActivity","addPhotos found, creating listener");
+            addPhotos.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (checkPermission()) {
+                        selectImage();
+                    }
+                }
+            });
+        }
     }
 
+    /**
+     *
+     */
     private void getFreshData() {
         if (intentState.equals("Edit")) {
             task = db.getTask(intentTaskUUID);
@@ -482,6 +556,9 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *
+     */
     private void refreshView() {
         if (intentState.equals("Edit")) {
             editTaskDetails();
@@ -501,6 +578,86 @@ public class TaskActivity extends AppCompatActivity {
                 deleteTaskButton.setVisibility(View.GONE);
                 editTaskButton.setVisibility(View.GONE);
                 markCompleteButton.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    /**
+     * check permission for storage access on device. If permission not granted ask for permission
+     * @return true/false if permission granted/not granted
+     */
+    private boolean checkPermission(){
+        int permission = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED){
+            String[] permissionStrings = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            ActivityCompat.requestPermissions(TaskActivity.this,
+                    permissionStrings,
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+            return false;
+
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Display a menu asking whether the user would like to take a photo or choose from gallery
+     * adapted from http://www.theappguruz.com/blog/android-take-photo-camera-gallery-code-sample
+     * //TODO put this acknowledge in wiki
+     */
+    private void selectImage() {
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                    cameraIntent();
+                } else if (items[item].equals("Choose from Library")) {
+                    galleryIntent();
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    /**
+     * start activity for getting photos from camera
+     */
+    private void cameraIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null){
+            startActivityForResult(takePictureIntent, FOR_RETURN_CAMERA_PHOTOS);
+        }
+    }
+
+    /**
+     * start activity for getting photos from phone storage
+     */
+    private void galleryIntent() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(intent, FOR_RETURN_GALLERY_PHOTOS);
+    }
+
+    /**
+     * Callback method part of ActivityCompat.OnRequestPermissionResultCallback interface
+     * reports the result of the request for permissions
+     * @param requestCode code to identify the request by
+     * @param permissions list of permissions requested
+     * @param grantResults list of results corresponding to the permissions
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                addPhotos.performClick();
             }
         }
     }
