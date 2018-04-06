@@ -241,26 +241,14 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
             }
         } else if (requestCode == FOR_RETURN_GALLERY_PHOTOS && resultCode == RESULT_OK) {
             if (data != null) {
-                ArrayList<Uri> mArrayUri;
-                ArrayList<Bitmap> mBitmapsSelected;
                 // TODO credit https://guides.codepath.com/android/Accessing-the-Camera-and-Stored-Media
-                if (data.getClipData() != null) {
-                    ClipData mClipData = data.getClipData();
-                    mArrayUri = new ArrayList<>();
-                    mBitmapsSelected = new ArrayList<>();
-                    for (int i = 0; i < mClipData.getItemCount(); i++) {
-                        ClipData.Item item = mClipData.getItemAt(i);
-                        Uri uri = item.getUri();
-                        mArrayUri.add(uri);
-                        try {
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                            mBitmapsSelected.add(bitmap);
-                            Log.i("Bitmap size",Integer.toString(bitmap.getByteCount()));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            mArrayUri.remove(uri);
-                        }
-                    }
+                Uri photoUri = data.getData();
+                // Do something with the photo based on Uri
+                try {
+                    Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                    // Load the selected image into a preview
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -646,7 +634,6 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
     private void galleryIntent() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(intent, FOR_RETURN_GALLERY_PHOTOS);
     }
 
