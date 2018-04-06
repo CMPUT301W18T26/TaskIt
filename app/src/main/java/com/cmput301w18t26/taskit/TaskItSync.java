@@ -53,6 +53,9 @@ public class TaskItSync {
     private BidList localBids;
     private BidList remoteBids;
 
+    private PhotoList localPhotos;
+    private PhotoList remotePhotos;
+
     public long newBids = 0;
 
     /**
@@ -77,6 +80,9 @@ public class TaskItSync {
 
         remoteBids = new BidList();
         localBids = new BidList();
+
+        localPhotos = new PhotoList();
+        remotePhotos = new PhotoList();
 
         try {
             this.fs = TaskItFile.getInstance();
@@ -109,8 +115,11 @@ public class TaskItSync {
                 remoteUsers.clear();
                 remoteTasks.clear();
                 remoteBids.clear();
+                localPhotos.clear();
+                remotePhotos.clear();
 
-                fs.loadAllFromFile(localUsers, localTasks, localBids);
+                fs.loadAllFromFile(localUsers, localTasks, localBids, localPhotos);
+                // Todo: add photos from here on out
                 server.loadAllFromServer(remoteUsers, remoteTasks, remoteBids);
 
                 Log.d("TaskItSync", "Current user: " + currentUser);

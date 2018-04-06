@@ -55,6 +55,11 @@ public class TaskItFile {
     private static final String bidDirName = "bids";
 
     /**
+     * sub directory for bid objects
+     */
+    private static final String photoDirName = "photos";
+
+    /**
      * State variables
      */
     public static final int USER = 1;
@@ -151,6 +156,15 @@ public class TaskItFile {
         for (int i = 0; i < files.length; i++) {
             files[i].delete();
         }
+
+        // photo handling
+        dirName = getDirname(PHOTO);
+        dir = new File(dirName);
+        files = dir.listFiles();
+
+        for (int i = 0; i < files.length; i++) {
+            files[i].delete();
+        }
     }
 
     /**
@@ -159,7 +173,7 @@ public class TaskItFile {
      * @param t tasklist to load task objects into
      * @param b bidlist  to load bid  objects into
      */
-    public void loadAllFromFile(UserList u, TaskList t, BidList b) {
+    public void loadAllFromFile(UserList u, TaskList t, BidList b, PhotoList p) {
         String dirName;
         File dir;
         String[] filenames;
@@ -199,6 +213,21 @@ public class TaskItFile {
             filename = dirName + "/" + filenames[i];
             b.addBid((Bid) loadFromFile(filename, bidType));
         }
+
+        // photo handling
+        dirName = getDirname(PHOTO);
+        dir = new File(dirName);
+        filenames = dir.list();
+        Type photoType = new TypeToken<Photo>() {
+        }.getType();
+        for (int i = 0; i < filenames.length; i++) {
+            filename = dirName + "/" + filenames[i];
+            p.addPhoto((Photo) loadFromFile(filename, photoType));
+        }
+        for (Photo photo:p.getPhotos()) {
+            photo.ConvertFromString();
+            photo.clearStringified();
+        }
     }
 
     /**
@@ -216,7 +245,10 @@ public class TaskItFile {
             dirPath += "/" + taskDirName;
         } else if (model == BID) {
             dirPath += "/" + bidDirName;
+        } else if (model == PHOTO) {
+            dirPath += "/" + photoDirName;
         }
+
         File file = new File(dirPath);
         file.mkdirs();
         return dirPath;

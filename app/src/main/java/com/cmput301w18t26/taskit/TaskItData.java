@@ -90,6 +90,7 @@ public class TaskItData {
         this.users = new UserList();
         this.tasks = new TaskList();
         this.bids = new BidList();
+        this.photos = new PhotoList();
 
         try {
             // This will fail if no context is set in the TaskItFile singleton
@@ -201,7 +202,7 @@ public class TaskItData {
     /**
      * TASK METHODS
      */
-    public void addTask(Task task) {
+    public String addTask(Task task) {
         // Add metadata for sync and retrieval
         task.setUUID(UUID.randomUUID().toString());
         task.setTimestamp(new Date());
@@ -212,6 +213,7 @@ public class TaskItData {
         fs.addTaskFile(task);
 
         sync.sync();
+        return task.getUUID();
     }
 
     public void deleteTask(Task task) {
@@ -304,10 +306,14 @@ public class TaskItData {
         photo.setUUID(UUID.randomUUID().toString());
         photo.setTimestamp(new Date());
 
+
         photos.addPhoto(photo);
 
+        photo.Stringify();
         // Add the photo to filesystem
         fs.addPhotoFile(photo);
+        photo.clearStringified();
+
 
         sync.sync();
     }
@@ -651,7 +657,8 @@ public class TaskItData {
         users.clear();
         tasks.clear();
         bids.clear();
-        fs.loadAllFromFile(users, tasks, bids);
+        photos.clear();
+        fs.loadAllFromFile(users, tasks, bids, photos);
     }
 
     public long getNotificationCount() {

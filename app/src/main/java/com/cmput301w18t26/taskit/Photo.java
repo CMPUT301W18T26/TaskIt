@@ -2,6 +2,8 @@ package com.cmput301w18t26.taskit;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
 
 
 import java.io.ByteArrayInputStream;
@@ -18,6 +20,7 @@ public class Photo {
 
 
     private Bitmap photo;
+    private String photoString;
 
     /**
      * The UUID of the task this bid was placed on.
@@ -107,12 +110,51 @@ public class Photo {
         // Resize
         int w = photo.getWidth();
         int h = photo.getHeight();
-        int dest_w = 500;
+        Log.d("Photo","Photo (width,height) = ("+Integer.toString(w)+","+Integer.toString(h)+")");
+        int dest_w = 100;
         int dest_h = (dest_w/w)*h;
 
         photo = Bitmap.createScaledBitmap(photo, dest_w, dest_h, false);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.PNG, 100, out);
+        photo.compress(Bitmap.CompressFormat.JPEG, 60, out);
         photo = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+    }
+
+    public int getFilesize() {
+        return photo.getByteCount();
+    }
+
+    // Todo: cite https://stackoverflow.com/questions/41097432/send-jpg-images-to-server-json
+    public void Stringify() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String temp = null;
+        try {
+            System.gc();
+            Log.d("Photo", "Photo being stringified to "+Integer.toString(b.length)+" bytes");
+            temp = Base64.encodeToString(b, Base64.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } catch (OutOfMemoryError e) {
+            Log.d("Photo", "Photo too large to stringify");
+        }
+        photoString = temp;
+    }
+    // Todo: cite https://stackoverflow.com/questions/41097432/send-jpg-images-to-server-json
+    public void ConvertFromString() {
+        byte[] b;
+        try {
+            System.gc();
+            b = Base64.decode(photoString, Base64.DEFAULT);
+            photo = BitmapFactory.decodeByteArray(b, 0, b.length);
+            Log.d("Photo", "Photo after convertfromstring to "+Integer.toString(photo.getByteCount())+" bytes");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void clearStringified() {
+        photoString = null;
     }
 }

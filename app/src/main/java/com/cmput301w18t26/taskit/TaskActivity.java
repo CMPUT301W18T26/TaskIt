@@ -50,6 +50,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
     private TaskItData db;
     private Task task;
     private Intent intent;
+    private PhotoList photos = new PhotoList();
 
     private User curruser;
     private String intentState;
@@ -130,7 +131,15 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
         task.setDate(new Date());
         task.setStatus("Requested");
         task.setOwner(db.getCurrentUser().getOwner());
-        db.addTask(task);
+        String taskUUID = db.addTask(task);
+        for (Photo p: photos.getPhotos()) {
+            Log.i("TaskActivity","Photo size before "+Integer.toString(p.getFilesize()));
+            p.reduceFilesize();
+            Log.i("TaskActivity","Photo size after "+Integer.toString(p.getFilesize()));
+            p.setParentTask(taskUUID);
+            p.setOwner(db.getCurrentUser());
+            db.addPhoto(p);
+        }
     }
 
     /**
@@ -235,9 +244,8 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
                 Photo p = new Photo();
                 p.setPhoto(imageBitmap);
-                p.reduceFilesize();
-                db.addPhoto(p);
-                Log.i("Bitmap size", Integer.toString(imageBitmap.getByteCount()));
+                photos.addPhoto(p);
+                Log.i("Bitmap size before", Integer.toString(imageBitmap.getByteCount()));
             }
         } else if (requestCode == FOR_RETURN_GALLERY_PHOTOS && resultCode == RESULT_OK) {
             if (data != null) {
