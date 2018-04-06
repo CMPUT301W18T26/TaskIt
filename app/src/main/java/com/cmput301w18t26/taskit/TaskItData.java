@@ -64,6 +64,11 @@ public class TaskItData {
     private BidList bids;
 
     /**
+     * The bids for this application
+     */
+    private PhotoList photos;
+
+    /**
      * The user that is currently logged in to the application.
      */
     private User currentUser;
@@ -287,6 +292,42 @@ public class TaskItData {
 
         // Update by re-adding to the filesystem
         fs.addBidFile(bid);
+
+        sync.sync();
+    }
+
+    /**
+     * Photo METHODS
+     */
+    public void addPhoto(Photo photo) {
+        // Add metadata for sync and retrieval
+        photo.setUUID(UUID.randomUUID().toString());
+        photo.setTimestamp(new Date());
+
+        photos.addPhoto(photo);
+
+        // Add the photo to filesystem
+        fs.addPhotoFile(photo);
+
+        sync.sync();
+    }
+
+    public void deletePhoto(Photo photo) {
+        photos.deletePhoto(photo);
+
+        // Delete from filesystem
+        fs.deletePhotoFile(photo);
+
+        sync.sync();
+    }
+
+
+    public void updatePhoto (Photo photo) {
+        // Update metadata
+        photo.setTimestamp(new Date());
+
+        // Update by re-adding to the filesystem
+        fs.addPhotoFile(photo);
 
         sync.sync();
     }
@@ -620,6 +661,7 @@ public class TaskItData {
     public void resetNotificationCount() {
         sync.setNewBids(0);
     }
+
 
 
 }

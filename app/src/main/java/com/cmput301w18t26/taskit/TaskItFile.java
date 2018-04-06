@@ -60,6 +60,7 @@ public class TaskItFile {
     public static final int USER = 1;
     public static final int TASK = 2;
     public static final int BID = 3;
+    public static final int PHOTO = 4;
 
     /**
      * Android requires a context to determine file path
@@ -257,6 +258,18 @@ public class TaskItFile {
         return bidFile;
     }
 
+    /**
+     * Given a photo, return its full filename.
+     * Use the photo's UUID.
+     * @param photo user whose filename we wish returned
+     * @return the filename for the given photo.
+     */
+    public static String getPhotoFilename(Photo photo) {
+        String photoFile;
+        photoFile = getDirname(PHOTO) + "/" + photo.getUUID();
+        return photoFile;
+    }
+
     // TODO: cite the following in wiki
     // https://stackoverflow.com/questions/1889188/how-to-create-files-hierarchy-in-androids-data-data-pkg-files-directory
 
@@ -355,5 +368,36 @@ public class TaskItFile {
         file.delete();
     }
 
+    // https://stackoverflow.com/questions/1889188/how-to-create-files-hierarchy-in-androids-data-data-pkg-files-directory
+    /**
+     * Write the given photo object to file
+     * @param photo the photo to write to file
+     */
+    public void addPhotoFile(Photo photo) {
+        String photoFile = getPhotoFilename(photo);
+
+        try {
+            OutputStream fos = new FileOutputStream(photoFile, false);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(photo, out);
+            out.flush();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Delete the file associated with this photo.
+     * @param photo the photo object whose file we wish to delete.
+     */
+    public void deletePhotoFile(Photo photo) {
+        String filename = getPhotoFilename(photo);
+        File file = new File(filename);
+        file.delete();
+    }
 }
 

@@ -1,8 +1,11 @@
 package com.cmput301w18t26.taskit;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.Date;
 
 /**
@@ -11,6 +14,8 @@ import java.util.Date;
  * @see PhotoList
  */
 public class Photo {
+
+
 
     private Bitmap photo;
 
@@ -33,6 +38,14 @@ public class Photo {
      * Task owner username.
      */
     private String owner;
+
+    public Bitmap getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Bitmap photo) {
+        this.photo = photo;
+    }
 
     public void setOwner(String o) {
         this.owner = o;
@@ -90,4 +103,16 @@ public class Photo {
         this.parentTask = parentTask.getUUID();
     }
 
+    public void reduceFilesize() {
+        // Resize
+        int w = photo.getWidth();
+        int h = photo.getHeight();
+        int dest_w = 500;
+        int dest_h = (dest_w/w)*h;
+
+        photo = Bitmap.createScaledBitmap(photo, dest_w, dest_h, false);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.PNG, 100, out);
+        photo = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+    }
 }

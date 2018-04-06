@@ -233,6 +233,10 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
         } else if (requestCode == FOR_RETURN_CAMERA_PHOTOS && resultCode == RESULT_OK) {
             if (data != null) {
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                Photo p = new Photo();
+                p.setPhoto(imageBitmap);
+                p.reduceFilesize();
+                db.addPhoto(p);
                 Log.i("Bitmap size", Integer.toString(imageBitmap.getByteCount()));
             }
         } else if (requestCode == FOR_RETURN_GALLERY_PHOTOS && resultCode == RESULT_OK) {
