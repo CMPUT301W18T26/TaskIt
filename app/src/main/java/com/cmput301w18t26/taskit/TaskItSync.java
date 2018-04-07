@@ -159,7 +159,7 @@ public class TaskItSync {
                         Log.d("TaskItSync", "remote is most current");
                         fs.deleteUserFile(lUser);
                         fs.addUserFile(rUser);
-                    } else { // local is current
+                    } else if (rUser.getTimestamp().before(lUser.getTimestamp())) { // local is current
                         Log.d("TaskItSync", "local is current");
                         server.delUser(rUser);
                         server.addUser(lUser);
@@ -180,7 +180,7 @@ public class TaskItSync {
                         Log.d("TaskItSync", "remote is most current");
                         fs.deleteUserFile(lUser);
                         fs.addUserFile(rUser);
-                    } else { // local is current
+                    } else if (rUser.getTimestamp().before(lUser.getTimestamp())) { // local is current
                         Log.d("TaskItSync", "local is most current");
                         server.delUser(rUser);
                         server.addUser(lUser);
@@ -233,7 +233,7 @@ public class TaskItSync {
                         fs.deleteTaskFile(lTask);
                         fs.addTaskFile(rTask);
                         Log.d("TaskItSync", "update local");
-                    } else { // local is current
+                    } else if (rTask.getTimestamp().before(lTask.getTimestamp())) { // local is current
                         server.delTask(rTask);
                         server.addTask(lTask);
                         Log.d("TaskItSync", "update remote");
@@ -252,7 +252,7 @@ public class TaskItSync {
                         fs.deleteTaskFile(lTask);
                         fs.addTaskFile(rTask);
                         Log.d("TaskItSync", "update local");
-                    } else { // local is current
+                    } else if (rTask.getTimestamp().before(lTask.getTimestamp())) { // local is current
                         server.delTask(rTask);
                         server.addTask(lTask);
                         Log.d("TaskItSync", "update remote");
@@ -318,7 +318,7 @@ public class TaskItSync {
                         fs.deleteBidFile(lBid);
                         fs.addBidFile(rBid);
                         Log.d("TaskItSync", "update local");
-                    } else { // local is current
+                    } else if (rBid.getTimestamp().before(lBid.getTimestamp())) { // local is current
                         server.delBid(rBid);
                         server.addBid(lBid);
                         Log.d("TaskItSync", "update remote");
@@ -337,7 +337,7 @@ public class TaskItSync {
                         fs.deleteBidFile(lBid);
                         fs.addBidFile(rBid);
                         Log.d("TaskItSync", "update local");
-                    } else { // local is current
+                    } else if (rBid.getTimestamp().before(lBid.getTimestamp())) { // local is current
                         server.delBid(rBid);
                         server.addBid(lBid);
                         Log.d("TaskItSync", "update server");

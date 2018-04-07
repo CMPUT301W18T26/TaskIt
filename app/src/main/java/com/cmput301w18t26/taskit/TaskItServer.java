@@ -299,7 +299,7 @@ public class TaskItServer {
             BidList bids = new BidList();
 
             Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX_TaskItMain).addType(TYPE_BID).build();
-
+            Log.d("TaskItServer", "bidlist search uri: "+search.getURI());
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {

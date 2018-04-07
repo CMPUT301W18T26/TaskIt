@@ -267,7 +267,6 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
         super.onResume();
         Log.d("TaskActivity", "Resuming...");
         db.resetNotificationCount();
-        db.sync();
         getFreshData();
         refreshView();
     }
@@ -547,6 +546,16 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
      *
      */
     private void getFreshData() {
+        Log.d("TaskActivity", "TaskUUID: "+intentTaskUUID);
+
+        if (!db.taskExists(intent.getStringExtra("UUID"))) {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         if (intentState.equals("Edit")) {
             task = db.getTask(intentTaskUUID);
         } else if (intentState.equals("New Task")) {

@@ -49,7 +49,6 @@ public class BidActivity extends AppCompatActivity {
                 bid.setDate(new Date());
                 Double actualamount = bid.getAmount();
                 db.addBid(bid);
-                task.setStatus("Bidded");
                 finish();
 
             }
