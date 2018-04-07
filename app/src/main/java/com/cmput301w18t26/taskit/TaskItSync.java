@@ -120,7 +120,7 @@ public class TaskItSync {
 
                 fs.loadAllFromFile(localUsers, localTasks, localBids, localPhotos);
                 // Todo: add photos from here on out
-                server.loadAllFromServer(remoteUsers, remoteTasks, remoteBids);
+                server.loadAllFromServer(remoteUsers, remoteTasks, remoteBids, remotePhotos);
 
                 Log.d("TaskItSync", "Current user: " + currentUser);
                 Log.d("TaskItSync", "syncing... fs count: " + String.valueOf(localUsers.getUserCount()));
@@ -128,6 +128,7 @@ public class TaskItSync {
                 syncUsers();
                 syncTasks();
                 syncBids();
+                syncPhotos();
             } else {
                 Log.d("TaskItSync", "server not connected");
             }
@@ -377,6 +378,79 @@ public class TaskItSync {
                     fs.addBidFile(currBid);
                     newBids += 1;
                     Log.d("TaskItSync", "adding bid to local");
+                }
+            }
+        }
+    }
+
+    /**
+     * Given the data in the local/remote PhotoLists
+     * adds/Removes objects from the filesystem and server
+     * based on the cases mentioned at the head of this class file.
+     */
+    private void syncPhotos() {
+        Photo currPhoto;
+        Log.d("TaskItSync", "Current user: "+ currentUser);
+        Log.d("TaskItSync", "Syncing photos");
+        for (int i=0;i<localPhotos.getPhotoCount(); i++) {
+            currPhoto = localPhotos.getPhoto(i);
+            Log.d("TaskItSync", "current photo "+currPhoto.getUUID());
+
+            if (currPhoto.isOwner(currentUser)) { // Owner's file
+                if (!remotePhotos.hasPhoto(currPhoto)) { // Local, not remote
+                    server.addPhoto(currPhoto);
+                    Log.d("TaskItSync", "adding photo to server");
+                } else { // In both
+                    Photo rPhoto = remotePhotos.getPhoto(currPhoto);
+                    Photo lPhoto = localPhotos.getPhoto(currPhoto);
+                    if (rPhoto.getTimestamp().after(lPhoto.getTimestamp())) { // remote is current
+                        fs.deletePhotoFile(lPhoto);
+                        fs.addPhotoFile(rPhoto);
+                        Log.d("TaskItSync", "update local");
+                    } else if (rPhoto.getTimestamp().before(lPhoto.getTimestamp())) { // local is current
+                        server.delPhoto(rPhoto);
+                        server.addPhoto(lPhoto);
+                        Log.d("TaskItSync", "update remote");
+                    }
+                    // remove from remote list (so as not to duplicate work)
+                    remotePhotos.deletePhoto(currPhoto);
+                }
+            } else { // Others file
+                if (!remotePhotos.hasPhoto(currPhoto)) { // Local, not remote
+                    fs.deletePhotoFile(currPhoto);
+                    Log.d("TaskItSync", "deleting photo from local");
+                } else { // In both
+                    Photo rPhoto = remotePhotos.getPhoto(currPhoto);
+                    Photo lPhoto = localPhotos.getPhoto(currPhoto);
+                    if (rPhoto.getTimestamp().after(lPhoto.getTimestamp())) { // remote is current
+                        fs.deletePhotoFile(lPhoto);
+                        fs.addPhotoFile(rPhoto);
+                        Log.d("TaskItSync", "update local");
+                    } else if (rPhoto.getTimestamp().before(lPhoto.getTimestamp())) { // local is current
+                        server.delPhoto(rPhoto);
+                        server.addPhoto(lPhoto);
+                        Log.d("TaskItSync", "update server");
+                    }
+                    // remove from remote list (so as not to duplicate work)
+                    remotePhotos.deletePhoto(currPhoto);
+                }
+            }
+
+        }
+
+        for (int i=0;i<remotePhotos.getPhotoCount(); i++) {
+            currPhoto = remotePhotos.getPhoto(i);
+            Log.d("TaskItSync", "current photo "+currPhoto.getUUID());
+
+            if (currPhoto.isOwner(currentUser)) { // Owner's file
+                if (!localPhotos.hasPhoto(currPhoto)) { // Remote, not local
+                    server.delPhoto(currPhoto);
+                    Log.d("TaskItSync", "deleting photo from server");
+                }
+            } else { // Others file
+                if (!localPhotos.hasPhoto(currPhoto)) { // Remote, not local
+                    fs.addPhotoFile(currPhoto);
+                    Log.d("TaskItSync", "adding photo to local");
                 }
             }
         }

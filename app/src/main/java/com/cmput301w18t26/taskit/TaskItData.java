@@ -305,14 +305,14 @@ public class TaskItData {
         // Add metadata for sync and retrieval
         photo.setUUID(UUID.randomUUID().toString());
         photo.setTimestamp(new Date());
-
+        photo.Stringify();
 
         photos.addPhoto(photo);
 
-        photo.Stringify();
+
         // Add the photo to filesystem
         fs.addPhotoFile(photo);
-        photo.clearStringified();
+//        photo.clearStringified();
 
 
         sync.sync();

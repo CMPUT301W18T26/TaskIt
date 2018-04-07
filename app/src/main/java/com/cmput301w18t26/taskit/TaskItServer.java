@@ -66,7 +66,9 @@ public class TaskItServer {
     private static String TYPE_USER = "user";
     private static String TYPE_TASK = "task";
     private static String TYPE_BID = "bid";
+    private static String TYPE_PHOTO = "photo";
 
+    private static boolean forceOfflineMode = false;
 
     /**
      * Setup the server.
@@ -228,6 +230,41 @@ public class TaskItServer {
         }
     }
 
+
+    public static class addPhotoJob extends AsyncTask<Photo, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Photo... photos) {
+            verifySettings();
+
+            for (Photo photo : photos) {
+                Index index = new Index.Builder(photo)
+                        .index(INDEX_TaskItMain)
+                        .type(TYPE_PHOTO)
+                        .id(photo.getUUID())
+                        .build();
+
+                try {
+                    // where is the client?
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()) {
+                        Log.d("TaskItServer", String.valueOf(result.getId())+result.getJsonString());
+//                        tweet.setId(result.getId());
+                    } else {
+                        Log.d("TaskItServer", "add task not succeed "+result.getErrorMessage());
+                    }
+
+                }
+                catch (Exception e) {
+                    Log.d("TaskItServer", "Exception during add task");
+                    e.printStackTrace();
+                }
+
+            }
+            return null;
+        }
+    }
+
     /**
      *        ----    Get {user, task, bid} methods    ----
      * These create async tasks and will retrieve their corresponding objects
@@ -306,7 +343,7 @@ public class TaskItServer {
                     List<Bid> foundBid = result.getSourceAsObjectList(Bid.class);
                     bids.addAll(foundBid);
                 } else {
-                    Log.d("TaskItServer", "Something bad in get Task");
+                    Log.d("TaskItServer", "Something bad in get Bid");
                 }
             }
             catch (Exception e) {
@@ -315,6 +352,32 @@ public class TaskItServer {
             }
 
             return bids;
+        }
+    }
+
+    public static class getPhotoJob extends AsyncTask<String, Void, PhotoList> {
+        @Override
+        protected PhotoList doInBackground(String... search_parameters) {
+            verifySettings();
+
+            PhotoList photos = new PhotoList();
+
+            Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX_TaskItMain).addType(TYPE_PHOTO).build();
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    List<Photo> foundPhoto = result.getSourceAsObjectList(Photo.class);
+                    photos.addAll(foundPhoto);
+                } else {
+                    Log.d("TaskItServer", "Something bad in get photo");
+                }
+            }
+            catch (Exception e) {
+                Log.d("TaskItServer", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                e.printStackTrace();
+            }
+
+            return photos;
         }
     }
 
@@ -420,6 +483,37 @@ public class TaskItServer {
         }
     }
 
+    public static class deletePhotoJob extends AsyncTask<Photo, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Photo... photos) {
+            verifySettings();
+
+            for (Photo photo : photos) {
+                Delete index = new Delete.Builder(photo.getUUID())
+                        .index(INDEX_TaskItMain)
+                        .type(TYPE_PHOTO)
+                        .build();
+                try {
+                    // where is the client?
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()) {
+                        Log.d("TaskItServer", String.valueOf(result.getId())+result.getJsonString());
+                    } else {
+                        Log.d("TaskItServer", "delete photo not succeed "+result.getErrorMessage());
+                    }
+
+                }
+                catch (Exception e) {
+                    Log.d("TaskItServer", "Exception during delete photo");
+                    e.printStackTrace();
+                }
+
+            }
+            return null;
+        }
+    }
+
     /**
      * Loads all the application data from the server into the corresponding
      * container class.
@@ -427,20 +521,23 @@ public class TaskItServer {
      * @param t TaskList to add task objects retrieved from the server
      * @param b BidList to add bid objects retrieved from the server*
      */
-    public void loadAllFromServer(UserList u, TaskList t, BidList b) {
+    public void loadAllFromServer(UserList u, TaskList t, BidList b, PhotoList p) {
         Log.d("TaskItServer", "Entering loadallfromserver");
         TaskItServer.getUserJob getUser = new TaskItServer.getUserJob();
         TaskItServer.getTaskJob getTask = new TaskItServer.getTaskJob();
         TaskItServer.getBidJob getBid = new TaskItServer.getBidJob();
+        TaskItServer.getPhotoJob getPhoto = new TaskItServer.getPhotoJob();
 
         getUser.execute("");
         getTask.execute("");
         getBid.execute("");
+        getPhoto.execute("");
 
         try {
             u.addAll(getUser.get());
             t.addAll(getTask.get());
             b.addAll(getBid.get());
+            p.addAll(getPhoto.get());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -492,6 +589,16 @@ public class TaskItServer {
     }
 
     /**
+     * Convenience function that adds a given photo to the server.
+     * Creates the async job and executes it.
+     * @param photo photo to add to the server
+     */
+    public void addPhoto(Photo photo) {
+        TaskItServer.addPhotoJob addPhoto = new TaskItServer.addPhotoJob();
+        addPhoto.execute(photo);
+    }
+
+    /**
      * Convenience function that deletes a given user from the server.
      * Creates the async job and executes it.
      * @param user user to remove from the server
@@ -519,6 +626,16 @@ public class TaskItServer {
     public void delBid(Bid bid) {
         TaskItServer.deleteBidJob delBid = new TaskItServer.deleteBidJob();
         delBid.execute(bid);
+    }
+
+    /**
+     * Convenience function that deletes a given photo from the server.
+     * Creates the async job and executes it.
+     * @param photo photo to remove from the server
+     */
+    public void delPhoto(Photo photo) {
+        TaskItServer.deletePhotoJob delPhoto = new TaskItServer.deletePhotoJob();
+        delPhoto.execute(photo);
     }
 
     /**
@@ -570,12 +687,33 @@ public class TaskItServer {
     }
 
     /**
+     * Retrieves a list of photos from the server
+     * @return a PhotoList containing all the photo data from the server.
+     */
+    public PhotoList getPhotos() {
+        PhotoList l = new PhotoList();
+        TaskItServer.getPhotoJob getPhoto = new TaskItServer.getPhotoJob();
+        getPhoto.execute("");
+        try {
+            l = getPhoto.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return l;
+    }
+
+    /**
      * A convenience method to setup and execute a job to setup the server
      */
     public void setupServer() {
         TaskItServer.setupServerJob setup = new TaskItServer.setupServerJob();
         setup.execute();
     }
+
+    public void setForceOfflineMode(boolean mode) {
+        forceOfflineMode = mode;
+    }
+
     public static boolean isNetworkConnected(Context c) throws InterruptedException, IOException {
         long startTime = System.nanoTime();
 
@@ -584,7 +722,10 @@ public class TaskItServer {
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean result = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
+                         activeNetwork.isConnectedOrConnecting();
+        if (forceOfflineMode) {
+            result = false;
+        }
 
         /**
          * todo: delete this if not needed
