@@ -550,6 +550,7 @@ public class TaskItServer {
     public static void verifySettings() {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
+//            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://172.31.97.231:9200/");
             DroidClientConfig config = builder.build();
 
             JestClientFactory factory = new JestClientFactory();
@@ -727,13 +728,6 @@ public class TaskItServer {
             result = false;
         }
 
-        /**
-         * todo: delete this if not needed
-        // String command = "ping -c 1 google.com";
-        String command = "timeout 0.2 ping -c 1 cmput301.softwareprocess.es";
-
-        boolean result = (Runtime.getRuntime().exec (command).waitFor() == 0);
-        **/
         long duration = (System.nanoTime() - startTime);
         Log.d("TaskItServer", "Server ping time "+Long.toString(duration/1000000)+" ms");
         return result;

@@ -128,7 +128,7 @@ public class Photo {
     // Todo: cite https://stackoverflow.com/questions/41097432/send-jpg-images-to-server-json
     public void Stringify() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        photo.compress(Bitmap.CompressFormat.JPEG, 60, baos);
         byte[] b = baos.toByteArray();
         String temp = null;
         try {
@@ -155,7 +155,4 @@ public class Photo {
         }
     }
 
-    public void clearStringified() {
-        photoString = null;
-    }
 }

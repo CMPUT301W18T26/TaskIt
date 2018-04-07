@@ -226,7 +226,6 @@ public class TaskItFile {
         }
         for (Photo photo:p.getPhotos()) {
             photo.ConvertFromString();
-            photo.clearStringified();
         }
     }
 
