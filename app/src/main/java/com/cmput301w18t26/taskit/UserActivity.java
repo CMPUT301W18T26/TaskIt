@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by kevingordon on 2018-02-26.
@@ -64,15 +66,37 @@ public class UserActivity extends AppCompatActivity {
                     String usernameInput = usernameEdit.getText().toString();
                     String nameInput = nameEdit.getText().toString();
                     String emailInput = emailEdit.getText().toString();
-                    long phoneInput = Long.parseLong(phoneEdit.getText().toString());
-                    if (db.userExists(usernameInput)) {
-                        invalidUsername.setText("Username already exists");
-                        invalidUsername.setVisibility(View.VISIBLE);
+                    String phonestring = phoneEdit.getText().toString();
+                     if (db.userExists(usernameInput)) {
+                         Toast.makeText(UserActivity.this, "Username already exists", Toast.LENGTH_SHORT).show();
+//                        invalidUsername.setText("Username already exists");
+//                        invalidUsername.setVisibility(View.VISIBLE);
                     } else {
                         User user = new User();
+                        if (usernameInput.equals("")) {
+                            Log.i("UserActivity", "no username inserted");
+                            Toast.makeText(UserActivity.this, "Please insert username", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (nameInput.equals("")) {
+                            Log.i("UserActivity", "no name inserted");
+                            Toast.makeText(UserActivity.this, "Please insert name", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (emailInput.equals("")) {
+                            Log.i("UserActivity", "no email inserted");
+                            Toast.makeText(UserActivity.this, "Please insert email", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                         if (phonestring.equals("")) {
+                             Log.i("UserActivity", "no email inserted");
+                             Toast.makeText(UserActivity.this, "Please insert email", Toast.LENGTH_SHORT).show();
+                             return;
+                         }
                         user.setUsername(usernameInput);
                         user.setName(nameInput);
                         user.setEmail(emailInput);
+                        long phoneInput = Long.parseLong(phonestring);
                         user.setPhone(phoneInput);
                         db.setCurrentUser(user);
                         db.addUser(user);
@@ -84,8 +108,8 @@ public class UserActivity extends AppCompatActivity {
             cancelButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-                    finish();
                     setResult(RESULT_OK);
+                    finish();
                 }
             });
 
