@@ -20,6 +20,7 @@ public class TaskListTest extends ActivityInstrumentationTestCase2 {
         assertTrue(true);
     }
 
+    // test adding a task to TaskList
     public void testAddTask() {
         TaskList tasks = new TaskList();
         Task task = new MockTask();
@@ -28,6 +29,7 @@ public class TaskListTest extends ActivityInstrumentationTestCase2 {
         assertTrue(tasks.hasTask(task));
     }
 
+    // test method for return boolean -- true if TaskList is non-empty
     public void testHasTask() {
         TaskList tasks = new TaskList();
         Task task = new MockTask();
@@ -36,6 +38,7 @@ public class TaskListTest extends ActivityInstrumentationTestCase2 {
         assertTrue(tasks.hasTask(task));
     }
 
+    // test getTask method, returns Task object by index or UUID
     public void testGetTask() {
         TaskList tasks = new TaskList();
         Task task = new MockTask();
@@ -44,7 +47,7 @@ public class TaskListTest extends ActivityInstrumentationTestCase2 {
         assertEquals(task.getUUID(), returnedTask.getUUID());
     }
 
-
+    // test deleting a task object from TaskList
     public void testDelete() {
         TaskList tasks = new TaskList();
         Task task = new MockTask();
@@ -53,6 +56,7 @@ public class TaskListTest extends ActivityInstrumentationTestCase2 {
         assertFalse(tasks.hasTask(task));
     }
 
+    // test getting a count of the number of Task objects in TaskList
     public void testGetTaskCount() {
         TaskList tasks = new TaskList();
         assertEquals(0, tasks.getTaskCount());

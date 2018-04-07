@@ -20,6 +20,7 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
         assertTrue(true);
     }
 
+    // tests adding a user to UserList class
     public void testAddUser() {
         UserList users = new UserList();
         User user = new MockUser();
@@ -28,6 +29,7 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
         assertTrue(users.hasUser(user));
     }
 
+    //test hasUser() method in userlist
     public void testHasUser() {
         UserList users = new UserList();
         User user = new MockUser();
@@ -36,6 +38,7 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
         assertTrue(users.hasUser(user));
     }
 
+    //test getUser() method, should return User object based on index, name, or UUID
     public void testGetUser() {
         UserList users = new UserList();
         User user = new MockUser();
@@ -59,14 +62,17 @@ public class UserListTest extends ActivityInstrumentationTestCase2 {
     }
 
 
+    // test deleting a User object from Userlist
     public void testDelete() {
         UserList users = new UserList();
         User user = new MockUser();
         users.addUser(user);
+        assertTrue(users.hasUser(user));
         users.deleteUser(user);
         assertFalse(users.hasUser(user));
     }
 
+    // test getUserCount method, should return number of Users in UserList object
     public void testGetUserCount() {
         UserList users = new UserList();
         assertEquals(0, users.getUserCount());

@@ -1,5 +1,6 @@
 package com.cmput301w18t26.taskit.ModelTests;
 
+import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.cmput301w18t26.taskit.BidList;
@@ -17,6 +18,7 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         super(TaskActivity.class);
     }
 
+    // test setting and getting Tasks timestamp
     public void testSetGetDate() {
         Task task = new Task();
         Date date = new Date();
@@ -24,6 +26,7 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         assertEquals(date, task.getDate());
     }
 
+    // test setting and getting the User associated with Task object
     public void testSetGetUser() {
         Task task = new Task();
         String user = "AliceBob";
@@ -31,6 +34,7 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         assertEquals(user, task.getUser());
     }
 
+    // test setting and getting the description field (string) in a Task object
     public void testSetGetDescription() {
         Task task = new Task();
         String desc = "A very lovely viewtask...";
@@ -38,13 +42,25 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         assertEquals(desc, task.getDescription());
     }
 
+    // test setting and getting Task location object
     public void testSetGetLocation() {
-//        Task task = new Task();
-//        String loc = "Odd type for location...";
-//        task.setLocation(loc);
-//        assertEquals(loc, task.getLocation());
+        Location loc = new Location("");
+        Task task = new Task();
+        task.setLocation(loc);
+        assertEquals(loc, task.getLocation());
     }
 
+    // test method to return boolean depending on whether location field in task has been assigned
+    public void testHasLocation() {
+        Location loc = new Location("");
+        Task task = new Task();
+        assertFalse(task.hasLocation());
+        task.setLocation(loc);
+        assertTrue(task.hasLocation());
+
+    }
+
+    // test the setting and getting of a Task status (string)
     public void testSetGetStatus() {
         Task task = new Task();
         String status = "Requested";
@@ -52,6 +68,7 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         assertEquals(status, task.getStatus());
     }
 
+    // test the setting and getting of a Task title (string)
     public void testSetGetTitle() {
         Task task = new Task();
         String title = "Super great viewtask right here!";

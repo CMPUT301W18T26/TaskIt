@@ -18,6 +18,7 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         super(UserActivity.class);
     }
 
+    // test setting and getting the name of the User (string)
     public void testSetGetName() {
         User user = new User();
         String name = "AliceBob";
@@ -25,6 +26,7 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         assertEquals(name, user.getName());
     }
 
+    // test the setting and getting of the User email
     public void testSetGetEmail() {
         User user = new User();
         String email = "AliceBob@charlie.com";
@@ -32,6 +34,7 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         assertEquals(email, user.getEmail());
     }
 
+    //test the setting and getting of the phone number field (int)
     public void testSetGetPhone() {
         User user = new User();
         int phone = 1234567890;
@@ -39,6 +42,7 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         assertEquals(phone, user.getPhone());
     }
 
+    // test the setting and getting of user's username (string)
     public void testSetGetUserName() {
         User user = new User();
         String username = "AliceBob";
@@ -46,6 +50,7 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         assertEquals(username, user.getUsername());
     }
 
+    // test setting and getting the user's rank
     public void testSetGetRanks() {
         User user = new User();
         int[] ranks = {1,2,3,4,5};
@@ -53,7 +58,7 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         assertEquals(ranks, user.getRanks());
     }
 
-
+    // a more complete testing of getRanks method
     public void testGetRank() {
         User user = new User();
         int[] ranks1 = {1,2,3,4,5};
@@ -70,6 +75,7 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         assertEquals(-1.0, user.getRank());
     }
 
+    // test setting and getting the date timestamp from User object
     public void testSetGetDate() {
         User user = new User();
         Date date = new Date();

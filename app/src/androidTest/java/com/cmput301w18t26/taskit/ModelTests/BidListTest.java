@@ -20,6 +20,7 @@ public class BidListTest extends ActivityInstrumentationTestCase2 {
         assertTrue(true);
     }
 
+    //test adding a bid to BidList
     public void testAddBid() {
         BidList bids = new BidList();
         Bid bid = new MockBid();
@@ -28,6 +29,7 @@ public class BidListTest extends ActivityInstrumentationTestCase2 {
         assertTrue(bids.hasBid(bid));
     }
 
+    // test hasBid method, which returns a boolean
     public void testHasBid() {
         BidList bids = new BidList();
         Bid bid = new MockBid();
@@ -36,6 +38,7 @@ public class BidListTest extends ActivityInstrumentationTestCase2 {
         assertTrue(bids.hasBid(bid));
     }
 
+    // test getBid method, should return Bid object associated with index or UUID
     public void testGetBid() {
         BidList bids = new BidList();
         Bid bid = new MockBid();
@@ -44,7 +47,7 @@ public class BidListTest extends ActivityInstrumentationTestCase2 {
         assertEquals(bid.getUUID(), returnedBid.getUUID());
     }
 
-
+    // tests deleting bid from BidList
     public void testDeleteBid() {
         BidList bids = new BidList();
         Bid bid = new MockBid();
@@ -53,6 +56,7 @@ public class BidListTest extends ActivityInstrumentationTestCase2 {
         assertFalse(bids.hasBid(bid));
     }
 
+    // count number of Bids in BidList object
     public void testGetBidCount() {
         BidList bids = new BidList();
         assertEquals(0, bids.getBidCount());
