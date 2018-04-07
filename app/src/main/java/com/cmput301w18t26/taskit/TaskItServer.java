@@ -710,7 +710,7 @@ public class TaskItServer {
         setup.execute();
     }
 
-    public void setForceOfflineMode(boolean mode) {
+    public static void setForceOfflineMode(boolean mode) {
         forceOfflineMode = mode;
     }
 
