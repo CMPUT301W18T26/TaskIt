@@ -289,6 +289,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
      */
     private void setupUIElements() {
         addLocationButton = (Button) findViewById(R.id.add_location);
+        ownerText = (TextView) findViewById(R.id.taskowner);
         createTaskButton = (Button) findViewById(R.id.createtask);
         markCompleteButton = (Button) findViewById(R.id.markcomplete);
         bidButton = (Button) findViewById(R.id.bidTask);
@@ -339,6 +340,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
             ownerText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.i("TaskActivity","Clicked on username");
                     Intent profileIntent = new Intent(getApplicationContext(), UserActivity.class);
                     profileIntent.putExtra(TYPE, "Other User");
                     profileIntent.putExtra("User", task.getOwner());
@@ -359,6 +361,8 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                         intent.putExtra("UUID", task.getUUID());
                         startActivity(intent);
                         setResult(RESULT_OK);
+                    } else {
+                        Log.i("TaskActivity", "View location denied, no location available");
                     }
 
                 }
