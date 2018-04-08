@@ -134,9 +134,6 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
         task.setOwner(db.getCurrentUser().getOwner());
         String taskUUID = db.addTask(task);
         for (Photo p: photos.getPhotos()) {
-            Log.i("TaskActivity","Photo size before "+Integer.toString(p.getFilesize()));
-            p.reduceFilesize();
-            Log.i("TaskActivity","Photo size after "+Integer.toString(p.getFilesize()));
             p.setParentTask(taskUUID);
             p.setOwner(db.getCurrentUser());
             db.addPhoto(p);
@@ -218,6 +215,9 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
                 Photo p = new Photo();
                 p.setPhoto(imageBitmap);
+                Log.i("TaskActivity","Photo size before "+Integer.toString(p.getFilesize()));
+                p.reduceFilesize();
+                Log.i("TaskActivity","Photo size after "+Integer.toString(p.getFilesize()));
                 photos.addPhoto(p);
                 Log.i("Bitmap size before", Integer.toString(imageBitmap.getByteCount()));
             }
@@ -230,6 +230,9 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                     Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
                     Photo p = new Photo();
                     p.setPhoto(selectedImage);
+                    Log.i("TaskActivity","Photo size before "+Integer.toString(p.getFilesize()));
+                    p.reduceFilesize();
+                    Log.i("TaskActivity","Photo size after "+Integer.toString(p.getFilesize()));
                     photos.addPhoto(p);
                     // Load the selected image into a preview
                 } catch (IOException e) {
