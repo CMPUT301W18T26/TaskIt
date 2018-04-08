@@ -380,7 +380,8 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                         }
                     });
 
-                    task.setStatus("Done");
+                    task.setStatus(Task.STATUS_DONE);
+                    db.updateTask(task);
                     markCompleteButton.setVisibility(View.GONE);
                     getTaskDetails();
                 }
@@ -592,6 +593,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                 markRequestedButton.setVisibility(View.GONE);
             } else if (status == Task.STATUS_ASSIGNED) {
                 editTaskButton.setVisibility(View.GONE);
+                bidButton.setVisibility(View.GONE);
             } else if (status == Task.STATUS_DONE) {
                 editTaskButton.setVisibility(View.GONE);
                 markCompleteButton.setVisibility(View.GONE);

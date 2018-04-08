@@ -37,7 +37,8 @@ public class ReviewDescriptionActivity extends AppCompatActivity {
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
-        reviewList = db.getCurrentUser().getRatingDescriptions();
+        User user = db.getUserByUsername(getIntent().getStringExtra("Username"));
+        reviewList = user.getRatingDescriptions();
 
         if (reviewList.size() == 0) {
             emptyReview.add("There are currently no written reviews for this user.");

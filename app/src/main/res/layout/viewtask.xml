@@ -300,7 +300,7 @@
         android:layout_marginStart="16dp"
         android:backgroundTint="@android:color/holo_green_dark"
         android:text="Mark Complete"
-        app:layout_constraintBottom_toTopOf="@+id/viewBids"
+        app:layout_constraintBottom_toTopOf="@+id/viewPhotos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -115,7 +115,7 @@ public class Photo {
         int w = photo.getWidth();
         int h = photo.getHeight();
         Log.d("Photo","Photo input (width,height) = ("+Integer.toString(w)+","+Integer.toString(h)+")");
-        int dest_w = 750;
+        int dest_w = 128;
         int dest_h = (int) ((dest_w/(double) w)*h);
         Log.d("Photo","Photo output (width,height) = ("+Integer.toString(dest_w)+","+Integer.toString(dest_h)+")");
 
@@ -125,6 +125,18 @@ public class Photo {
 //        photo = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
     }
 
+    public void resizeForDisplay() {
+        // Resize
+        int w = photo.getWidth();
+        int h = photo.getHeight();
+        Log.d("Photo","Photo input (width,height) = ("+Integer.toString(w)+","+Integer.toString(h)+")");
+        int dest_w = 750;
+        int dest_h = (int) ((dest_w/(double) w)*h);
+        Log.d("Photo","Photo output (width,height) = ("+Integer.toString(dest_w)+","+Integer.toString(dest_h)+")");
+
+        photo = Bitmap.createScaledBitmap(photo, dest_w, dest_h, false);
+    }
+
     public int getFilesize() {
         return photo.getByteCount();
     }
@@ -132,7 +144,7 @@ public class Photo {
     // Todo: cite https://stackoverflow.com/questions/41097432/send-jpg-images-to-server-json
     public void Stringify() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.JPEG, 40, baos);
+        photo.compress(Bitmap.CompressFormat.JPEG, 30, baos);
         byte[] b = baos.toByteArray();
         String temp = null;
         try {

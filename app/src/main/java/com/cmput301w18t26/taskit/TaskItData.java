@@ -593,6 +593,9 @@ public class TaskItData {
         // For each task in tasks
         for (Task t: tasks.getTasks()) {
             taskString = t.toString();
+            if (t.getStatus().equals(Task.STATUS_DONE)) {
+                continue;
+            }
             for (String s: kws) {
                 if (taskString.toLowerCase().indexOf(s.toLowerCase()) != -1 &&
                     !filtered.hasTask(t)) {
