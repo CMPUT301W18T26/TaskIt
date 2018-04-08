@@ -28,6 +28,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homev2);
+        TaskItFile.setContext(this);
         db = TaskItData.getInstance();
 
         setTitle(Html.fromHtml("<font color=#ffffff>" + "Home" + "</font>"));

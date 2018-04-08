@@ -6,6 +6,7 @@ package com.cmput301w18t26.taskit;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -210,6 +211,8 @@ public class TaskItData {
         tasks.addTask(task);
 
         // Add the task to filesystem
+        Log.d("TaskIt Data", "fs: " + Boolean.toString(fs == null));
+        Log.d("TaskIt Data", "task: " + Boolean.toString(task == null));
         fs.addTaskFile(task);
 
         sync.sync();

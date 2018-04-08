@@ -10,12 +10,14 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.cmput301w18t26.taskit.HomeActivity;
 import com.cmput301w18t26.taskit.LoginActivity;
 import com.cmput301w18t26.taskit.R;
 import com.cmput301w18t26.taskit.TaskItData;
 import com.cmput301w18t26.taskit.TaskItFile;
+import com.cmput301w18t26.taskit.TaskItServer;
 import com.cmput301w18t26.taskit.User;
 import com.cmput301w18t26.taskit.UserActivity;
 import com.robotium.solo.Solo;
@@ -40,6 +42,7 @@ public class UserProfileTest extends ActivityInstrumentationTestCase2 {
 
     public void testCreateEditViewUser() {
         // ADD THIS FOR ALL TEST
+        TaskItServer.setForceOfflineMode(true);
         Context c = getInstrumentation().getTargetContext().getApplicationContext();
         TaskItFile.setContext(c);
         TaskItData db = TaskItData.getInstance();
@@ -93,7 +96,7 @@ public class UserProfileTest extends ActivityInstrumentationTestCase2 {
 
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 
-        Button viewProfileButton = (Button) solo.getView(R.id.profile);
+        ImageButton viewProfileButton = (ImageButton) solo.getView(R.id.myprofile2);
 
         solo.clickOnView(viewProfileButton);
 

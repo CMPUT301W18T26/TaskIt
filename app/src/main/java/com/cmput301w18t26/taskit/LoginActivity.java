@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //TaskItServer.setForceOfflineMode(true);
         setContentView(R.layout.login);
         username = (EditText) findViewById(R.id.username);
         Log.d("login activity", username.getText().toString());
