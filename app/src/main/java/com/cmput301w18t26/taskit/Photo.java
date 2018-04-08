@@ -1,3 +1,7 @@
+/*
+ * Copyright 2018, Team 26 CMPUT 301. University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under the terms and coditions fo the Code of Student Behaviour at the University of Alberta.
+ */
+
 package com.cmput301w18t26.taskit;
 
 import android.graphics.Bitmap;
@@ -129,7 +133,7 @@ public class Photo {
         return photo.getByteCount();
     }
 
-    // Todo: cite https://stackoverflow.com/questions/41097432/send-jpg-images-to-server-json
+    /* Converts image to string */
     public void Stringify() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.JPEG, 40, baos);
@@ -146,7 +150,8 @@ public class Photo {
         }
         photoString = temp;
     }
-    // Todo: cite https://stackoverflow.com/questions/41097432/send-jpg-images-to-server-json
+
+    //
     public void ConvertFromString() {
         byte[] b;
         try {
