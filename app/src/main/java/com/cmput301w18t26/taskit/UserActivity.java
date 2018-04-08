@@ -88,11 +88,11 @@ public class UserActivity extends AppCompatActivity {
                             Toast.makeText(UserActivity.this, "Please insert valid email", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                         if (phonestring.length() != 10) {
-                             Log.i("UserActivity", "wrong phone format");
-                             Toast.makeText(UserActivity.this, "Please insert valid 10 digit phone number", Toast.LENGTH_SHORT).show();
-                             return;
-                         }
+                        if (phonestring.length() != 10) {
+                            Log.i("UserActivity", "wrong phone format");
+                            Toast.makeText(UserActivity.this, "Please insert valid 10 digit phone number", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         user.setUsername(usernameInput);
                         user.setName(nameInput);
                         user.setEmail(emailInput);
