@@ -167,6 +167,24 @@ public class TaskItFile {
         }
     }
 
+    public TaskList loadTasksFromFile() {
+        // task handling
+        TaskList tl = new TaskList();
+        String dirName = getDirname(TASK);
+        File dir = new File(dirName);
+        String[] filenames = dir.list();
+        String filename;
+
+        Type taskType = new TypeToken<Task>() {
+        }.getType();
+        for (int i = 0; i < filenames.length; i++) {
+            filename = dirName + "/" + filenames[i];
+
+            tl.addTask((Task) loadFromFile(filename, taskType));
+        }
+        return tl;
+    }
+
     /**
      * Load all application files into the provided lists.
      * @param u userlist to load user objects into

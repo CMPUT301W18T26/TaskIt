@@ -33,6 +33,7 @@ public class BidListActivity extends AppCompatActivity {
     private BidListAdapter adapter;
     private TaskItData db;
     private TextView nobids;
+    private String intentTaskUUID;
     TaskList tasks;
 
     private ListView bidlist;
@@ -46,6 +47,7 @@ public class BidListActivity extends AppCompatActivity {
         db = TaskItData.getInstance();
         Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
+        intentTaskUUID = intent.getStringExtra("UUID");
         final Task task = db.getTask(intent.getStringExtra("UUID"));
 
         bidList = db.taskBids(task);
@@ -61,52 +63,52 @@ public class BidListActivity extends AppCompatActivity {
         adapter = new BidListAdapter(BidListActivity.this, bidList);
 
         bidlistview.setAdapter(adapter);
-
-        bidlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-            final Bid bid = (Bid) adapter.getItem(i);
-
-
-            View promptview = getLayoutInflater().inflate(R.layout.bid_prompt,null);
-            AlertDialog.Builder bidprompt = new AlertDialog.Builder(BidListActivity.this);
-            Button acceptBid = (Button) promptview.findViewById(R.id.acceptbid);
-            Button declineBid = (Button) promptview.findViewById(R.id.declinebid);
-
-            bidprompt.setView(promptview);
-            final AlertDialog dialog = bidprompt.create();
-            dialog.show();
-
-            final User currentuser = db.getCurrentUser();
-            acceptBid.setOnClickListener(new View.OnClickListener() {
+        if (task.isOwner(db.getCurrentUser())) {
+            bidlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onClick(View v) {
-                    task.setAssignee(bid.getOwner());
-                    bid.setStatus("Accepted");
-                    task.setStatus("Assigned");
-                    dialog.dismiss();
-                    db.updateTask(task);
-                    finish();
+                public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                    final Bid bid = (Bid) adapter.getItem(i);
+
+
+                    View promptview = getLayoutInflater().inflate(R.layout.bid_prompt, null);
+                    AlertDialog.Builder bidprompt = new AlertDialog.Builder(BidListActivity.this);
+                    Button acceptBid = (Button) promptview.findViewById(R.id.acceptbid);
+                    Button declineBid = (Button) promptview.findViewById(R.id.declinebid);
+
+                    bidprompt.setView(promptview);
+                    final AlertDialog dialog = bidprompt.create();
+                    dialog.show();
+
+                    final User currentuser = db.getCurrentUser();
+                    acceptBid.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            task.setAssignee(bid.getOwner());
+                            bid.setStatus("Accepted");
+                            task.setStatus("Assigned");
+                            dialog.dismiss();
+                            db.updateTask(task);
+                            finish();
+                        }
+                    });
+
+                    declineBid.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            db.deleteBid(bid);
+                            dialog.dismiss();
+                            adapter.remove(bid);
+                            adapter.notifyDataSetChanged();
+
+                            //adapter = new BidListAdapter(BidListActivity.this, bidList);
+                            //bidList = db.taskBids(task);
+                            //bidlistview.setAdapter(adapter);
+                        }
+                    });
+
                 }
             });
-
-            declineBid.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    db.deleteBid(bid);
-                    dialog.dismiss();
-                    adapter.remove(bid);
-                    adapter.notifyDataSetChanged();
-
-                    //adapter = new BidListAdapter(BidListActivity.this, bidList);
-                    //bidList = db.taskBids(task);
-                    //bidlistview.setAdapter(adapter);
-                }
-            });
-
-
         }
-        });
 
 
     }

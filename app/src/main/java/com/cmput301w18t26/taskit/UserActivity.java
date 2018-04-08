@@ -35,7 +35,7 @@ public class UserActivity extends AppCompatActivity {
     private TextView nameText;
     private TextView emailText;
     private TextView phoneText;
-    private TextView invalidUsername;
+//    private TextView invalidUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class UserActivity extends AppCompatActivity {
             emailEdit = (EditText) findViewById(R.id.email);
             phoneEdit = (EditText) findViewById(R.id.phone);
             nameEdit = (EditText) findViewById(R.id.name);
-            invalidUsername = (TextView) findViewById(R.id.invalid_username);
+//            invalidUsername = (TextView) findViewById(R.id.invalid_username);
             Button actionButton = (Button) findViewById(R.id.confirmuser);
             Button cancelButton = (Button) findViewById(R.id.cancel);
             actionButton.setOnClickListener(new View.OnClickListener() {
@@ -83,16 +83,16 @@ public class UserActivity extends AppCompatActivity {
                             Toast.makeText(UserActivity.this, "Please insert name", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        if (emailInput.equals("")) {
-                            Log.i("UserActivity", "no email inserted");
-                            Toast.makeText(UserActivity.this, "Please insert email", Toast.LENGTH_SHORT).show();
+                        if (emailInput.equals("") || !android.util.Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
+                            Log.i("UserActivity", "bad email inserted");
+                            Toast.makeText(UserActivity.this, "Please insert valid email", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                         if (phonestring.equals("")) {
-                             Log.i("UserActivity", "no email inserted");
-                             Toast.makeText(UserActivity.this, "Please insert email", Toast.LENGTH_SHORT).show();
-                             return;
-                         }
+                        if (phonestring.length() != 10) {
+                            Log.i("UserActivity", "wrong phone format");
+                            Toast.makeText(UserActivity.this, "Please insert valid 10 digit phone number", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         user.setUsername(usernameInput);
                         user.setName(nameInput);
                         user.setEmail(emailInput);

@@ -21,6 +21,20 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
+        android:id="@+id/viewPhotos"
+        style="@style/Button"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:text="@string/view_photos"
+        app:layout_constraintBottom_toTopOf="@+id/viewBids"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/viewBids"
         style="@style/Button"
         android:layout_width="0dp"
@@ -51,13 +65,15 @@
     <Button
         android:id="@+id/deletetask"
         style="@style/Button"
-        android:layout_width="175dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:text="Delete Task"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/edittask" />
 
     <TextView
         android:id="@+id/TaskDescription"
@@ -259,6 +275,20 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/textView8"
         app:layout_constraintTop_toBottomOf="@+id/tasklocation" />
+
+    <Button
+        android:id="@+id/markrequested"
+        style="@style/Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:backgroundTint="@android:color/holo_green_dark"
+        android:text="Mark Requested"
+        app:layout_constraintBottom_toTopOf="@+id/markcomplete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/markcomplete"

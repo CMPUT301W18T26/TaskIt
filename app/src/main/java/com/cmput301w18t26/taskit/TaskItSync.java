@@ -123,8 +123,14 @@ public class TaskItSync {
                 server.loadAllFromServer(remoteUsers, remoteTasks, remoteBids, remotePhotos);
 
                 Log.d("TaskItSync", "Current user: " + currentUser);
-                Log.d("TaskItSync", "syncing... fs count: " + String.valueOf(localUsers.getUserCount()));
-                Log.d("TaskItSync", "syncing... svr count: " + String.valueOf(remoteUsers.getUserCount()));
+                Log.d("TaskItSync", "syncing... fs user count: " + String.valueOf(localUsers.getUserCount()));
+                Log.d("TaskItSync", "syncing... svr user count: " + String.valueOf(remoteUsers.getUserCount()));
+                Log.d("TaskItSync", "syncing... fs task count: " + String.valueOf(localTasks.getTaskCount()));
+                Log.d("TaskItSync", "syncing... svr task count: " + String.valueOf(remoteTasks.getTaskCount()));
+                Log.d("TaskItSync", "syncing... fs bid count: " + String.valueOf(localBids.getBidCount()));
+                Log.d("TaskItSync", "syncing... svr bid count: " + String.valueOf(remoteBids.getBidCount()));
+                Log.d("TaskItSync", "syncing... fs photo count: " + String.valueOf(localPhotos.getPhotoCount()));
+                Log.d("TaskItSync", "syncing... svr photo count: " + String.valueOf(remotePhotos.getPhotoCount()));
                 syncUsers();
                 syncTasks();
                 syncBids();
@@ -290,13 +296,14 @@ public class TaskItSync {
         Bid currBid;
         Log.d("TaskItSync", "Current user: "+ currentUser);
         Log.d("TaskItSync", "Syncing bids");
+        TaskList freshTasks = fs.loadTasksFromFile();
         for (int i=0;i<localBids.getBidCount(); i++) {
             currBid = localBids.getBid(i);
             Log.d("TaskItSync", "current bid "+currBid.getUUID());
 
             Task parentTask = null;
-            if (localTasks.hasTask(currBid.getParentTask())) {
-                parentTask = localTasks.getTask(currBid.getParentTask());
+            if (freshTasks.hasTask(currBid.getParentTask())) {
+                parentTask = freshTasks.getTask(currBid.getParentTask());
             }
             boolean valid = parentTask!=null &&
                     (currBid.getTimestamp().after(parentTask.getTimestamp()) ||

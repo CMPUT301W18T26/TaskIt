@@ -348,6 +348,12 @@ public class TaskItData {
         return bids;
     }
 
+    // Sometimes you need the raw list.
+    // would be nice to have it immutable for consistency...
+    public PhotoList getPhotos() {
+        return photos;
+    }
+
     /**
      *       ----    Filter methods    -----
      * The following methods query the database,
@@ -486,6 +492,21 @@ public class TaskItData {
         return filtered;
     }
 
+    /**
+     * Photos for a given task
+     *
+     * @param task user that has bidded on tasks
+     * @return list of photos for the given task
+     */
+    public PhotoList getTaskPhotos(String task) {
+        PhotoList filtered = new PhotoList();
+        for (Photo p: photos.getPhotos()) {
+            if (p.isParentTask(task)) {
+                filtered.addPhoto(p);
+            }
+        }
+        return filtered;
+    }
 
     /**
      * Compute the lowest bid for this given task
@@ -662,6 +683,7 @@ public class TaskItData {
         bids.clear();
         photos.clear();
         fs.loadAllFromFile(users, tasks, bids, photos);
+        Log.d("TaskItData", "There are " +Integer.toString(photos.getPhotoCount()) + " Photos");
     }
 
     public long getNotificationCount() {
@@ -671,7 +693,5 @@ public class TaskItData {
     public void resetNotificationCount() {
         sync.setNewBids(0);
     }
-
-
 
 }

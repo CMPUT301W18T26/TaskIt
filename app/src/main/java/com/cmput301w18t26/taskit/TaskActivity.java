@@ -68,6 +68,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
     private EditText editDescText;
 
     private Button markCompleteButton;
+    private Button markRequestedButton;
     private Button bidButton;
     private Button deleteTaskButton;
     private Button editTaskButton;
@@ -77,9 +78,9 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
     private Button viewBids;
     private Button addBidButton;
     private Button confirmEdits;
-    private Spinner spinner;
     private Button cancelEdits;
     private Button addPhotos;
+    private Button viewPhotos;
 
     /**
      * sets button usage and intent passing
@@ -133,9 +134,6 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
         task.setOwner(db.getCurrentUser().getOwner());
         String taskUUID = db.addTask(task);
         for (Photo p: photos.getPhotos()) {
-            Log.i("TaskActivity","Photo size before "+Integer.toString(p.getFilesize()));
-            p.reduceFilesize();
-            Log.i("TaskActivity","Photo size after "+Integer.toString(p.getFilesize()));
             p.setParentTask(taskUUID);
             p.setOwner(db.getCurrentUser());
             db.addPhoto(p);
@@ -175,31 +173,11 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     /**
-     * User is the owner of the task, sets the spinner to the task status, and sets the
-     * text to its current text
+     * User is the owner of the task and sets the text to its current text
      */
     private void editTaskDetails () {
-        String status = db.getTaskStatus(task);
-
-        // Sets the dropdown menu, puts default position as the current task status
-        String[] dropdownItems = {"Change Task Status", Task.STATUS_REQUESTED};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-
-        spinner.setAdapter(adapter);
-        spinner.setSelection(0);
-        if (status.equals(Task.STATUS_BIDDED) || status.equals(Task.STATUS_ASSIGNED)) {
-            spinner.setVisibility(View.VISIBLE);
-        } else {
-            spinner.setVisibility(View.GONE);
-        }
-
         editTitleText.setText(task.getTitle(),TextView.BufferType.EDITABLE);
         editDescText.setText(task.getDescription(),TextView.BufferType.EDITABLE);
-
     }
 
     /**
@@ -207,20 +185,13 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
      * @param task current task being edited
      * @param title title of the task
      * @param desc editable description
-     * @param spinner changeable spinner
      */
-    private void modifyDetails (Task task, EditText title,EditText desc, Spinner spinner){
-        String newstatus = spinner.getSelectedItem().toString();
+    private void modifyDetails (Task task, EditText title,EditText desc){
         String editedTitle = title.getText().toString();
         String editedDesc = desc.getText().toString();
 
         task.setTitle(editedTitle);
         task.setDescription(editedDesc);
-        task.setStatus(newstatus);
-
-        if (newstatus.equals(Task.STATUS_REQUESTED)) {
-            task.deleteAssignee();
-        }
 
         db.updateTask(task);
         finish();
@@ -244,6 +215,9 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
                 Photo p = new Photo();
                 p.setPhoto(imageBitmap);
+                Log.i("TaskActivity","Photo size before "+Integer.toString(p.getFilesize()));
+                p.reduceFilesize();
+                Log.i("TaskActivity","Photo size after "+Integer.toString(p.getFilesize()));
                 photos.addPhoto(p);
                 Log.i("Bitmap size before", Integer.toString(imageBitmap.getByteCount()));
             }
@@ -254,6 +228,12 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                 // Do something with the photo based on Uri
                 try {
                     Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                    Photo p = new Photo();
+                    p.setPhoto(selectedImage);
+                    Log.i("TaskActivity","Photo size before "+Integer.toString(p.getFilesize()));
+                    p.reduceFilesize();
+                    Log.i("TaskActivity","Photo size after "+Integer.toString(p.getFilesize()));
+                    photos.addPhoto(p);
                     // Load the selected image into a preview
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -300,11 +280,11 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
         viewBids = (Button) findViewById(R.id.viewBids);
         editTitleText = (EditText) findViewById(R.id.editTitle);
         editDescText = (EditText) findViewById(R.id.editDescription);
-        spinner = (Spinner) findViewById(R.id.spinner);
         confirmEdits = (Button) findViewById(R.id.confirmedit);
         cancelEdits = (Button) findViewById(R.id.cancelmodify);
         addPhotos = (Button) findViewById(R.id.add_photos);
-
+        viewPhotos = (Button) findViewById(R.id.viewPhotos);
+        markRequestedButton = (Button) findViewById(R.id.markrequested);
     }
 
     /**
@@ -507,7 +487,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                     yesButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            modifyDetails(task, editTitleText, editDescText, spinner);
+                            modifyDetails(task, editTitleText, editDescText);
                             finish();
                             //                        markCompleteButton.setVisibility(View.GONE);
                         }
@@ -538,9 +518,21 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
             addPhotos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d("TaskActivity","Add photo button pressed");
                     if (checkPermission()) {
                         selectImage();
                     }
+                }
+            });
+        }
+        if (viewPhotos != null) {
+            Log.d("TaskActivity","viewPhotos found, creating listener");
+            viewPhotos.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent viewPhotosIntent = new Intent(TaskActivity.this, PhotoViewActivity.class);
+                    viewPhotosIntent.putExtra("UUID", intentTaskUUID);
+                    startActivity(viewPhotosIntent);
                 }
             });
         }
@@ -580,17 +572,34 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
         } else { // View task
             getTaskDetails();
 
-            if (!db.getTaskStatus(task).equals(Task.STATUS_ASSIGNED)
-                    || !task.isOwner(curruser)) {
-                markCompleteButton.setVisibility(View.GONE);
-            }
-
             if (task.isOwner(curruser)){
                 bidButton.setVisibility(View.GONE);
             } else {
                 deleteTaskButton.setVisibility(View.GONE);
                 editTaskButton.setVisibility(View.GONE);
                 markCompleteButton.setVisibility(View.GONE);
+                markRequestedButton.setVisibility(View.GONE);
+            }
+
+            String status = db.getTaskStatus(task);
+
+            if (status == Task.STATUS_REQUESTED) {
+                markCompleteButton.setVisibility(View.GONE);
+                markRequestedButton.setVisibility(View.GONE);
+            } else if (status == Task.STATUS_BIDDED) {
+                editTaskButton.setVisibility(View.GONE);
+                markCompleteButton.setVisibility(View.GONE);
+                markRequestedButton.setVisibility(View.GONE);
+            } else if (status == Task.STATUS_ASSIGNED) {
+                editTaskButton.setVisibility(View.GONE);
+            } else if (status == Task.STATUS_DONE) {
+                editTaskButton.setVisibility(View.GONE);
+                markCompleteButton.setVisibility(View.GONE);
+                markRequestedButton.setVisibility(View.GONE);
+            }
+
+            if (db.getTaskPhotos(intentTaskUUID).getPhotoCount()==0) {
+                viewPhotos.setVisibility(View.GONE);
             }
         }
     }

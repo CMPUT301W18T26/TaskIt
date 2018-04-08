@@ -12,6 +12,7 @@
     <string name="task_description">Description</string>
     <string name="create_task">Create Task</string>
     <string name="add_photos">Add Photos</string>
+    <string name="view_photos">View Photos</string>
     <string name="add_location">Add Location</string>
     <string name="search_hint">Search Tasks</string>
     <string-array name="array_country">
