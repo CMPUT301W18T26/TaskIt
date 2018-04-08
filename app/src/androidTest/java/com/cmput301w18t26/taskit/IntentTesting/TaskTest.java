@@ -110,7 +110,8 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         //testTask.setDescription(testdescr);
         Button confirmNewTask = (Button) solo.getView(R.id.createtask);
         solo.clickOnView(confirmNewTask);
-        //solo.goBack();
+        if (!solo.getCurrentActivity().equals(HomeActivity.class));
+            solo.goBack();
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         // check that it's there
         //solo.waitForText("An example task!");
