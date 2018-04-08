@@ -37,22 +37,11 @@ public class HomeActivity extends AppCompatActivity {
 
         setTitle(Html.fromHtml("<font color=#ffffff>" + "Home" + "</font>"));
 
-
         ImageButton mapButton = (ImageButton) findViewById(R.id.mapicon2);
         ImageButton searchTasksButton = (ImageButton) findViewById(R.id.searchicon2);
         ImageButton profileButton = (ImageButton) findViewById(R.id.myprofile2);
         ImageButton newTaskButton = (ImageButton) findViewById(R.id.newtask2);
         ImageButton myTasksButton = (ImageButton) findViewById(R.id.mytasks2);
-
-/*
-        Button inProgressButton = (Button) findViewById(R.id.inprogresstasks);
-        Button assignedTasksButton = (Button) findViewById(R.id.assignedtasks);
-        Button biddedTasksButton = (Button) findViewById(R.id.biddedtasks);
-        Button requestedBidsButton = (Button) findViewById(R.id.requestedbidstasks);
-        Button allRequestedButton = (Button) findViewById(R.id.allrequestedtasks);
-        Button searchTasksButton = (Button) findViewById(R.id.searchtasks);
-        Button profileButton = (Button) findViewById(R.id.profile);
-        Button mapButton = (Button) findViewById(R.id.mapbutton);*/
 
         final Intent taskList = new Intent(getApplicationContext(),ListActivity.class);
 
@@ -65,46 +54,6 @@ public class HomeActivity extends AppCompatActivity {
                 setResult(RESULT_OK);
             }
         });
-
-/*        inProgressButton.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                taskList.putExtra(TYPE, "My Tasks");
-                taskList.putExtra(FILTER, "myOwnedInProgress");
-                startActivity(taskList);
-                setResult(RESULT_OK);
-            }
-        });
-
-        assignedTasksButton.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                taskList.putExtra(TYPE, "My Tasks");
-                taskList.putExtra(FILTER, "myAssigned");
-                startActivity(taskList);
-                setResult(RESULT_OK);
-            }
-        });
-
-        biddedTasksButton.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                taskList.putExtra(TYPE, "My Tasks");
-                taskList.putExtra(FILTER, "tasksWithMyBids");
-                startActivity(taskList);
-                setResult(RESULT_OK);
-            }
-        });
-
-        requestedBidsButton.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                taskList.putExtra(TYPE, "Requested Tasks");
-                taskList.putExtra(FILTER, "myTasksWithBids");
-                startActivity(taskList);
-                setResult(RESULT_OK);
-            }
-        });*/
 
         myTasksButton.setOnClickListener(new View.OnClickListener() {
 
@@ -147,6 +96,9 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Adds notifications to the My Tasks button based on if there are new bids or not
+     */
     @Override
     public void onResume(){
         super.onResume();

@@ -543,7 +543,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     /**
-     *
+     * refreshes intent based on if the task is a new task or editing task
      */
     private void getFreshData() {
         Log.d("TaskActivity", "TaskUUID: "+intentTaskUUID);
@@ -566,7 +566,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     /**
-     *
+     * Restarts the view
      */
     private void refreshView() {
         if (intentState.equals("Edit")) {

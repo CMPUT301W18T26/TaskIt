@@ -24,7 +24,7 @@ import android.widget.TextView;
 /**
  * Shows the list of bids for the task clicked on
  * Creates dialog that allows the user to accept or decline a bid
- * If the bid is declined, it is deleted from the database
+ * If the bid is declined, it is not deleted from the database
  */
 public class BidListActivity extends AppCompatActivity {
 
@@ -58,7 +58,6 @@ public class BidListActivity extends AppCompatActivity {
 
         setTitle("Bids");
 
-
         //Checks if there are any bids for this task
         if (db.getTaskBidCount(task) == 0 ){
             nobids.setVisibility(View.VISIBLE);
@@ -66,13 +65,13 @@ public class BidListActivity extends AppCompatActivity {
 
         adapter = new BidListAdapter(BidListActivity.this, bidList);
 
+        //Set the page so if the owner is viewing the bids, they can accept or decline a bid
         bidlistview.setAdapter(adapter);
         if (task.isOwner(db.getCurrentUser())) {
             bidlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
                     final Bid bid = (Bid) adapter.getItem(i);
-
 
                     View promptview = getLayoutInflater().inflate(R.layout.bid_prompt, null);
                     AlertDialog.Builder bidprompt = new AlertDialog.Builder(BidListActivity.this);
@@ -83,7 +82,6 @@ public class BidListActivity extends AppCompatActivity {
                     final AlertDialog dialog = bidprompt.create();
                     dialog.show();
 
-                    final User currentuser = db.getCurrentUser();
                     acceptBid.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -104,9 +102,6 @@ public class BidListActivity extends AppCompatActivity {
                             adapter.remove(bid);
                             adapter.notifyDataSetChanged();
 
-                            //adapter = new BidListAdapter(BidListActivity.this, bidList);
-                            //bidList = db.taskBids(task);
-                            //bidlistview.setAdapter(adapter);
                         }
                     });
 
@@ -117,33 +112,4 @@ public class BidListActivity extends AppCompatActivity {
 
     }
 
-//
-//    public class ListClickHandler implements AdapterView.OnItemClickListener {
-//
-//        /**
-//         * Activate DisplayEditSubscription when list item is clicked
-//         *
-//         * @param adapter current adapter
-//         * @param view current view
-//         * @param position current position of subscription
-//         * @param arg3 excess argument
-//         */
-//        @Override
-//        public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
-//            // TODO Auto-generated method stub
-//            Bid bid = (Bid)adapter.getItemAtPosition(position);
-//
-//            View promptview = getLayoutInflater().inflate(R.layout.bid_prompt,null);
-//            AlertDialog.Builder bidprompt = new AlertDialog.Builder(BidListActivity.this);
-//            Button acceptBid = (Button) promptview.findViewById(R.id.acceptbid);
-//            Button declineBid = (Button) promptview.findViewById(R.id.declinebid);
-//
-//            bidprompt.setView(promptview);
-//            AlertDialog dialog = bidprompt.create();
-//            dialog.show();
-//            //String UUID = bid.getUUID();
-//
-//
-//        }
-//    }
 }

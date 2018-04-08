@@ -17,6 +17,9 @@ import java.util.ArrayList;
  * Created by colin on 2018-04-01.
  */
 
+/**
+ * Class creates reviews and allows user to view the reviews
+ */
 public class ReviewDescriptionActivity extends AppCompatActivity {
 
     private ListView listOfReviewDescriptions;

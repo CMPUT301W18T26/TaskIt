@@ -68,12 +68,14 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listtask);
+
         listOfTasks = (ListView) findViewById(R.id.listOfTasks);
         listOfTasks2 = (ListView) findViewById(R.id.listOfTasks2);
-        SearchView searchView = (SearchView) findViewById(R.id.searchView);
         spinner = (Spinner) findViewById(R.id.viewtaskspinner);
-        TabWidget tabwidget = (TabWidget) findViewById(android.R.id.tabs);
         host = (TabHost)findViewById(R.id.tab_host);
+
+        SearchView searchView = (SearchView) findViewById(R.id.searchView);
+        TabWidget tabwidget = (TabWidget) findViewById(android.R.id.tabs);
         db = TaskItData.getInstance();
         Intent intent = getIntent();
         String type = intent.getStringExtra(HomeActivity.TYPE);
@@ -191,6 +193,7 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    //refreshes list on swipe
     private void listRefresh() {
         db.sync();
         getFreshTaskList();
@@ -201,6 +204,7 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         adapter.notifyDataSetChanged();
     }
 
+    //updates the array based on the spinner selection
     private void updateArrayAdapter() {
         adapter.clear();
         adapter.setShowAssignee(showAssignee);
@@ -208,6 +212,7 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         adapter.notifyDataSetChanged();
     }
 
+    //Sets up the tabs shown on 'my tasks' page
     private void setupTabs(){
         host.setup();
 
@@ -284,6 +289,10 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         getFreshTaskList();
         updateArrayAdapter();
     }
+
+    /**
+     * filters the list displayed based on the filter and status passed in
+     */
     public void getFreshTaskList() {
         Log.d("ListActivity","FreshTasjList with filters: "+filter+", "+dropDownFilter);
         switch (filter) {
