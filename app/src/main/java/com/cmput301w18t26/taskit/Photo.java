@@ -1,3 +1,7 @@
+/*
+ * Copyright 2018, Team 26 CMPUT 301. University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under the terms and coditions fo the Code of Student Behaviour at the University of Alberta.
+ */
+
 package com.cmput301w18t26.taskit;
 
 import android.graphics.Bitmap;
@@ -115,7 +119,7 @@ public class Photo {
         int w = photo.getWidth();
         int h = photo.getHeight();
         Log.d("Photo","Photo input (width,height) = ("+Integer.toString(w)+","+Integer.toString(h)+")");
-        int dest_w = 750;
+        int dest_w = 128;
         int dest_h = (int) ((dest_w/(double) w)*h);
         Log.d("Photo","Photo output (width,height) = ("+Integer.toString(dest_w)+","+Integer.toString(dest_h)+")");
 
@@ -125,14 +129,26 @@ public class Photo {
 //        photo = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
     }
 
+    public void resizeForDisplay() {
+        // Resize
+        int w = photo.getWidth();
+        int h = photo.getHeight();
+        Log.d("Photo","Photo input (width,height) = ("+Integer.toString(w)+","+Integer.toString(h)+")");
+        int dest_w = 750;
+        int dest_h = (int) ((dest_w/(double) w)*h);
+        Log.d("Photo","Photo output (width,height) = ("+Integer.toString(dest_w)+","+Integer.toString(dest_h)+")");
+
+        photo = Bitmap.createScaledBitmap(photo, dest_w, dest_h, false);
+    }
+
     public int getFilesize() {
         return photo.getByteCount();
     }
 
-    // Todo: cite https://stackoverflow.com/questions/41097432/send-jpg-images-to-server-json
+    /* Converts image to string */
     public void Stringify() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.JPEG, 40, baos);
+        photo.compress(Bitmap.CompressFormat.JPEG, 30, baos);
         byte[] b = baos.toByteArray();
         String temp = null;
         try {
@@ -146,7 +162,8 @@ public class Photo {
         }
         photoString = temp;
     }
-    // Todo: cite https://stackoverflow.com/questions/41097432/send-jpg-images-to-server-json
+
+    //
     public void ConvertFromString() {
         byte[] b;
         try {

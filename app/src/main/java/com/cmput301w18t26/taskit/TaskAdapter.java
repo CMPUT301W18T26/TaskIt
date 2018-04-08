@@ -1,3 +1,7 @@
+/*
+ * Copyright 2018, Team 26 CMPUT 301. University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under the terms and coditions fo the Code of Student Behaviour at the University of Alberta.
+ */
+
 package com.cmput301w18t26.taskit;
 
 /**
@@ -11,10 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-
-import static android.app.Activity.RESULT_OK;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
 

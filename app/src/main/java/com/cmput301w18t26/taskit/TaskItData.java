@@ -1,3 +1,7 @@
+/*
+ * Copyright 2018, Team 26 CMPUT 301. University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under the terms and coditions fo the Code of Student Behaviour at the University of Alberta.
+ */
+
 package com.cmput301w18t26.taskit;
 
 /**
@@ -595,6 +599,9 @@ public class TaskItData {
         // For each task in tasks
         for (Task t: tasks.getTasks()) {
             taskString = t.toString();
+            if (t.getStatus().equals(Task.STATUS_DONE)) {
+                continue;
+            }
             for (String s: kws) {
                 if (taskString.toLowerCase().indexOf(s.toLowerCase()) != -1 &&
                     !filtered.hasTask(t)) {

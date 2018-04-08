@@ -1,3 +1,7 @@
+/*
+ * Copyright 2018, Team 26 CMPUT 301. University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under the terms and coditions fo the Code of Student Behaviour at the University of Alberta.
+ */
+
 package com.cmput301w18t26.taskit;
 
 import android.content.Intent;
@@ -113,10 +117,10 @@ public class UserActivity extends AppCompatActivity {
                 }
             });
 
-            /**
-             * Retrieves user details to update, and sets the text displayed to current details
-             * so user can modify them.
-              */
+        /**
+         * Retrieves user details to update, and sets the text displayed to current details
+         * so user can modify them.
+         */
         } else if (type.equals("Update")) {
             setContentView(R.layout.edituser);
             Button actionButton = (Button) findViewById(R.id.confirmuser);
@@ -157,35 +161,42 @@ public class UserActivity extends AppCompatActivity {
             phoneText = (TextView) findViewById(R.id.update_phone);
             RatingBar userRating = (RatingBar) findViewById(R.id.userrating);
             TextView reviewCount = (TextView) findViewById(R.id.reviewcount);
+            final User user;
 
-            reviewCount.setText(Integer.toString(db.getCurrentUser().getRatings().size()));
-            userRating.setRating(db.getCurrentUser().getRatingsAverage());
+            if (type.equals("My Profile")) {
+                usernameText.setText(db.getCurrentUser().getUsername());
+                nameText.setText(db.getCurrentUser().getName());
+                emailText.setText(db.getCurrentUser().getEmail());
+                phoneText.setText(String.valueOf(db.getCurrentUser().getPhone()));
+                user = db.getCurrentUser();
+            } else if (type.equals("Other User")) {
+                String userString = intent.getStringExtra("User");
+                user = db.getUserByUsername(userString);
+                usernameText.setText(user.getUsername());
+                nameText.setText(user.getName());
+                emailText.setText(user.getEmail());
+                phoneText.setText(String.valueOf(user.getPhone()));
+                editButton.setVisibility(View.GONE);
+            } else {
+                Log.e("UserActivity", "THIS SHOULDN'T HAPPEN, LOOK INTO IT...");
+                user = new User();
+            }
+
+            reviewCount.setText(Integer.toString(user.getRatings().size()));
+            userRating.setRating(user.getRatingsAverage());
 
             userRating.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         Intent reviewDescriptionIntent = new Intent(getApplicationContext(), ReviewDescriptionActivity.class);
+                        reviewDescriptionIntent.putExtra("Username", user.getUsername());
                         startActivity(reviewDescriptionIntent);
                         setResult(RESULT_OK);
                     }
                     return true;
                 }
             });
-            if (type.equals("My Profile")) {
-                usernameText.setText(db.getCurrentUser().getUsername());
-                nameText.setText(db.getCurrentUser().getName());
-                emailText.setText(db.getCurrentUser().getEmail());
-                phoneText.setText(String.valueOf(db.getCurrentUser().getPhone()));
-            } else if (type.equals("Other User")) {
-                String userString = intent.getStringExtra("User");
-                User user = db.getUserByUsername(userString);
-                usernameText.setText(user.getUsername());
-                nameText.setText(user.getName());
-                emailText.setText(user.getEmail());
-                phoneText.setText(String.valueOf(user.getPhone()));
-                editButton.setVisibility(View.GONE);
-            }
 
             editButton.setOnClickListener(new View.OnClickListener() {
 
