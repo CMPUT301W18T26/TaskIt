@@ -1,3 +1,7 @@
+/*
+ * Copyright 2018, Team 26 CMPUT 301. University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under the terms and coditions fo the Code of Student Behaviour at the University of Alberta.
+ */
+
 package com.cmput301w18t26.taskit;
 
 import android.content.Intent;
@@ -13,6 +17,9 @@ import java.util.ArrayList;
  * Created by colin on 2018-04-01.
  */
 
+/**
+ * Class creates reviews and allows user to view the reviews
+ */
 public class ReviewDescriptionActivity extends AppCompatActivity {
 
     private ListView listOfReviewDescriptions;

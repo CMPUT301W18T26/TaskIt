@@ -1,3 +1,7 @@
+/*
+ * Copyright 2018, Team 26 CMPUT 301. University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under the terms and coditions fo the Code of Student Behaviour at the University of Alberta.
+ */
+
 package com.cmput301w18t26.taskit.IntentTesting;
 
 
@@ -24,6 +28,7 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
  */
 
 public class BidTest extends ActivityInstrumentationTestCase2 {
+
     private Solo solo;
 
     public BidTest(){
@@ -63,13 +68,19 @@ public class BidTest extends ActivityInstrumentationTestCase2 {
         foo = new MockUser();
         foo.setUsername(myUsername);
 
-        Task testTask = new MockTask();
-        testTask.setTitle("Test Task");
-        testTask.setDescription("Test desc");
-        db.addTask(testTask);
+        //Task testTask = new MockTask();
+        //testTask.setTitle("Test Task");
+        //testTask.setDescription("Test desc");
+        //db.addTask(testTask);
 
         solo.assertCurrentActivity("Wrong Activity", TaskActivity.class);
 
+        // End with cleanup of the mess we made...
+        try {
+            db.deleteUser(foo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }
