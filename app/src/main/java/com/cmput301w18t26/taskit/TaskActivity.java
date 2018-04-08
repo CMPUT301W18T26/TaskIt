@@ -80,6 +80,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
     private Spinner spinner;
     private Button cancelEdits;
     private Button addPhotos;
+    private Button viewPhotos;
 
     /**
      * sets button usage and intent passing
@@ -254,6 +255,9 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                 // Do something with the photo based on Uri
                 try {
                     Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                    Photo p = new Photo();
+                    p.setPhoto(selectedImage);
+                    photos.addPhoto(p);
                     // Load the selected image into a preview
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -304,7 +308,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
         confirmEdits = (Button) findViewById(R.id.confirmedit);
         cancelEdits = (Button) findViewById(R.id.cancelmodify);
         addPhotos = (Button) findViewById(R.id.add_photos);
-
+        viewPhotos = (Button) findViewById(R.id.viewPhotos);
     }
 
     /**
@@ -538,9 +542,21 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
             addPhotos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d("TaskActivity","Add photo button pressed");
                     if (checkPermission()) {
                         selectImage();
                     }
+                }
+            });
+        }
+        if (viewPhotos != null) {
+            Log.d("TaskActivity","viewPhotos found, creating listener");
+            viewPhotos.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent viewPhotosIntent = new Intent(TaskActivity.this, PhotoViewActivity.class);
+                    viewPhotosIntent.putExtra("UUID", intentTaskUUID);
+                    startActivity(viewPhotosIntent);
                 }
             });
         }
@@ -591,6 +607,10 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                 deleteTaskButton.setVisibility(View.GONE);
                 editTaskButton.setVisibility(View.GONE);
                 markCompleteButton.setVisibility(View.GONE);
+            }
+
+            if (db.getTaskPhotos(intentTaskUUID).getPhotoCount()==0) {
+                viewPhotos.setVisibility(View.GONE);
             }
         }
     }
