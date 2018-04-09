@@ -443,6 +443,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                         @Override
                         public void onClick(View v) {
                             db.deleteTask(task);
+                            Toast.makeText(TaskActivity.this, "Task deleted.", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     });
