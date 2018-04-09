@@ -72,7 +72,7 @@ public class BidListActivity extends AppCompatActivity {
 
                     View promptview = getLayoutInflater().inflate(R.layout.bid_prompt, null);
                     AlertDialog.Builder bidprompt = new AlertDialog.Builder(BidListActivity.this);
-                    Button acceptBid = (Button) promptview.findViewById(R.id.ok);
+                    Button acceptBid = (Button) promptview.findViewById(R.id.acceptbid);
                     Button declineBid = (Button) promptview.findViewById(R.id.declinebid);
 
                     bidprompt.setView(promptview);
