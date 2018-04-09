@@ -38,6 +38,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Activity for starting Google Maps and handling the interactions with it
  * will likely be refactored into multiple classes in the future so this is View class
  * and the controller functionality can be separated out
+ * @author Brady
+ * @see MapFragment
+ * @see OnMapReadyCallback
+ * @see android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback
+ * @see GoogleMap
  */
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
