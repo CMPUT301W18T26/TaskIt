@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -62,6 +63,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map);
+        setTitle(Html.fromHtml("<font color=#ffffff>" + "Map" + "</font>"));
         callIntent = getIntent();
         callType = callIntent.getStringExtra("calltype");
         db = TaskItData.getInstance();
@@ -192,7 +194,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, FIVE_KM_ZOOM));
         if (callType.equals("viewTasks")) {
             TextView tapAndHold = (TextView) findViewById(R.id.tap_and_hold);
-            tapAndHold.setVisibility(View.GONE);
+            tapAndHold.setText("View tasks in your area");
             viewTasks();
         } else if (callType.equals("chooseLocation")) {
             chooseLocation();
