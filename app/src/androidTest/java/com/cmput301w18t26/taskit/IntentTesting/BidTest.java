@@ -102,6 +102,7 @@ public class BidTest extends ActivityInstrumentationTestCase2 {
         //TEST USE-CASE  Place Bid on Task
         ImageButton SearchTasksButton = (ImageButton) solo.getView(R.id.searchicon2);
         solo.clickOnView(SearchTasksButton);
+        solo.waitForActivity(ListActivity.class, 5000);
         solo.assertCurrentActivity("Wrong Activity", ListActivity.class);
         //click on task
         solo.clickOnText(taskName);

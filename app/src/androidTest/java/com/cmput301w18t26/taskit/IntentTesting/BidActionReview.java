@@ -106,6 +106,7 @@ public class BidActionReview extends ActivityInstrumentationTestCase2 {
         //TEST USE-CASE  Accept Bid on Task
         ImageButton MyTasksButton = (ImageButton) solo.getView(R.id.mytasks2);
         solo.clickOnView(MyTasksButton);
+        solo.waitForActivity(ListActivity.class, 5000);
         solo.assertCurrentActivity("Wrong Activity", ListActivity.class);
         //click on task
         solo.clickOnText(taskName);

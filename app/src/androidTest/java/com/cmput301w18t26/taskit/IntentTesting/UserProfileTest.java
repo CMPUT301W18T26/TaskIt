@@ -90,7 +90,7 @@ public class UserProfileTest extends ActivityInstrumentationTestCase2 {
 
         solo.clickOnView(confirmUserButton);
 
-        solo.waitForActivity(LoginActivity.class, 3000);
+        solo.waitForActivity(LoginActivity.class, 5000);
 
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 

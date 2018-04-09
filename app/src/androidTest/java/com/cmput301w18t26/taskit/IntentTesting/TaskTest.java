@@ -87,6 +87,7 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
         // Get the add new task button
         ImageButton addTaskButton = (ImageButton) solo.getView(R.id.newtask2);
         solo.clickOnView(addTaskButton);
+        solo.waitForActivity(TaskActivity.class, 5000);
         solo.assertCurrentActivity("Wrong Activity", TaskActivity.class);
         // fill out the tasks
         String testtitle = "An example task!";
