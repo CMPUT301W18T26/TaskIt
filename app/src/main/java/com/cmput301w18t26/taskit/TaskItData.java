@@ -226,6 +226,7 @@ public class TaskItData {
     public void deleteTask(Task task) {
         // Cascade delete all bids for this task
         BidList deleteThese = new BidList();
+        PhotoList deleteThesePhotos = new PhotoList();
 
         User currUser = getCurrentUser();
 
@@ -238,6 +239,18 @@ public class TaskItData {
         for (Bid b: deleteThese.getBids()) {
             setCurrentUser(getUserByUsername(b.getOwner()));
             deleteBid(b);
+        }
+
+        setCurrentUser(currUser);
+
+        for (Photo p: photos.getPhotos()) {
+            if (p.isParentTask(task)) {
+                deleteThesePhotos.addPhoto(p);
+            }
+        }
+
+        for (Photo p: deleteThesePhotos.getPhotos()) {
+            deletePhoto(p);
         }
 
         setCurrentUser(currUser);
