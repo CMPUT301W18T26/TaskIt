@@ -588,9 +588,6 @@ public class TaskItData {
      * In progress
      */
     public TaskList keywordSearch(String keywords){
-        if (keywords.length()==0) {
-            return getTasks();
-        }
         TaskList filtered = new TaskList();
 
         // break keywords into words
@@ -601,6 +598,9 @@ public class TaskItData {
             taskString = t.toString();
             if (t.getStatus().equals(Task.STATUS_DONE)) {
                 continue;
+            }
+            if (keywords.length()==0) {
+                filtered.addTask(t);
             }
             for (String s: kws) {
                 if (taskString.toLowerCase().indexOf(s.toLowerCase()) != -1 &&
