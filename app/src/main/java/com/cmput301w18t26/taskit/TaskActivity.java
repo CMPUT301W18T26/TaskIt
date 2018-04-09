@@ -257,7 +257,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                 }
             }
         }
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK && requestCode != FOR_RETURN_LOCATION) {
             Toast.makeText(TaskActivity.this, "Photo Added", Toast.LENGTH_LONG).show();
         }
     }
