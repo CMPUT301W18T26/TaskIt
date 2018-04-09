@@ -572,7 +572,7 @@ public class TaskItServer {
     public static void verifySettings() {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
-//            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://172.31.97.231:9200/");
+//            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://192.168.1.118:9200/");
             DroidClientConfig config = builder.build();
 
             JestClientFactory factory = new JestClientFactory();

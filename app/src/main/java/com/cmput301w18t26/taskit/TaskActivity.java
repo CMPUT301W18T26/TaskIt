@@ -558,6 +558,19 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                 }
             });
         }
+        if (markRequestedButton != null) {
+            Log.d("TaskActivity","markRequestedButton found, creating listener");
+            markRequestedButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    task.setStatus(Task.STATUS_REQUESTED);
+                    task.deleteAssignee();
+                    db.updateTask(task);
+                    getFreshData();
+                    refreshView();
+                }
+            });
+        }
     }
 
     /**
