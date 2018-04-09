@@ -4,6 +4,7 @@
 
 package com.cmput301w18t26.taskit;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -102,6 +103,24 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
+
+        if (db.getNotificationCount() > 0) {
+            View promptview = getLayoutInflater().inflate(R.layout.notify_bid_prompt, null);
+            AlertDialog.Builder bidprompt = new AlertDialog.Builder(HomeActivity.this);
+            Button ok = (Button) promptview.findViewById(R.id.ok);
+
+            bidprompt.setView(promptview);
+            final AlertDialog dialog = bidprompt.create();
+            dialog.show();
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    db.resetNotificationCount();
+                    dialog.hide();
+                }
+            });
+        }
 
         long numNotifications = db.getNotificationCount();
         TextView notifications = findViewById(R.id.notifications);

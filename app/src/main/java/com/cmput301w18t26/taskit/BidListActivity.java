@@ -5,14 +5,11 @@
 package com.cmput301w18t26.taskit;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -75,7 +72,7 @@ public class BidListActivity extends AppCompatActivity {
 
                     View promptview = getLayoutInflater().inflate(R.layout.bid_prompt, null);
                     AlertDialog.Builder bidprompt = new AlertDialog.Builder(BidListActivity.this);
-                    Button acceptBid = (Button) promptview.findViewById(R.id.acceptbid);
+                    Button acceptBid = (Button) promptview.findViewById(R.id.ok);
                     Button declineBid = (Button) promptview.findViewById(R.id.declinebid);
 
                     bidprompt.setView(promptview);
