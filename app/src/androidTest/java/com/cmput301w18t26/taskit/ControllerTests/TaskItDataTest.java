@@ -35,86 +35,89 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
     }
 
     /**
-     * Test user add / delete.
-     * We expect the filesystem to be updated with the user.
+     * Test adding and deleting of user in the database
      */
     public void testAddDeleteUser() {
+        // Filesystem setup
         Context c = getInstrumentation().getTargetContext().getApplicationContext();
-        // Typically from an activity a call would be more like:
-        //   TaskItData db = TaskItData.getInstance(this);
         TaskItFile.setContext(c);
+
+        // Database setup
         TaskItData db = TaskItData.getInstance();
         db.sync();
 
+        // Setup our mock user
         String username = "Bob";
         User u1 = new MockUser(username);
-        User u2 = new MockUser(username);
-        db.setCurrentUser(u2);
 
-        String filename;
-        File file;
-
-        while (db.userExists(username)) {
-            db.deleteUser(db.getUserByUsername(username));
-        }
+        // Need to set current user for correct operation
+        db.setCurrentUser(u1);
 
         // Begin test
-        assertFalse(db.userExists(username));
+        assertFalse(db.getUsers().hasUser(u1));
+
         db.addUser(u1);
 
-        assertTrue(db.userExists(username));
-        filename = TaskItFile.getUserFilename(db.getUserByUsername(username));
-        file = new File(filename);
-        assertTrue(file.exists());
+        assertTrue(db.getUsers().hasUser(u1));
 
-        // Give the server some time.
-        try {
-            TimeUnit.SECONDS.sleep(3);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        db.deleteUser(u1);
 
-        assertTrue(file.exists());
-
-        db.deleteUser(db.getUserByUsername(username));
-
-        assertFalse(file.exists());
+        assertFalse(db.getUsers().hasUser(u1));
 
     }
 
+    /**
+     * Test adding and deleting of task in the database
+     */
     public void testAddDeleteTask() {
+        // Filesystem setup
         Context c = getInstrumentation().getTargetContext().getApplicationContext();
-        // Typically from an activity a call would be more like:
-        //   TaskItData db = TaskItData.getInstance(this);
         TaskItFile.setContext(c);
-        TaskItData db = TaskItData.getInstance();
 
+        // Database setup
+        TaskItData db = TaskItData.getInstance();
+        db.sync();
+
+        // Need to setup a mock user,
+        //  and make it the current database user
+        //  and make it the task owner
         String username = "Bob";
         User u = new MockUser(username);
         Task t = new MockTask(u.getOwner());
         db.setCurrentUser(u);
         db.addUser(u);
-        db.addTask(t);
 
-        String filename = TaskItFile.getTaskFilename(t);
-        File file = new File(filename);
+        // Begin Test
+        assertFalse(db.getTasks().hasTask(t));
 
-        assertTrue(file.exists());
+        String UUID = db.addTask(t);
+
+        assertTrue(db.taskExists(UUID));
 
         db.deleteTask(t);
 
-        assertFalse(file.exists());
+        assertFalse(db.taskExists(UUID));
+
+        // Cleanup our mess
         db.deleteUser(u);
 
     }
 
+    /**
+     * Test adding and deleting of bid in the database
+     */
     public void testAddDeleteBid() {
+        // Filesystem setup
         Context c = getInstrumentation().getTargetContext().getApplicationContext();
-        // Typically from an activity a call would be more like:
-        //   TaskItData db = TaskItData.getInstance(this);
         TaskItFile.setContext(c);
-        TaskItData db = TaskItData.getInstance();
 
+        // Database setup
+        TaskItData db = TaskItData.getInstance();
+        db.sync();
+
+        // Need to setup a mock user,
+        //  and make it the current database user
+        //  and make it the task owner
         String username = "Bob";
         User u = new MockUser(username);
         Task t = new MockTask(u.getOwner());
@@ -124,17 +127,18 @@ public class TaskItDataTest extends ActivityInstrumentationTestCase2{
 
         Bid bid = new MockBid(username, t);
 
+        // Begin test
+        assertFalse(db.getBids().hasBid(bid));
+
         db.addBid(bid);
 
-        String filename = TaskItFile.getBidFilename(bid);
-        File file = new File(filename);
-
-        assertTrue(file.exists());
+        assertTrue(db.getBids().hasBid(bid));
 
         db.deleteBid(bid);
 
-        assertFalse(file.exists());
+        assertFalse(db.getBids().hasBid(bid));
 
+        // Cleanup our mess
         db.deleteTask(t);
         db.deleteUser(u);
     }
