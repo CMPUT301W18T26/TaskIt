@@ -201,21 +201,26 @@
         app:layout_constraintStart_toStartOf="@+id/taskTitle"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/taskdescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <ScrollView
+        android:id="@+id/ScrollView01"
+        android:layout_height="150dp"
+        android:layout_width="fill_parent"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="136dp"
         android:layout_marginTop="10dp"
-        android:text="Description"
-        android:textAlignment="viewStart"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tasktitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tasktitle">
+        <TextView
+            android:id="@+id/taskdescription"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+    </ScrollView>
 
     <TextView
         android:id="@+id/taskstatus"
@@ -230,7 +235,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskdescription" />
+        app:layout_constraintTop_toBottomOf="@+id/ScrollView01" />
 
     <TextView
         android:id="@+id/tasklowbid"
