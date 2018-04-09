@@ -1,7 +1,3 @@
-/*
- * Copyright 2018, Team 26 CMPUT 301. University of Alberta - All Rights Reserved. You may use, distribute, or modify this code under the terms and coditions fo the Code of Student Behaviour at the University of Alberta.
- */
-
 package com.cmput301w18t26.taskit.IntentTesting;
 
 import android.app.Activity;
@@ -12,12 +8,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.cmput301w18t26.taskit.Bid;
 import com.cmput301w18t26.taskit.BidActivity;
 import com.cmput301w18t26.taskit.BidListActivity;
 import com.cmput301w18t26.taskit.HomeActivity;
 import com.cmput301w18t26.taskit.ListActivity;
 import com.cmput301w18t26.taskit.LoginActivity;
 import com.cmput301w18t26.taskit.MapActivity;
+import com.cmput301w18t26.taskit.MockBid;
 import com.cmput301w18t26.taskit.MockTask;
 import com.cmput301w18t26.taskit.MockUser;
 import com.cmput301w18t26.taskit.R;
@@ -37,11 +35,11 @@ import com.robotium.solo.Solo;
 
 
 
-public class BidTest extends ActivityInstrumentationTestCase2 {
+public class BidActionReview extends ActivityInstrumentationTestCase2 {
 
     private Solo solo;
 
-    public BidTest(){
+    public BidActionReview(){
         super(HomeActivity.class);
     }
 
@@ -85,43 +83,58 @@ public class BidTest extends ActivityInstrumentationTestCase2 {
         db.addUser(foo);
         foo2.setUsername(otherUsername);
         db.addUser(foo2);
-        db.setCurrentUser(foo);
+        db.setCurrentUser(foo2);
 
         Task exampleTask = new MockTask();
+        Bid exampleBid = new MockBid();
 
         exampleTask.setTitle(taskName);
         exampleTask.setStatus("Requested");
         exampleTask.setOwner(foo2);
         db.addTask(exampleTask);
 
+        exampleBid.setAmount(20);
+        exampleBid.setParentTask(exampleTask);
+        exampleBid.setOwner(myUsername);
+        db.addBid(exampleBid);
+
 
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 
         assertFalse(solo.waitForText(taskName, 1, 3000));
 
-        //TEST USE-CASE  Place Bid on Task
-        ImageButton SearchTasksButton = (ImageButton) solo.getView(R.id.searchicon2);
-        solo.clickOnView(SearchTasksButton);
+        //TEST USE-CASE  Accept Bid on Task
+        ImageButton MyTasksButton = (ImageButton) solo.getView(R.id.mytasks2);
+        solo.clickOnView(MyTasksButton);
         solo.assertCurrentActivity("Wrong Activity", ListActivity.class);
         //click on task
         solo.clickOnText(taskName);
         solo.assertCurrentActivity("Wrong Activity", TaskActivity.class);
-        //click on bid
-        Button bidButton = (Button) solo.getView(R.id.bidTask);
-        solo.clickOnView(bidButton);
-        solo.assertCurrentActivity("Wrong Activity", BidActivity.class);
-        //make a bid
-        String bid = "20";
-        solo.enterText((EditText) solo.getView(R.id.bidText), bid);
-        Button bidButton2 = (Button) solo.getView(R.id.bidButton);
-        solo.clickOnView(bidButton2);
-        solo.assertCurrentActivity("Wrong Activity", TaskActivity.class);
+        //view bids
         Button viewBids = (Button) solo.getView(R.id.viewBids);
         solo.clickOnView(viewBids);
         solo.assertCurrentActivity("Wrong Activity", BidListActivity.class);
+        //click bid in bidlist
+        solo.clickOnText("20.00");
+        solo.waitForActivity("Wait for Activity", 1000);
+        solo.clickOnText("Accept");
+        solo.assertCurrentActivity("Wrong Activity", TaskActivity.class);
+        solo.waitForActivity("Wait for Activity", 2000);
+        //mark task complete
+        Button markComplete = (Button) solo.getView(R.id.markcomplete);
+        solo.clickOnView(markComplete);
+        solo.waitForActivity("Wait for Activity", 1000);
+        String review = "This user was bad. 0 stars.";
+        solo.enterText((EditText) solo.getView(R.id.description), review);
+        Button submit = (Button) solo.getView(R.id.submit);
+        solo.clickOnView(submit);
         solo.waitForActivity("Wait for Activity", 2000);
         solo.goBack();
-        solo.goBack();
+
+
+
+
+
 
 
 
