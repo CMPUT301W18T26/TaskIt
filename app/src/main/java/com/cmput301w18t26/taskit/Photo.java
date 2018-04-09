@@ -22,8 +22,14 @@ import java.util.Date;
 public class Photo {
 
 
-
+    /**
+     * The photo is stored here.
+     */
     private Bitmap photo;
+
+    /**
+     * The stringified photo for the server is stored here.
+     */
     private String photoString;
 
     /**
@@ -114,6 +120,9 @@ public class Photo {
         this.parentTask = parentTask.getUUID();
     }
 
+    /**
+     * We resize the photo substantially.
+     */
     public void reduceFilesize() {
         // Resize
         int w = photo.getWidth();
@@ -124,11 +133,11 @@ public class Photo {
         Log.d("Photo","Photo output (width,height) = ("+Integer.toString(dest_w)+","+Integer.toString(dest_h)+")");
 
         photo = Bitmap.createScaledBitmap(photo, dest_w, dest_h, false);
-//        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        photo.compress(Bitmap.CompressFormat.JPEG, 60, out);
-//        photo = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
     }
 
+    /**
+     * Prior to viewing, we upscale the image considerably.
+     */
     public void resizeForDisplay() {
         // Resize
         int w = photo.getWidth();
@@ -144,7 +153,9 @@ public class Photo {
         return photo.getByteCount();
     }
 
-    /* Converts image to string */
+    /**
+     * The server can store base64 encoded images. Perform the encoding.
+     */
     public void Stringify() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.JPEG, 30, baos);
@@ -162,7 +173,9 @@ public class Photo {
         photoString = temp;
     }
 
-    //
+    /**
+     * When loading from the server, need to convert from base64 encoding back to Bitmap.
+     */
     public void ConvertFromString() {
         byte[] b;
         try {

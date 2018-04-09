@@ -26,7 +26,6 @@ public class BidListAdapter extends ArrayAdapter<Bid> {
      * @param context activity
      * @param bids current subscription
      */
-
     public BidListAdapter(Activity context, BidList bids) {
         super(context, R.layout.list_single, bids.getBids()); //TODO list_single? check that
         this.context = context;
@@ -40,7 +39,6 @@ public class BidListAdapter extends ArrayAdapter<Bid> {
      * @param parent parent of textview
      * @return
      */
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
