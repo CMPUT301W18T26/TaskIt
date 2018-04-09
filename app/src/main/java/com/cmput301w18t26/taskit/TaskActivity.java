@@ -60,6 +60,8 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
     private String intentState;
     private String intentTaskUUID;
 
+    private Location location;
+
     // UI Elements
     private TextView titleText;
     private TextView dateText;
@@ -136,6 +138,15 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
         task.setDate(new Date());
         task.setStatus("Requested");
         task.setOwner(db.getCurrentUser().getOwner());
+        if (location!=null) {
+            task.setLocation(location);
+        }
+        if (task.hasLocation()) {
+            Log.d("TaskActivity", "...Task does have a location");
+            Log.d("TaskActivity","The task location is "+Double.toString(task.getLocation().getLatitude())+", "+Double.toString(task.getLocation().getLongitude()));
+        } else {
+            Log.d("TaskActivity", "...Task does not have a location");
+        }
         String taskUUID = db.addTask(task);
         for (Photo p: photos.getPhotos()) {
             p.setParentTask(taskUUID);
@@ -210,10 +221,10 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == FOR_RETURN_LOCATION && resultCode == RESULT_OK) {
-                Location location = new Location("");
+                location = new Location("");
                 location.setLatitude(data.getDoubleExtra("latitude",0));
                 location.setLongitude(data.getDoubleExtra("longitude",0));
-                task.setLocation(location);
+                Log.d("TaskActivity", "The location chosen is "+Double.toString(location.getLatitude())+", "+Double.toString(location.getLongitude()));
         } else if (requestCode == FOR_RETURN_CAMERA_PHOTOS && resultCode == RESULT_OK) {
             if (data != null) {
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
@@ -560,6 +571,7 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
         if (intentState.equals("Edit")) {
             task = db.getTask(intentTaskUUID);
         } else if (intentState.equals("New Task")) {
+            Log.d("TaskActivity", "I'm in new task state...");
             task = new Task();
         } else {
             task = db.getTask(intentTaskUUID);

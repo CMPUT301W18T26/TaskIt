@@ -199,7 +199,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void viewTasks() {
         Location taskLocation;
         TaskList nearbyTasks = db.tasksWithin5K(currentLocation);
+        Log.d("MapActivity", "Found "+Integer.toString(nearbyTasks.getTaskCount())+ " nearby tasks...");
         for (Task task: nearbyTasks.getTasks()) {
+
             taskLocation = task.getLocation();
             LatLng loc = new LatLng(taskLocation.getLatitude(), taskLocation.getLongitude());
             Marker marker = myMap.addMarker(new MarkerOptions().position(loc).title(task.getTitle()).snippet(task.getDescription()));
