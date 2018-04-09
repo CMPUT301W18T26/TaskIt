@@ -38,6 +38,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Activity for starting Google Maps and handling the interactions with it
  * will likely be refactored into multiple classes in the future so this is View class
  * and the controller functionality can be separated out
+ * @author Brady
+ * @see MapFragment
+ * @see OnMapReadyCallback
+ * @see android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback
+ * @see GoogleMap
  */
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -203,6 +208,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // set pins at all tasks with status requested/bidded within 5 km of userLocation
     }
 
+    /**
+     *  View all the tasks within 5 km as markers on the map
+     */
     public void viewTasks() {
         Location taskLocation;
         TaskList nearbyTasks = db.tasksWithin5K(currentLocation);
@@ -227,6 +235,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     * Long click to choose and return a location for a task.
+     */
     public void chooseLocation() {
         myMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener(){
             @Override
@@ -241,6 +252,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
+    /**
+     * Place a marker for a single task and centre camera on marker
+     */
     public void viewOneTask(){
         Task task = db.getTask(callIntent.getStringExtra("UUID"));
         Location taskLocation = task.getLocation();
