@@ -137,7 +137,6 @@ public class Photo {
         int dest_w = 750;
         int dest_h = (int) ((dest_w/(double) w)*h);
         Log.d("Photo","Photo output (width,height) = ("+Integer.toString(dest_w)+","+Integer.toString(dest_h)+")");
-
         photo = Bitmap.createScaledBitmap(photo, dest_w, dest_h, false);
     }
 

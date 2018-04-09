@@ -35,6 +35,7 @@ import io.searchbox.core.SearchResult;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.mapping.PutMapping;
+import io.searchbox.params.Parameters;
 
 /**
  * Created by kevingordon on 2018-03-05.
@@ -284,7 +285,11 @@ public class TaskItServer {
             UserList users = new UserList();
 
             // Log.d("TaskItServer", search_parameters[0]);
-            Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX_TaskItMain).addType(TYPE_USER).build();
+            Search search = new Search.Builder(search_parameters[0])
+                                    .addIndex(INDEX_TaskItMain)
+                                    .addType(TYPE_USER)
+                                    .setParameter(Parameters.SIZE, 100)
+                                    .build();
 
             try {
                 SearchResult result = client.execute(search);
@@ -312,7 +317,11 @@ public class TaskItServer {
 
             TaskList tasks = new TaskList();
 
-            Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX_TaskItMain).addType(TYPE_TASK).build();
+            Search search = new Search.Builder(search_parameters[0])
+                                .addIndex(INDEX_TaskItMain)
+                                .addType(TYPE_TASK)
+                                .setParameter(Parameters.SIZE, 100)
+                                .build();
 
             try {
                 SearchResult result = client.execute(search);
@@ -339,7 +348,12 @@ public class TaskItServer {
 
             BidList bids = new BidList();
 
-            Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX_TaskItMain).addType(TYPE_BID).build();
+            Search search = new Search.Builder(search_parameters[0])
+                                    .addIndex(INDEX_TaskItMain)
+                                    .addType(TYPE_BID)
+                                    .setParameter(Parameters.SIZE, 100)
+                                    .build();
+
             Log.d("TaskItServer", "bidlist search uri: "+search.getURI());
             try {
                 SearchResult result = client.execute(search);
@@ -366,7 +380,11 @@ public class TaskItServer {
 
             PhotoList photos = new PhotoList();
 
-            Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX_TaskItMain).addType(TYPE_PHOTO).build();
+            Search search = new Search.Builder(search_parameters[0])
+                                    .addIndex(INDEX_TaskItMain)
+                                    .addType(TYPE_PHOTO)
+                                    .setParameter(Parameters.SIZE, 100)
+                                    .build();
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {

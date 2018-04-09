@@ -588,9 +588,6 @@ public class TaskItData {
      * In progress
      */
     public TaskList keywordSearch(String keywords){
-        if (keywords.length()==0) {
-            return getTasks();
-        }
         TaskList filtered = new TaskList();
 
         // break keywords into words
@@ -601,6 +598,9 @@ public class TaskItData {
             taskString = t.toString();
             if (t.getStatus().equals(Task.STATUS_DONE)) {
                 continue;
+            }
+            if (keywords.length()==0) {
+                filtered.addTask(t);
             }
             for (String s: kws) {
                 if (taskString.toLowerCase().indexOf(s.toLowerCase()) != -1 &&
@@ -623,12 +623,21 @@ public class TaskItData {
         float distance;
 
         for (Task task: tasks.getTasks()) {
+            Log.d("TaskItData", "Looking at task distance...");
+
+            if (task.hasLocation()) {
+                Log.d("TaskItData", "...Task does have a location");
+            } else {
+                Log.d("TaskItData", "...Task does not have a location");
+            }
+
             if (!task.hasLocation()
-                    || task.getStatus().equals("Assigned")
-                    || task.getStatus().equals("Done")) {
+                    || task.getStatus().equals(Task.STATUS_ASSIGNED)
+                    || task.getStatus().equals(Task.STATUS_DONE)) {
                 continue;
             }
             distance = location.distanceTo(task.getLocation());
+            Log.d("TaskItData", "Task has distance "+Double.toString(distance));
 //            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
 //                    taskLocation.getLatitude(), taskLocation.getLongitude(), results);
             //TODO replace "Assigned" and "Bidded" with string constants from Task class

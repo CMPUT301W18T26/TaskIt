@@ -189,7 +189,7 @@ public class Task {
     public String locationString() {
         String s = "";
         s += "Lat: " + Double.toString(location.getLatitude());
-        s += ", ";
+        s += "\n";
         s += "Lon: " + Double.toString(location.getLongitude());
         return s;
     }
