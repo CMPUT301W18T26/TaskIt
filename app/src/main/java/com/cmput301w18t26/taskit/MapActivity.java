@@ -5,6 +5,7 @@
 package com.cmput301w18t26.taskit;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -188,6 +191,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, FIVE_KM_ZOOM));
         if (callType.equals("viewTasks")) {
+            TextView tapAndHold = (TextView) findViewById(R.id.tap_and_hold);
+            tapAndHold.setVisibility(View.GONE);
             viewTasks();
         } else if (callType.equals("chooseLocation")) {
             chooseLocation();
@@ -228,6 +233,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 returnIntent.putExtra("latitude",point.latitude);
                 returnIntent.putExtra("longitude",point.longitude);
                 setResult(RESULT_OK, returnIntent);
+                Toast.makeText(MapActivity.this, "Location Added", Toast.LENGTH_LONG).show();
                 finish();
             }
         });

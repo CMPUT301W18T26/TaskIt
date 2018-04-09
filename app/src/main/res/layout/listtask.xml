@@ -13,6 +13,7 @@
         android:id="@+id/refreshimage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/gradient2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_popup_sync" />

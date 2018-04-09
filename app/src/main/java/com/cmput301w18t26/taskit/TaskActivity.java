@@ -5,6 +5,7 @@
 package com.cmput301w18t26.taskit;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
@@ -26,6 +27,7 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -254,6 +256,9 @@ public class TaskActivity extends AppCompatActivity implements ActivityCompat.On
                     e.printStackTrace();
                 }
             }
+        }
+        if (resultCode == RESULT_OK) {
+            Toast.makeText(TaskActivity.this, "Photo Added", Toast.LENGTH_LONG).show();
         }
     }
 
