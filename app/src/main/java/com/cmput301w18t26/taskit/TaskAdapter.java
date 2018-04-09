@@ -61,16 +61,23 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         txtTitle.setText(getItem(position).getTitle());
         txtStatus.setText(db.getTaskStatus(getItem(position)));
         if (showAssignee) {
-            txtUsername.setText(getItem(position).getAssignee());
+            txtUsername.setText("Assignee: "+getItem(position).getAssignee());
         } else {
-            txtUsername.setText(getItem(position).getOwner());
+            txtUsername.setText("Owner: "+getItem(position).getOwner());
         }
         txtUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent profileIntent = new Intent(context, UserActivity.class);
                 profileIntent.putExtra(TYPE, "Other User");
-                profileIntent.putExtra("User", txtUsername.getText().toString());
+                String username = txtUsername.getText().toString();
+                if (showAssignee) {
+                    username = username.substring(10);
+                } else {
+                    username = username.substring(7);
+                }
+
+                profileIntent.putExtra("User", username);
                 context.startActivity(profileIntent);
             }
         });

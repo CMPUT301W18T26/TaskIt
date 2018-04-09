@@ -309,6 +309,7 @@ public class TaskItSync {
             if (freshTasks.hasTask(currBid.getParentTask())) {
                 parentTask = freshTasks.getTask(currBid.getParentTask());
             }
+            Log.d("TaskItSync","Bid owner/ task assignee"+currBid.getOwner()+"/"+parentTask.getAssignee());
             boolean valid = parentTask!=null &&
                     (currBid.getTimestamp().after(parentTask.getTimestamp()) ||
                      currBid.isOwner(parentTask.getAssignee()));
