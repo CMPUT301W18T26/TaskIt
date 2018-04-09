@@ -609,7 +609,7 @@ public class TaskItData {
         // For each task in tasks
         for (Task t: tasks.getTasks()) {
             taskString = t.toString();
-            if (t.getStatus().equals(Task.STATUS_DONE)) {
+            if (t.getStatus().equals(Task.STATUS_DONE) || t.getStatus().equals(Task.STATUS_ASSIGNED)) {
                 continue;
             }
             if (keywords.length()==0) {
